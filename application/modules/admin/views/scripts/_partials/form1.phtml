@@ -1,0 +1,324 @@
+<?php echo $this->form->renderForm(false); ?>
+			<?php 
+			$labelC="col-md-3";
+			$ElementC="col-md-9";
+			?>
+		
+		
+<div id="accordion" role="tablist" aria-multiselectable="true">
+        <?php $tab=1; ?>
+		<div class="card">
+            <div class="card-header" role="tab" id="heading<?php echo $tab; ?>"  data-toggle="collapse" data-parent="#accordion" data-target="#collapse<?php echo $tab; ?>">
+                <h5 class="mb-0">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $tab; ?>">
+                  Account Details
+                </a>
+              </h5>
+            </div>
+
+            <div id="collapse<?php echo $tab; ?>" class="out collapse show" role="tabpanel" aria-labelledby="heading<?php echo $tab; ?>">
+                <div class="card-block">
+                    
+					
+					<div class="form-group row"><div class="<?php echo $labelC; ?>">
+					<?php echo $this->form->sector->getLabel(); ?>
+					</div><div class="<?php echo $ElementC; ?> hide_label">
+						<?php echo $this->form->getElement('sector'); ?>
+					</div></div>
+					
+					<div class="form-group row"><div class="<?php echo $labelC; ?>">
+						<?php echo $this->form->client->getLabel(); ?><br>
+						<a href="#" class="select_all" title="select all" data_ref="client">All</a> | <a href="#" title="select none" class="select_none" data_ref="client">None</a>
+					</div><div class="<?php echo $ElementC; ?> hide_label"> 
+						<?php echo $this->form->getElement('client'); ?>
+					</div></div>
+					
+					
+                </div>
+            </div>
+        </div>
+		<?php $tab=2; ?>
+        <div class="card">
+            <div class="card-header collapsed" role="tab" id="heading<?php echo $tab; ?>" data-toggle="collapse" data-parent="#accordion" data-target="#collapse<?php echo $tab; ?>">
+                <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $tab; ?>" aria-expanded="false" aria-controls="collapse<?php echo $tab; ?>">
+                  Debt Details
+                </a>
+              </h5>
+            </div>
+            <div id="collapse<?php echo $tab; ?>" class="collapse" role="tabpanel" aria-labelledby="heading<?php echo $tab; ?>">
+                <div class="card-block">
+                    
+					
+					<div class="form-group row">
+						<div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->debt_value_from->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('debt_value_from'); ?>
+						</div>
+						<div class="col-md-1">
+							<?php echo $this->form->debt_value_to->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('debt_value_to'); ?>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->last_pay_date_from->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('last_pay_date_from'); ?>
+						</div>
+						<div class="col-md-1">
+							<?php echo $this->form->last_pay_date_to->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('last_pay_date_to'); ?>
+						</div>
+					</div>
+					
+					
+					<div class="form-group row">
+						<div class="col-md-3">
+							<?php echo $this->form->previous_payment_from->getLabel(); ?>
+						</div>
+						<div class="col-md-3 hide_label">
+							<?php echo $this->form->getElement('previous_payment_from'); ?>
+						</div>
+						<div class="col-md-3">
+							<?php echo $this->form->previous_payment_to->getLabel(); ?>
+						</div>
+						<div class="col-md-3 hide_label">
+							<?php echo $this->form->getElement('previous_payment_to'); ?>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->age_from_loading_from->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('age_from_loading_from'); ?>
+						</div>
+						<div class="col-md-1">
+							<?php echo $this->form->age_from_loading_to->getLabel(); ?>
+						</div>
+						<div class="col-md-4 hide_label">
+							<?php echo $this->form->getElement('age_from_loading_to'); ?>
+						</div>
+					</div>
+					
+					
+                </div>
+            </div>
+        </div>
+		<?php $tab=3; ?>
+        <div class="card">
+            <div class="card-header collapsed" role="tab" id="heading<?php echo $tab; ?>" data-toggle="collapse" data-parent="#accordion" data-target="#collapse<?php echo $tab; ?>">
+                <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $tab; ?>" aria-expanded="false" aria-controls="collapse<?php echo $tab; ?>">
+                  Customer Details
+                </a>
+              </h5>
+            </div>
+            <div id="collapse<?php echo $tab; ?>" class="collapse" role="tabpanel" aria-labelledby="heading<?php echo $tab; ?>">
+                <div class="card-block">
+                    
+					
+						<div class="form-group row">
+							<div class="<?php echo $labelC; ?>">
+								<?php echo $this->form->dob_year_from->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('dob_year_from'); ?>
+							</div>
+							<div class="col-md-1">
+								<?php echo $this->form->dob_year_to->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('dob_year_to'); ?>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="<?php echo $labelC; ?>">
+								<?php echo $this->form->dob_from->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('dob_from'); ?>
+							</div>
+							<div class="col-md-1">
+								<?php echo $this->form->dob_to->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('dob_to'); ?>
+							</div>
+						</div>
+						
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->demographic->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('demographic'); ?>
+						</div></div>
+					
+					
+                </div>
+            </div>
+        </div>
+		<?php $tab=4; ?>
+        <div class="card">
+            <div class="card-header collapsed" role="tab" id="heading<?php echo $tab; ?>" data-toggle="collapse" data-parent="#accordion" data-target="#collapse<?php echo $tab; ?>">
+                <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $tab; ?>" aria-expanded="false" aria-controls="collapse<?php echo $tab; ?>">
+                  Contact So Far
+                </a>
+              </h5>
+            </div>
+            <div id="collapse<?php echo $tab; ?>" class="collapse" role="tabpanel" aria-labelledby="heading<?php echo $tab; ?>">
+                <div class="card-block">
+                    
+					
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->outbound->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('outbound'); ?>
+						</div></div>
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->outbound_type->getLabel(); ?><br>
+						<div class="outbound_type" style="display:none;"><a href="#" class="select_all" title="select all" data_ref="outbound_type">All</a> | <a href="#" title="select none" class="select_none" data_ref="outbound_type">None</a></div>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('outbound_type'); ?>
+						</div></div>
+						<div class="form-group row">
+							<div class="<?php echo $labelC; ?>">
+								<?php echo $this->form->outbound_within_from->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('outbound_within_from'); ?>
+							</div>
+							<div class="col-md-1">
+								<?php echo $this->form->outbound_within_to->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('outbound_within_to'); ?>
+							</div>
+						</div>
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->inbound->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('inbound'); ?>
+						</div></div>
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->inbound_type->getLabel(); ?><br>
+							<div class="inbound_type" style="display:none;"><a href="#" class="select_all" title="select all" data_ref="inbound_type">All</a> | <a href="#" title="select none" class="select_none" data_ref="inbound_type">None</a></div>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('inbound_type'); ?>
+						</div></div>
+						<div class="form-group row">
+							<div class="<?php echo $labelC; ?>">
+								<?php echo $this->form->inbound_within_from->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('inbound_within_from'); ?>
+							</div>
+							<div class="col-md-1">
+								<?php echo $this->form->inbound_within_to->getLabel(); ?>
+							</div>
+							<div class="col-md-4 hide_label">
+								<?php echo $this->form->getElement('inbound_within_to'); ?>
+							</div>
+						</div>
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->rep_code->getLabel(); ?><br>
+							<a href="#" class="select_all" title="select all" data_ref="rep_code">All</a> | <a href="#" title="select none" class="select_none" data_ref="rep_code">None</a>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('rep_code'); ?>
+						</div></div>
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->gender->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php 
+							echo $this->form->getElement('gender');
+							?>
+						</div></div>
+						
+					
+                </div>
+            </div>
+        </div>
+	</div>	
+		<?php $tab=5; ?>
+        <div class="card">
+            <div class="end_header card-header collapsed" role="tab" id="heading<?php echo $tab; ?>" data-toggle="collapse" data-target="#collapse<?php echo $tab; ?>">
+                <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" href="#collapse<?php echo $tab; ?>" aria-expanded="false" aria-controls="collapse<?php echo $tab; ?>">
+                  Export
+                </a>
+              </h5>
+            </div>
+            <div id="collapse<?php echo $tab; ?>" class="out collapse show" aria-labelledby="heading<?php echo $tab; ?>">
+                <div class="card-block">
+						
+						<div class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->export_format->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('export_format');?>
+						</div></div>
+						<?php if ($hide==1) { ?>
+						<div id="field_email_type" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->email_type->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('email_type');?>
+						</div></div>
+						<?php } ?>
+						<div id="field_discount_offer" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->discount_offer->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('discount_offer');?>
+						</div></div>
+						<div id="field_sms_type" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->sms_type->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('sms_type');?>
+						</div></div>
+						<div id="field_phone_type" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->phone_type->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('phone_type');?>
+						</div></div>
+						<?php if ($hide==1) { ?>
+						<div id="field_ivr_type" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->ivr_type->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('ivr_type');?>
+						</div></div>
+						<div id="field_callback_type" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->callback_type->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('callback_type');?>
+						</div></div>
+						<?php } ?>
+						<div id="field_letter_template" class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->letter_template->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('letter_template');?>
+						</div></div>
+						<?php if ($hide==1) { ?>
+						<div id="field_include_client_name " class="form-group row"><div class="<?php echo $labelC; ?>">
+							<?php echo $this->form->include_client_name->getLabel(); ?>
+						</div><div class="<?php echo $ElementC; ?> hide_label">
+							<?php echo $this->form->getElement('include_client_name');?>
+						</div></div>
+						<?php } ?>
+						
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<?php echo $this->form->submit; ?>
+							</div>
+						</div>
+					
+                </div>
+            </div>
+        </div>

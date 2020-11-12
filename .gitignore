@@ -1,0 +1,7 @@
+/var/*
+*.scssc
+Thumbs.db
+.DS_Store
+/nbproject/private/
+/nbproject/*
+/tmp/*

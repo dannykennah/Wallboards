@@ -1,0 +1,202 @@
+<style>
+
+.TM {
+	padding-left:50px;
+}
+
+.TM .card-blue-white .card-body{
+	border-radius:20px;
+}
+
+</style>
+
+<div class="container-fluid">
+	<h2 class=""><span>Conversational SMS Board</span></h2>
+	<div class="row">
+
+		<div class="col-md-8">
+			<div class="col-md-12">
+				<div class="TM row1 row row-data" style="padding-top:20px">
+
+					<div class="col-md-7">
+						<div class="card card-blue-white mt-0">
+								<h5 class="card-header-nofill zen_text">No Active Chats</h5>
+						</div>
+					</div>
+
+
+				</div>
+
+				<div class="TM row2 row row-data" style="padding-top:20px">
+
+
+				</div>
+
+			</div>
+		</div>
+
+		<div class="col-md-4 mt-3 TM">
+			<div class="col-md-12">
+
+				<div class="row row-data" style="padding-top:20px; padding-left:115px;">
+					<div class="mt-0 card-background-crs weekSent" style="width:60%; padding-left:50px; padding-right: 50px;">
+						<h5 style="font-size:16px; ">Messages Delivered this Week</h5><div class="card-body p-0">
+							<div style="line-height:25px; padding-top:55px; padding-bottom:40px; text-align:center;">
+								<span class="zen_text">0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row row-data" style="padding-top:20px; padding-left:115px;">
+					<div class="mt-0 card-background-crs monthSent" style="width:60%; padding-left:50px; padding-right: 50px;">
+						<h5 style="font-size:16px;">Messages Delivered this Month</h5><div class="p-0">
+							<div style="line-height:25px; padding-top:55px; padding-bottom:40px; text-align:center;">
+								<span class="zen_text">0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row row-data activechat2" style="padding-top:20px; padding-left:115px;">
+					<div class="card-background-crs mt-0 activeChats" style="width:60%; padding-left:50px; padding-right: 50px;">
+						<h5 style="font-size:16px;">Active Chats</h5><div class="p-0">
+							<div style="line-height:25px; padding-top:55px; padding-bottom:40px; text-align:center;">
+								<span class="zen_text">0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+function update_TMtexts(the_id){
+	$.ajax({
+				url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+				dataType: 'json',  // what to expect back from the PHP script, if anything
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'post',
+			}).done(function(res){
+
+				// Clear rows and initialize variables
+				// The lack of an underscore here differentiates the rows on the live chat wallboard and the text magic wallboard
+
+				if (res.length != 0){
+					$(".row1").html("");
+					$(".row2").html("");
+
+					var chatCount = 0;
+					var messageCount = 0;
+					var row = 1;
+					var msgLimit = 8;
+
+					// reduce the limit for messages shown if there are more than two chats being shown
+					if(res.length > 2){
+						msgLimit = 4;
+					}
+
+
+					// For each chat we've retrieved...
+					for(count = 0; count < res.length; count++){
+
+						if (count > 1){
+							row = 2;
+						}
+
+						// make a box for each chat
+						$(".row"+row).append('<div class="col-md-6">'+
+																'<div class="card-background-crs card-blue-white card-body mt-0">'+
+																	'<h5 class="card-header-nofill" style="font-size:18px;">'+res[count][0].sender+'</h5><div class="p-0">'+
+																			'<div>'+
+																				'<ul class="list-group TMC_'+count+'"></ul>'+
+																			'</div>' +
+																		'</div>' +
+																	'</div>'+
+															 '</div>');
+
+						for(messageCount = 0; messageCount < res[count].length; messageCount++){
+
+							if (messageCount < msgLimit){
+
+								// Display the messages in reverse order
+								if (res[count][(res[count].length - (messageCount+1))].direction == "i"){
+									$('.TMC_'+count).append('<li class = "list-group-item">'+res[count][(res[count].length - (messageCount+1))].text+'<div class="livechat_icon_user"><i class="fas fa-user"> </i></div></li>');
+								} else{
+									$('.TMC_'+count).append("<li class = 'list-group-item' style='color:#d1fc00; text-align:right;'>"+res[count][(res[count].length - (messageCount+1))].text+"<div class='livechat_icon_crs' style='margin-left:472px;'><img src='http://wallboards.creditresourcesolutions.co.uk/images/logo.png'></div></li>");
+								}
+
+							}
+
+						}
+
+					}
+
+				} else{
+
+					$(".row1").html("");
+					$(".row2").html("");
+
+					$(".row1").append('<div class="col-md-7">'+
+										'<div class="card card-blue-white mt-0">'+
+										'<h5 class="card-header zen_text">No Active Chats</h5>'+
+										'</div></div>');
+
+				}
+
+
+			});
+}
+
+function update_TMstats(the_id) {
+
+	$.ajax({
+				url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+				dataType: 'json',  // what to expect back from the PHP script, if anything
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'post',
+			}).done(function(res){
+
+				// If there are no active chats then clear both rows of chats and insert the "No Active Chats" box
+				if ((res.live == "0") || (res.week == null)){
+					$(".row1").html("");
+					$(".row2").html("");
+
+					$(".row1").append('<div class="col-md-7">'+
+										'<div class="card card-blue-white mt-0">'+
+										'<h5 class="card-header zen_text">No Active Chats</h5>'+
+										'</div></div>');
+
+					if(res.week != null){
+
+						// Insert new values into the number displays
+						$(".weekSent .zen_text").html(res.week[0].messagesSentDelivered);
+						$(".monthSent .zen_text").html(res.month[0].messagesSentDelivered);
+						$(".activeChats .zen_text").html(res.live);
+
+					}
+
+				}else{
+
+					// Insert new values into the number displays
+					$(".weekSent .zen_text").html(res.week[0].messagesSentDelivered);
+					$(".monthSent .zen_text").html(res.month[0].messagesSentDelivered);
+					$(".activeChats .zen_text").html(res.live);
+
+				}
+				$( ".activechat2" ).effect( "bounce", {times:2}, 1000 );
+				// $( ".activeChats" ).effect( "shake", {times:1}, 1000 );
+
+			});
+
+}
+
+</script>

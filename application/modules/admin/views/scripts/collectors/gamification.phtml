@@ -1,0 +1,32 @@
+<?php
+echo '<table width="100%">';
+echo '<tr>';
+  echo '<td>Person</td>';
+  echo '<td>Award</td>';
+  echo '<td>Total</td>';
+  echo '<td>Xp Total</td>';
+echo '</tr>';
+foreach ($this->xp as $key => $person) {
+  $total=0;
+  $xp_total=0;
+  foreach ($person as $award) {
+    echo '<tr>';
+      echo '<td>'.$key.'</td>';
+      echo '<td>'.$award['name'].'</td>';
+      echo '<td>'.$award['total'].'</td>';
+      echo '<td>'.$award['xp_total'].'</td>';
+    echo '</tr>';
+    $total=$total+$award['total'];
+    $xp_total=$xp_total+$award['xp_total'];
+  }
+
+  echo '<tr style="background-color: #3794e6; color: #FFF;">';
+    echo '<td colspan="2">'.$key.' TOTAL </td>';
+    echo '<td>'.$total.'</td>';
+    echo '<td>'.$xp_total.'</td>';
+  echo '</tr>';
+
+
+}
+echo '</table>';
+ ?>

@@ -1,0 +1,32 @@
+<table class="table table-striped mb-0">
+  <thead>
+    <tr>
+      <th scope="col">Target Month</th>
+      <th scope="col">Revenue Target</th>
+      <th scope="col">Arrangement Targets</th>
+      <th scope="col">Accounts Worked Targets</th>
+      <?php if (!$this->ex_button) {?>
+      <th scope="col" width="10%">Actions</th>
+      <?php } ?>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+
+
+      foreach ($this->targets as $tag){
+        ?>
+        <tr>
+          <td scope="col"><?php echo $tag->month; ?></td>
+          <td scope="col"><?php echo $tag->target; ?></td>
+          <td scope="col"><?php echo $tag->arrangements_target; ?></td>
+          <td scope="col"><?php echo $tag->worked_target; ?></td>
+          <?php if (!$this->ex_button) {?>
+            <td scope="col">Edit</td>
+          <?php } ?>
+        </tr>
+        <?php
+      }
+      ?>
+      <tbody>
+</table>

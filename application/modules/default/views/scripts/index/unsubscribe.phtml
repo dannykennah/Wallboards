@@ -1,0 +1,22 @@
+<?php $this->pageTitle = 'Unsubscribe'; ?>
+
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="<?php echo $this->baseUrl('js/libs/autocomplete.js'); ?>"></script>
+  
+
+<section class="inner-1  cf">
+
+    <?php if ($this->success): ?>
+
+        <p>You have successfully opted out of automated emails about this debt.</p>
+
+    <?php else: ?>
+
+        <p>You have received this email because of a debt owed by you.</p>
+        <p>You may opt out of automated emails about this debt, but we will continue to contact you by other means.</p>
+
+        <?php echo $this->form; ?>
+
+    <?php endif; ?>
+
+</section>

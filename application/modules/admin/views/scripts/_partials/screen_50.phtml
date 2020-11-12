@@ -1,0 +1,1266 @@
+<?php
+//debt,debtor,trans table start
+$servers['reporting'] = array();
+
+$testinfo = array();
+$array = array();$errors = array();
+$errors2 = array();
+
+foreach($this->fetchReps AS $replication){
+  array_push($testinfo,$replication->TgtTable);
+}
+
+if (!in_array("debt", $testinfo)) {
+    $debt = true;
+}
+
+if (!in_array("debtor", $testinfo)) {
+    $debtor = true;
+}
+if (!in_array("debt_trans", $testinfo)) {
+  $debt_trans = true;
+}
+
+foreach($this->fetchReps AS $replication){
+
+  if($replication->TgtTable === 'debt_trans'){
+
+    $eventdate = $replication->EventDate;
+    $eventtime = $replication->EventTime;
+
+    $diff = ceil((strtotime(date("Y/m/d H:i:s"))-strtotime($eventdate." ".$eventtime))/60);
+
+    if($diff < 30){
+      $color = 'green';
+    }
+    if($diff > 30 && $diff < 60){
+      $color = 'yellow';
+    }
+    if($diff >= 60){
+      $color = 'red';
+    }
+
+    $information = array('Tablename'=>'Trans Table','Event_Ran'=>$eventtime,'Event_Status'=>$color);
+
+    array_push($servers['reporting'],$information);
+
+    if($color === 'red'){
+      $information = array('task_title'=>'Trans Table','created'=>$eventtime,'runtime'=>$color);
+      array_push($errors, (object) $information);
+    }
+
+  }
+
+
+  if($replication->TgtTable === 'debt'){
+
+    $eventdate = $replication->EventDate;
+    $eventtime = $replication->EventTime;
+
+    $diff = ceil((strtotime(date("Y/m/d H:i:s"))-strtotime($eventdate." ".$eventtime))/60);
+
+    if($diff < 30){
+      $color = 'green';
+    }
+    if($diff > 30 && $diff < 60){
+      $color = 'yellow';
+    }
+    if($diff > 60){
+    $color = 'red';
+    }
+
+    $information = array('Tablename'=>'Debt Table','Event_Ran'=>$eventtime,'Event_Status'=>$color);
+
+    array_push($servers['reporting'],$information);
+
+    if($color === 'red'){
+      $information = array('task_title'=>'Debt Table','created'=>$eventtime,'runtime'=>$color);
+      array_push($errors, (object) $information);
+    }
+  }
+
+  if($replication->TgtTable === 'debtor'){
+
+    $eventdate = $replication->EventDate;
+    $eventtime = $replication->EventTime;
+
+    $diff = ceil((strtotime(date("Y/m/d H:i:s"))-strtotime($eventdate." ".$eventtime))/60);
+
+    if($diff < 30){
+      $color = 'green';
+    }
+    if($diff > 30 && $diff < 60){
+      $color = 'yellow';
+    }
+    if($diff > 60){
+    $color = 'red';
+    }
+
+    $information = array('Tablename'=>'Debtor Table','Event_Ran'=>$eventtime,'Event_Status'=>$color);
+
+    array_push($servers['reporting'],$information);
+
+    if($color === 'red'){
+      $information = array('task_title'=>'Debtor Table','created'=>$eventtime,'runtime'=>$color);
+      array_push($errors, (object) $information);
+    }
+  }
+
+}
+
+if($debt === true){
+  $dt = new DateTime('now', new DateTimezone('Europe/London'));
+
+  $information = array('Tablename'=>'Debt Table','Event_Ran'=>date("H:i:s"),'Event_Status'=>'green');
+
+  array_push($servers['reporting'],$information);
+}
+
+if($debtor === true){
+  $dt = new DateTime('now', new DateTimezone('Europe/London'));
+
+  $information = array('Tablename'=>'Debtor Table','Event_Ran'=>date("H:i:s"),'Event_Status'=>'green');
+
+  array_push($servers['reporting'],$information);
+}
+
+if($debt_trans === true){
+  $dt = new DateTime('now', new DateTimezone('Europe/London'));
+
+  $information = array('Tablename'=>'Debtor Table','Event_Ran'=>date("H:i:s"),'Event_Status'=>'green');
+
+  array_push($servers['reporting'],$information);
+}
+//debt,debtor,trans table End
+
+///Start of pulling in errors for group
+foreach ($this->tasks as $task) {
+
+  if ($task->task_group==1) {
+
+    if($task->runtime === 'red'){
+      // array_push($errors, $task);
+      $errors[] = $task;
+    }
+
+  }
+
+  if ($task->task_group==2) {
+
+    if($task->runtime === 'red'){
+      $errors[] = $task;
+      // array_push($errors, $task);
+    }
+
+  }
+
+  if ($task->task_group==3) {
+
+    if($task->runtime === 'red'){
+      // array_push($errors, $task);
+            $errors[] = $task;
+    }
+
+  }
+
+  // if ($task->task_group==4) {
+  //
+  //   if($task->runtime === 'red'){
+  //     array_push($errors, $task);
+  //   }
+  //
+  // }
+
+  if ($task->task_group==5) {
+
+    if($task->runtime === 'red'){
+
+      // array_push($errors2, $task);
+            $errors[] = $task;
+
+    }
+
+  }
+
+  // if ($task->task_group==6) {
+  //
+  //   if($task->runtime === 'red'){
+  //     array_push($errors, $task);
+  //   }
+  //
+  // }
+
+
+  // if ($task->task_group==7) {
+  //
+  //   if($task->runtime === 'red'){
+  //
+  //     // array_push($errors, $task);
+  //           $errors[] = $task;
+  //
+  //   }
+  //
+  // }
+
+}
+
+//end of group push error data
+//processing website batch card
+function getlight($name,$run,$due,&$errors){
+
+  $duedate = date('Y-m-d ').$due;
+
+  $todaysdate = date('Y-m-d');
+
+  $todaystime = date('H:i:s');
+
+  $check = date('Y-m-d',strtotime($run));
+
+  $currentdue = date('Y-m-d H:i:s',strtotime($duedate));
+
+  $datetime1 = date_create($currentdue);
+  $datetime2 = date_create($run);
+
+  $interval = date_diff($datetime1, $datetime2);
+
+  if($check != $todaysdate){
+
+    if ($due > $todaystime) {
+      $data = '<ul class="traffic_block">
+                            <li class="grey_active "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>';
+    } else {
+
+      $data = '<ul class="boxtraffic traffic_block">
+                            <li class="red_active"><i class="fa fa-circle fa-1x" aria-hidden="true"></i></li>
+                            <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>
+                          <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                              </ul>';
+
+                                              if($name != 'makerepeatauthorise0320'){
+                                                $information = array('task_title'=>$name,'created'=>date('H:i:s'),'runtime'=>'red');
+
+                                                array_push($errors, (object) $information);
+                                              }
+    }
+
+
+
+  }
+  else {
+    if($interval->i < 30){
+      $data = '<ul class="traffic_block">
+                            <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="green_active "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>';
+    }
+    if($interval->i > 30 || $interval->h > 0){
+      $data = '<ul class="traffic_block">
+                            <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=" yellow_active "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>';
+    }
+
+  }
+  return $data;
+}
+
+$makefirstauthenticate0320 = getlight('makefirstauthenticate0320',$this->batchCards[0]['run_datetime'],$this->batchCards[0]['due_time'],$errors);
+
+$makerepeatauthorise0320 = getlight('makerepeatauthorise0320',$this->batchCards[1]['run_datetime'],$this->batchCards[1]['due_time'],$errors);
+
+$makerepeatpayment0320 = getlight('makerepeatpayment0320',$this->batchCards[2]['run_datetime'],$this->batchCards[2]['due_time'],$errors);
+
+$retryfailedauthed0300 = getlight('retryfailedauthed0300',$this->batchCards[3]['run_datetime'],$this->batchCards[3]['due_time'],$errors);
+
+$retryfailedauthenticate0300 = getlight('retryfailedauthenticate0300',$this->batchCards[4]['run_datetime'],$this->batchCards[4]['due_time'],$errors);
+
+$retryfailedpayment0300 = getlight('retryfailedpayment0300',$this->batchCards[5]['run_datetime'],$this->batchCards[5]['due_time'],$errors);
+
+$retryfailedauthed0700 = getlight('retryfailedauthed0700',$this->batchCards[6]['run_datetime'],$this->batchCards[6]['due_time'],$errors);
+
+$retryfailedauthenticate0700 = getlight('retryfailedauthenticate0700',$this->batchCards[7]['run_datetime'],$this->batchCards[7]['due_time'],$errors);
+
+$retryfailedpayment0700 = getlight('retryfailedpayment0700',$this->batchCards[8]['run_datetime'],$this->batchCards[8]['due_time'],$errors);
+
+$retryfailedauthed1700 = getlight('retryfailedauthed1700',$this->batchCards[9]['run_datetime'],$this->batchCards[9]['due_time'],$errors);
+
+$retryfailedauthenticate1700 = getlight('retryfailedauthenticate1700',$this->batchCards[10]['run_datetime'],$this->batchCards[10]['due_time'],$errors);
+
+$retryfailedpayment1700 = getlight('retryfailedpayment1700',$this->batchCards[11]['run_datetime'],$this->batchCards[11]['due_time'],$errors);
+///end of website batchcard processing
+
+
+ ?>
+<style>
+.maintxt {
+    background-image: url('https://media3.giphy.com/media/5nsiFjdgylfK3csZ5T/giphy.gif?cid=ecf05e4722b5da5yb9vj450ui747ksiqn0d70gvk4whlta0s&rid=giphy.gif');
+    background-size: cover;
+}
+.overlay-text {
+  position: absolute;
+  bottom: 8px;
+left: 16px;
+  font-size:100pt;
+  text-transform: uppercase;
+  text-shadow: 4px 4px red;
+}
+</style>
+<div class="container-fluid content2">
+<div class="row test">
+          <!-- <img src="https://thumbs.gfycat.com/OrneryGloriousAvocet-size_restricted.gif" class="col-xs-12 img-fluid">
+          <span class="overlay-text">Congratulations, You have reached £2000</span> -->
+    </div>
+</div>
+<div class="container-fluid content">
+  <div class="row">
+
+    <div class="col-xs-12 col-md-8">
+
+      <div class="col-xs-12">
+        <?php
+
+        // $items = array();
+        //
+        // foreach ($this->tasks as $task) {
+        //
+        //   if ($task->task_group==7) {
+        //     array_push($items,$task);
+        //   }
+        //
+        // }
+        //
+        // echo '<pre style="color:white;">';
+        // echo print_r($items);
+        // echo '</pre>';
+
+        ?>
+      </div>
+
+        <div class="card transparent text-white no-overlap mt-3">
+          <h5 class="card-header borderbottom mt-0 no-overlap">Caseflow Batch Card</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0">
+							<thead>
+								<tr>
+									<th>Run</th>
+									<th>Volume Success</th>
+									<th>Volume Failed</th>
+									<th>% Success</th>
+									<th>%Cash Success</th>
+									<th>Value</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody class="transparent white-text">
+
+                <?php
+                  $col1t=0;
+                  $col2t=0;
+                  $col3t=0;
+                  $col3ta=0;
+                  $col4t=0;
+                  foreach ($this->tasks as $task) {
+
+                    if ($task->task_id==12) { $notes = unserialize($task->notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>3am</td>
+                        <td><?php $col1t=$col1t+$notes[4]; echo $notes[4]; ?></td>
+                        <td><?php $col2t=$notes[6]; echo $notes[6]; ?></td>
+                        <td><?php
+                        $nsum=0;
+                        $total=0;
+                        $total = $notes[4]+$notes[6];
+                        $nsum = ($notes[4]/$total)*100;
+                        echo number_format($nsum,2,'.','');
+                        $col3t=$col3t+$nsum;
+                        ?>%</td>
+                        <td><?php
+                        $nsuma=0;
+                        $totala=0;
+                        $totala = $notes[3];
+                        $nsuma = ($notes[5]/$totala)*100;
+                        echo number_format($nsuma,2,'.','');
+                        $col3ta=$col3ta+$nsuma;
+                        ?>%</td>
+                        <td>£<?php $col4t=$col4t+$notes[5]; echo number_format($notes[5],2,'.',','); ?></td>
+                        <td>
+                          <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?> traffic_block">
+                            <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?>
+                            <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                          <?php
+                          if($task->runtime==='red'){?> <?php } ?>
+                           <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+                <?php
+                  foreach ($this->tasks as $task) {
+                    if ($task->task_id==13) { $notes = unserialize($task->notes);  //print_r($notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>7am</td>
+                        <td><?php $col1t=$col1t+$notes[4]; echo $notes[4]; ?></td>
+                        <td><?php echo $notes[6]; ?></td>
+                        <td><?php
+                        $nsum=0;
+                        $total=0;
+                        $total = $notes[4]+$notes[6];
+                        $nsum = ($notes[4]/$total)*100;
+                        echo number_format($nsum,2,'.','');
+                        $col3t=$col3t+$nsum;
+                        ?>%</td>
+                        <td><?php
+                        $nsuma=0;
+                        $totala=0;
+                        $totala = $notes[3];
+                        $nsuma = ($notes[5]/$totala)*100;
+                        echo number_format($nsuma,2,'.','');
+                        $col3ta=$col3ta+$nsuma;
+                        ?>%</td>
+                        <td>£<?php $col4t=$col4t+$notes[5]; echo number_format($notes[5],2,'.',','); ?></td>
+                        <td>
+                          <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?> traffic_block">
+                            <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                           <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+                <?php
+                  foreach ($this->tasks as $task) {
+                    if ($task->task_id==14) { $notes = unserialize($task->notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>5pm</td>
+                        <td><?php $col1t=$col1t+$notes[4]; echo $notes[4]; ?></td>
+                        <td><?php $col2t=$col2t+$notes[6]; echo $notes[2]; ?></td>
+                        <td><?php
+                        $nsum=0;
+                        $total=0;
+                        $total = $notes[4]+$notes[2];
+                        $nsum = ($notes[4]/$total)*100;
+                        if ($notes[4]) {
+                          echo number_format($nsum,2,'.','').'%';
+                          $col3t=$col3t+$nsum;
+                        } else {
+
+                        }
+                        ?></td>
+                        <td><?php
+                        $nsuma=0;
+                        $totala=0;
+                        $totala = $notes[3];
+                        $nsuma = ($notes[5]/$totala)*100;
+                        if ($notes[3]) {
+                          echo number_format($nsuma,2,'.','').'%';
+                        }
+                        $col3ta=$col3ta+$nsuma;
+                        ?></td>
+                        <td><?php if ($notes[4]) { ?>£<?php $col4t=$col4t+$notes[5]; echo number_format($notes[5],2,'.',',');  } ?></td>
+                        <td>
+                          <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                            <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                            <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                           <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+                <tr class="alert-success">
+                  <td>Total</td>
+                  <td><?php echo $col1t; ?></td>
+                  <td><?php echo $col2t; ?></td>
+                  <td><?php echo number_format($col3t,2,'.',''); ?>%</td>
+                  <td><?php echo number_format($col3ta,2,'.',''); ?>%</td>
+                  <td>£<?php echo number_format($col4t,2,'.',','); ?></td>
+                  <td> </td>
+                </tr>
+              </tbody>
+							</table>
+
+          </div>
+        </div>
+
+
+        <div class="card transparent text-white no-overlap mt-3">
+          <h5 class="card-header borderbottom mt-0 no-overlap">Website Batch Card</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0">
+							<thead>
+								<tr>
+									<th>Run</th>
+									<th>RetryFailedPayment</th>
+									<th>RetryFailedAuthenticate</th>
+									<th>RetryFailedAuthed</th>
+									<th>MakeRepeatPayment</th>
+									<th>MakeRepeatAuthorise</th>
+									<th>MakeFirstAuthenticate</th>
+								</tr>
+							</thead>
+							<tbody class="transparent white-text">
+
+                <?php
+                  $col1t=0;
+                  $col2t=0;
+                  $col3t=0;
+                  $col3ta=0;
+                  $col4t=0;
+                  foreach ($this->tasks as $task) {
+                    if ($task->task_id==15) { $notes = unserialize($task->notes); //print_r($notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>3am</td>
+                        <td><?php echo $retryfailedpayment0300; ?></td>
+                        <td><?php echo $retryfailedauthenticate0300; ?></td>
+                        <td><?php echo $retryfailedauthed0300; ?></td>
+                        <td><?php echo $makerepeatpayment0320; ?></td>
+                        <td><?php echo $makerepeatauthorise0320; ?></td>
+                        <td>
+                          <?php echo $makefirstauthenticate0320; ?>
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+                <?php
+                  foreach ($this->tasks as $task) {
+                    if ($task->task_id==16) { $notes = unserialize($task->notes);  //print_r($notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>7am</td>
+                        <td><?php echo $retryfailedpayment0700; ?></td>
+                        <td><?php echo $retryfailedauthenticate0700; ?></td>
+                        <td><?php echo $retryfailedauthed0700; ?></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>
+                          N/A
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+                <?php
+                  foreach ($this->tasks as $task) {
+                    if ($task->task_id==17) { $notes = unserialize($task->notes);
+                      ?>
+                      <tr class="alert-success">
+                        <td>5pm</td>
+                        <td><?php echo $retryfailedpayment1700; ?></td>
+                        <td><?php echo $retryfailedauthenticate1700; ?></td>
+                        <td><?php echo $retryfailedauthed1700; ?></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>
+                          N/A
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                ?>
+              </tbody>
+							</table>
+
+
+
+          </div>
+        </div>
+
+
+        <div class="card transparent text-white no-overlap mt-3" style="margin-bottom:10px;">
+          <h5 class="card-header borderbottom mt-0 no-overlap"><i class="fas fa-exclamation-triangle"></i>&nbsp;Notifications</h5>
+          <div class="card-body p-2">
+            <?php
+
+            if(count($errors) === 0 && count($errors) === 0){
+              ?>
+              <div style="text-align:center;">
+                <iframe src="https://giphy.com/embed/l41lWfcNbLXGQ8sU0" width="480" height="269" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+              <!-- <h4><i class="text-center far fa-smile fa-3x"></i>&nbsp; Hooray, there are no issues right now.</h4> -->
+            </div>
+              <?php
+            }
+            else {
+              // echo '<pre style="color:white;">';
+              // echo print_r($errors);
+              // echo '</pre>';
+              ?>
+              <div style="text-align:center;">
+              <iframe src="https://giphy.com/embed/poZnXsKLvTVGo" width="480" height="275" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+            </div>
+              <table class="table m-0">
+                <table class="table m-0" style="table-layout: fixed;">
+                  <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Time reported</th>
+                        <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="issues transparent white-text">
+                    <?php
+                    foreach($errors AS $error){
+                      ?>
+                      <tr>
+                      <td><?php echo $error->task_title; ?></td>
+
+                      <td><?php echo date('H:i:s',strtotime($error->created)); ?></td>
+                      <td>
+                        <ul class="<?php if($error->runtime==='red'){?> boxtraffic <?php } ?> traffic_block">
+                          <li class="<?php if ($error->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($error->runtime=="grey") { echo "grey_active "; } ?> <?php if ($error->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($error->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                        <?php if($error->runtime === 'red'){?>
+  <ul class="boxtraffic2 traffic_block" style="display:none;">
+                        <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                      </ul>
+<?php } ?>
+                      </td>
+                    </tr>
+                      <?php
+                    }
+                    ?>
+                    <?php
+                    foreach($errors2 AS $error){
+                      ?>
+                      <tr>
+                      <td><?php echo $error->task_title; ?></td>
+
+                      <td><?php echo $error->lastran; ?></td>
+                      <td>
+                        <ul class="<?php if($error->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($error->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($error->runtime=="grey") { echo "grey_active "; } ?> <?php if ($error->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($error->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                        <?php if($error->runtime === 'red'){?>
+  <ul class="boxtraffic2 traffic_block" style="display:none;">
+                        <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                      </ul>
+<?php } ?>
+                      </td>
+                    </tr>
+                      <?php
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              <?php
+            } ?>
+
+          </div>
+        </div>
+
+
+        <div class="col-xs-12 card transparent">
+          <div class="row">
+
+            <div class="col-xs-12 col-md-6 text-white">
+              <table class="table m-0" style="table-layout: fixed;">
+                <thead>
+                  <tr>
+                      <th>Internal site</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody class="transparent white-text internalservices-even">
+                </tbody>
+                </table>
+
+
+                <table class="table m-0" style="table-layout: fixed;">
+                  <thead>
+                    <tr>
+                        <th>Internal site</th>
+                        <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="transparent white-text internalservices-odd">
+                  </tbody>
+                  </table>
+            </div>
+            <div class="col-xs-12 col-md-6 text-white ">
+
+              <table class="table m-0" style="table-layout: fixed;">
+                <thead>
+                  <tr>
+                      <th>External site</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody class="transparent white-text externalservices">
+                </tbody>
+
+                </table>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-4">
+      <div class="card transparent text-white no-overlap mt-3">
+        <div class="card-body p-2">
+          <h5 class="card-header borderbottom mt-0 no-overlap"><i class="fas fa-thermometer-three-quarters"></i>&nbsp;System Status</h5>
+
+            <div class="row pt-1 pb-1 ">
+              <div class="col-md-12">
+                <strong>New Day</strong>
+              </div>
+            </div>
+            <?php
+
+              foreach ($this->tasks as $task) {
+                if ($task->task_group==1) {
+                  ?>
+                    <div class="row pt-1 pb-1 block1">
+                      <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <?php echo $task->task_title; ?>
+                            </div>
+                            <div class="col-md-6">
+                              <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                        <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                        <?php if($task->runtime === 'red'){?>
+                          <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                              </ul>
+                        <?php } ?>
+                      </div>
+                    </div>
+                  <?php
+                }
+              }
+            ?>
+
+
+            <div class="row pt-1 pb-1 ">
+              <div class="col-md-12">
+                &nbsp;
+              </div>
+              <div class="col-md-12">
+                <strong>Reporting Server</strong>
+              </div>
+            </div>
+            <?php
+
+              foreach ($this->tasks as $task) {
+                if ($task->task_group==2) {
+                  ?>
+                    <div class="row pt-1 pb-1 block1">
+                      <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <?php echo $task->task_title; ?>
+                            </div>
+                            <div class="col-md-6">
+                              <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                        <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                      </div>
+                    </div>
+                  <?php
+                }
+              }
+            ?>
+
+            <div class="row pt-1 pb-1 ">
+              <div class="col-md-12">
+                &nbsp;
+              </div>
+              <div class="col-md-12">
+                <strong>Replication Server</strong>
+              </div>
+            </div>
+
+            <?php
+              foreach ($servers['reporting'] as $task) {
+                  ?>
+                    <div class="row pt-1 pb-1 ">
+                      <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <?php echo $task['Tablename']; ?>
+                            </div>
+                            <div class="col-md-6">
+                              <?php if ($task['Event_Ran']) { ?>(Ran : <?php echo $task['Event_Ran']; ?>) <?php } ?>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                        <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($task['Event_Status']=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task['Event_Status']=="grey") { echo "grey_active "; } ?> <?php if ($task['Event_Status']=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task['Event_Status']=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                        <?php if($task->runtime === 'red'){?>
+                          <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                              </ul>
+                        <?php } ?>
+                      </div>
+                    </div>
+                  <?php
+              }
+            ?>
+
+            <div class="row pt-1 pb-1 block1crs">
+              <div class="col-md-12">
+                &nbsp;
+              </div>
+              <div class="col-md-12">
+                <strong>MyCRS Files</strong>
+              </div>
+            </div>
+            <?php
+              foreach ($this->tasks as $task) {
+                if ($task->task_group==5) {
+                  ?>
+                    <div class="row pt-1 pb-1 block1crs">
+                      <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <?php echo $task->task_title; ?>
+                            </div>
+                            <div class="col-md-6">
+                              <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                        <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                      </div>
+                    </div>
+                  <?php
+                }
+              }
+            ?>
+
+            <div class="row pt-1 pb-1 block2dma">
+              <div class="col-md-12">
+                &nbsp;
+              </div>
+              <div class="col-md-12">
+                <strong>DMA / Compass / WL / CPA Imports/exports</strong>
+              </div>
+            </div>
+            <?php
+              foreach ($this->tasks as $task) {
+                if ($task->task_group==7) {
+                  ?>
+                    <div class="row pt-1 pb-1 block2dma">
+                      <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <?php echo $task->task_title; ?>
+                            </div>
+                            <div class="col-md-6">
+                              <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                        <ul class="<?php if($task->runtime==='red'){?> boxtraffic <?php } ?>traffic_block">
+                          <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                          <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                        </ul>
+                          <?php if($task->runtime === 'red'){?>
+                            <ul class="boxtraffic2 traffic_block" style="display:none;">
+                                                  <li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                  <li class=""><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                </ul>
+                          <?php } ?>
+                      </div>
+                    </div>
+                  <?php
+                }
+              }
+            ?>
+
+                    <!-- <div class="row pt-1 pb-1 ">
+                      <div class="col-md-12">
+                        &nbsp;
+                      </div>
+                      <div class="col-md-12">
+                        <strong>Websites</strong>
+                      </div>
+                    </div> -->
+                    <?php
+
+                      foreach ($this->tasks as $task) {
+                        if ($task->task_group==6) {
+                          ?>
+                            <!-- <div class="row pt-1 pb-1 ">
+                              <div class="col-md-9">
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <?php echo $task->task_title; ?>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <?php if ($task->lastran) { ?>(Ran : <?php echo $task->lastran; ?>) <?php } ?>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="col-md-3">
+                                <ul class="traffic_block">
+                                  <li class="<?php if ($task->runtime=="red") { echo "red_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                  <li class="<?php if ($task->runtime=="grey") { echo "grey_active "; } ?> <?php if ($task->runtime=="yellow") { echo "yellow_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                  <li class="<?php if ($task->runtime=="green") { echo "green_active "; } ?>"><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                </ul>
+                              </div>
+                            </div> -->
+                          <?php
+                        }
+                      }
+                    ?>
+
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<style>
+.traffic_block{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  display: inline-block;
+  background-color: #033c5a;
+  padding: 2px 6px;
+  border-radius: 19px;
+}
+.traffic_block li{
+  display: inline-block;
+}
+.traffic_block .red_active i{
+  color:red;
+}
+.traffic_block .red_active1 i{
+  color:crimson;
+  box-shadow:
+        0 0 25px 12px #ff0000,  /* inner white */
+        0 0 24px -1px #ff0000, /* middle magenta */
+        0 0 37px -1px #0ff; /* outer cyan */
+        background-color:crimson;
+}
+.traffic_block .yellow_active i{
+  color:yellow;
+}
+.traffic_block .grey_active i{
+  color:grey;
+}
+.traffic_block .green_active i{
+  color:#08ea08;
+}
+</style>
+
+<script type="text/javascript">
+
+var shiftstatus = 0;
+
+var get_internal_website_status_status = 0;
+var get_uptime_status = 0;
+var flipInternalSitesStatus = 0;
+var shiftstatusdmacrs = 0;
+// videoinitiation = 0;
+//
+// function initiatevideo(gif,message){
+//
+//   if(videoinitiation == '0'){
+//     $('.content').hide();
+//     $('.content2').show();
+//
+//     $('.test').append('<img src="https://thumbs.gfycat.com/OrneryGloriousAvocet-size_restricted.gif" class="col-xs-12 img-fluid">');
+//     $('.test').append('<span class="overlay-text">'+message+'</span>');
+//
+//     $('.content2').hide();
+//
+//     $('.content').show();
+//
+//     console.log('test');
+//
+//     videoinitiation = 1;
+//   }
+//
+// }
+
+function flipInternalSites(){
+
+    if (flipInternalSitesStatus == 0) {
+        $('.internalservices-odd').parent().show();
+        $('.internalservices-even').parent().hide();
+        flipInternalSitesStatus = 1
+    }
+    else{
+        $('.internalservices-odd').parent().hide();
+        $('.internalservices-even').parent().show();
+        flipInternalSitesStatus = 0
+    }
+}
+
+function sitetrafficFlip(){
+
+if (shiftstatus == 0) {
+$('.boxtraffic2').show();
+$('.boxtraffic').hide();
+shiftstatus = 1
+}
+else{
+$('.boxtraffic2').hide();
+$('.boxtraffic').show();
+shiftstatus = 0
+}
+}
+
+function sitetrafficFlipdmacrs(){
+
+if (shiftstatusdmacrs == 0) {
+$('.block2dma').show();
+$('.block1crs').hide();
+shiftstatusdmacrs = 1
+}
+else{
+  $('.block2dma').hide();
+  $('.block1crs').show();
+shiftstatusdmacrs = 0
+}
+}
+
+
+
+function get_internal_website_status(the_id) {
+
+
+    if (get_internal_website_status_status == 0 || get_internal_website_status_status == 2) {
+        get_internal_website_status_status = 1;
+  $.ajax({
+      url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+      dataType: 'text',  // what to expect back from the PHP script, if anything
+      cache: true,
+            async: true,
+      contentType: true,
+      processData: true,
+    }).done(function(res){
+        $('.internalservices-even').empty();
+        $('.internalservices-odd').empty();
+            var obj = JSON.parse(res)
+
+            let x = 0;
+            var counter = 1;
+            Object.keys(obj).forEach(function(key) {
+
+                if (counter % 2 !== 0) {
+
+                    if (obj[key] === true) {
+                      $('.internalservices-odd').append('<tr>');
+                      $('.internalservices-odd').append('<td>'+key+'</td><td><ul class="traffic_block"><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class="green_active "><i class="fa fa-circle" aria-hidden="true"></i></li></ul>Online  </td>');
+                      $('.internalservices-odd').append('</tr>');
+                    }
+                    else{
+
+                      $('.internalservices-odd').append('<tr>');
+                      $('.internalservices-odd').append('<td>'+key+'</td><td><ul class="boxtraffic traffic_block"><li class="red_active "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul><ul class="boxtraffic2 traffic_block" style="display:none;"><li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul></td>');
+                      $('.internalservices-odd').append('</tr>');
+                    }
+                }
+                else{
+                    if (obj[key] === true) {
+                      $('.internalservices-even').append('<tr>');
+                      $('.internalservices-even').append('<td>'+key+'</td><td><ul class="traffic_block"><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class="green_active "><i class="fa fa-circle" aria-hidden="true"></i></li></ul>Online  </td>');
+                      $('.internalservices-even').append('</tr>');
+                    }
+                    else{
+                      $('.internalservices-even').append('<tr>');
+                      $('.internalservices-even').append('<td>'+key+'</td><td><ul class="boxtraffic traffic_block"><li class="red_active "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul><ul class="boxtraffic2 traffic_block" style="display:none;"><li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul></td>');
+                      $('.internalservices-even').append('</tr>');
+                    }
+                }
+                counter++;
+            })
+            get_internal_website_status_status = 2;
+    });
+
+    }
+}
+
+function get_uptime(the_id) {
+
+
+
+  let x = 0;
+
+    if (get_uptime_status == 0 || get_uptime_status == 2) {
+        get_uptime_status = 1;
+  $.ajax({
+      url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+      dataType: 'text',  // what to expect back from the PHP script, if anything
+      cache: true,
+            async: true,
+      contentType: true,
+      processData: true,
+    }).done(function(res){
+
+            $('.externalservices').empty();
+            var obj = JSON.parse(res)
+
+            Object.keys(obj).forEach(function(key) {
+                //console.log(obj);
+                //console.log(key);
+                if (obj[key]['status'] == 1) {
+
+                  $('.externalservices').append('<tr>');
+                  $('.externalservices').append('<td>'+key+'</td><td><ul class="traffic_block"><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class="green_active "><i class="fa fa-circle" aria-hidden="true"></i></li></ul>Online  </td>');
+                  $('.externalservices').append('</tr>');
+                  // if(key === 'MyTask'){
+                  //   $('.internalservices').append('<td>'+key+'</td>');
+                  // }
+                  //console.log(key);
+                    //$('.internal_site_status').append('<div class="col-md-4"><div style="padding:15px; margin:5px; background-color:green; border-radius:0.75rem;"><div class="span"><p><i class="far fa-thumbs-up fa-2x"></i></p><h1 style="color:white;">'+key+'</h1><span class=""><h3 style="color:white;">Online</h3></span></div></div></div>')
+                }
+                else{
+                  $('.externalservices').append('<tr>');
+                  $('.externalservices').append('<td>'+key+'</td><td><ul class="boxtraffic traffic_block"><li class="red_active"><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul><ul class="boxtraffic2 traffic_block" style="display:none;"><li class="red_active1"><i class="fa fa-circle" aria-hidden="true"></i></li><li class=" "><i class="fa fa-circle" aria-hidden="true"></i></li><li class=""><i class="fa fa-circle" aria-hidden="true"></i></li></ul></td>');
+                  $('.externalservices').append('</tr>');
+                }
+            })
+            get_uptime_status = 2;
+    });
+
+    }
+}
+// function internal_mysql_stats(the_id) {
+//     if (internal_mysql_stats_status == 0 ||internal_mysql_stats_status == 2) {
+//         internal_mysql_stats_status = 1;
+//   $.ajax({
+//       url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+//       dataType: 'text',  // what to expect back from the PHP script, if anything
+//       cache: true,
+//             async: true,
+//       contentType: true,
+//       processData: true,
+//     }).done(function(res){
+//
+//             var obj = JSON.parse(res)
+//             $('.imysql-1').empty();
+//             $('.imysql-2').empty();
+//             $('.imysql-3').empty();
+//             Object.keys(obj).forEach(function(key) {
+//                 if (key >= 0 && key <= 2) {
+//                     var res = obj[key].split(": ");
+//                     $('.imysql-1').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+//                 }
+//                 if (key >= 3 && key <= 5) {
+//                     var res = obj[key].split(": ");
+//                     $('.imysql-2').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+//                 }
+//                 if (key >= 6 && key <= 7) {
+//                     var res = obj[key].split(": ");
+//                     $('.imysql-3').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+//                 }
+//             });
+//             get_internal_website_status_status = 2;
+//     });
+//     }
+// }
+</script>

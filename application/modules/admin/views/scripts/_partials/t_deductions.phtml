@@ -1,0 +1,26 @@
+<table class="table table-striped mb-0">
+  <thead>
+    <tr>
+      <th scope="col">Deduct Month</th>
+      <th scope="col">Deduction</th>
+      <th scope="col">Debt Code</th>
+      <th scope="col">Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+
+
+      foreach ($this->deductions as $ded){
+        ?>
+        <tr>
+          <th scope="col"><?php echo $ded->month; ?></th>
+          <th scope="col"><?php echo $ded->amount; ?></th>
+          <th scope="col"><?php echo $ded->debt_code; ?></th>
+          <th scope="col"><?php echo $ded->reason; ?></th>
+        </tr>
+        <?php
+      }
+      ?>
+      <tbody>
+</table>

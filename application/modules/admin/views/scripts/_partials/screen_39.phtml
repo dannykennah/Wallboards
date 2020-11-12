@@ -1,0 +1,285 @@
+
+<style media="screen">
+  .contact-total-span{
+    font-size: 20px;
+    text-align: center;
+  }
+  .span{
+    text-align: center;
+  }
+  .card-background-crs h5{
+    margin-top: 0px !important;
+  }
+</style>
+<div class="container-fluid text-sm">
+  <h2 class=""><span>MyContact</span></h2>
+  <div class="row mt-3">
+    <div class="col-2">
+      <div class="mt-3">
+        <div class="card-background-crs">
+          <h5 class="p-3">Total SMS Today</h5>
+          <div class="contact-total span"><span class="contact-total-span sms-today">Volume - 0</span></div>
+          <div class="contact-total span"><span class="contact-total-span sms-today-sent">Sent - 0</span></div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="card-background-crs">
+          <h5 class="p-3">Total Emails Today</h5>
+          <div class="contact-total span"><span class="contact-total-span email-today">Volume - 0</span></div>
+          <div class="contact-total span"><span class="contact-total-span email-today-sent">Sent - 0</span></div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="card-background-crs">
+          <h5 class="p-3">Total LBE Today</h5>
+          <div class="contact-total span"><span class="contact-total-span lbe-today">Volume - 0</span></div>
+          <div class="contact-total span"><span class="contact-total-span lbe-today-sent">Sent - 0</span></div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="card-background-crs">
+          <h5 class="p-3">Total IVM Today</h5>
+          <div class="contact-total span"><span class="contact-total-span ivm-today">Volume - 0</span></div>
+          <div class="contact-total span"><span class="contact-total-span ivm-today-sent">Sent - 0</span></div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="card-background-crs">
+          <h5 class="p-3">Total Today</h5>
+          <div class="contact-total span"><span class="contact-total-span items-today">Volume - 0</span></div>
+          <div class="contact-total span"><span class="contact-total-span items-today-sent">Sent - 0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card card-background-crs">
+        <div class="card-header">
+          <h5 class="mt-0">Email</h5>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <th>Campaign</th>
+              <th>Rate</th>
+              <th>Total</th>
+              <th>Sent</th>
+              <th>Next</th>
+              <th>Status</th>
+            </thead>
+            <tbody class="emails-table">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card card-background-crs mt-3">
+        <div class="card-header">
+          <h5 class="mt-0">LBE</h5>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <th>Campaign</th>
+              <th>Rate</th>
+              <th>Total</th>
+              <th>Sent</th>
+              <th>Next</th>
+              <th>Status</th>
+            </thead>
+            <tbody class="lbe-table">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card card-background-crs">
+        <div class="card-header">
+          <h5 class="mt-0">SMS</h5>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <th>Campaign</th>
+              <th>Rate</th>
+              <th>Total</th>
+              <th>Sent</th>
+              <th>Next</th>
+              <th>Status</th>
+            </thead>
+
+            <tbody class="sms-table">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-3">
+      <div class="card card-background-crs">
+        <div class="card-header">
+          <h5 class="mt-0">IVM</h5>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <th>Campaign</th>
+              <th>Rate</th>
+              <th>Total</th>
+              <th>Sent</th>
+              <th>Next</th>
+              <th>Status</th>
+            </thead>
+            <tbody class="ivm-table">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+if (!result_complete_contact) {
+	var result_complete_contact=0;
+}
+
+
+  function contact_get_sent(){
+
+    if (result_complete_contact==2 || result_complete_contact==0) {
+        result_complete_contact=1;
+
+    $.ajax({
+  			url: '/admin/wallboard/apitest/contact', // point to server-side PHP script
+  			dataType: 'json',  // what to expect back from the PHP script, if anything
+  			cache: false,
+        async: false,
+  			contentType: false,
+  			processData: false,
+  			type: 'post',
+  		}).done(function(data){ //
+
+
+        $('.emails-table').empty()
+        data.running_jobs[1].data.forEach(function(item, index){
+          $('.emails-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+
+        })
+        $('.sms-table').empty()
+        data.running_jobs[2].data.forEach(function(item, index){
+          $('.sms-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+
+        })
+        $('.lbe-table').empty()
+        data.running_jobs[3].data.forEach(function(item, index){
+          $('.lbe-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+
+        })
+        $('.ivm-table').empty()
+        data.running_jobs[5].data.forEach(function(item, index){
+          $('.ivm-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+
+        })
+
+        // $('.campaigns').empty()
+        // Object.keys(data.summariesc).forEach(function (index) {
+        // 	// console.log(item); // key
+        // 	// console.log(lunch[item]); // value
+        //   $('.campaigns').append('<tr><td>'+data.summariesc[index].type+'</td><td>'+data.summariesc[index].job_name+'</td><td>'+data.summariesc[index].counted+'</td></tr>')
+        // });
+        // data['summariesc'].forEach(function(item){
+        //   $('.campaigns').append('<tr><td>'+item.type+'</td><td>'+item.job_name+'</td><td>'+item.counted+'</td></tr>')
+        // })
+
+        $('.items-today-sent').text('Sent - '+data.sumsent);
+        $('.items-today').text('Volume - '+data.sumitem);
+
+
+        $('.sms-today').text('Volume - '+data.sumsec['SMS']);
+        $('.lbe-today').text('Volume - '+data.sumsec['LBE']);
+        $('.email-today').text('Volume - '+data.sumsec['Email']);
+        if (typeof data.sumsec['SMS'] == 'undefined') {
+          $('.sms-today').text('Volume - 0');
+        }
+        if (typeof data.sumsec['LBE'] == 'undefined') {
+          $('.lbe-today').text('Volume - 0');
+        }
+        if (typeof data.sumsec['Email'] == 'undefined') {
+          $('.email-today').text('Volume - 0');
+        }
+
+        $('.sms-today-sent').text('Sent - '+data.summariesg[1].counteds);
+        $('.lbe-today-sent').text('Sent - '+data.summariesg[2].counteds);
+        $('.email-today-sent').text('Sent - '+data.summariesg[0].counteds);
+
+        result_complete_contact=2;
+  		});
+
+
+    // var opJSON=$.getJSON('/admin/wallboard/apitest/contact', function(data) {
+    //   $('.emails-table').empty()
+    //   data.running_jobs[1].data.forEach(function(item, index){
+    //     $('.emails-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+    //
+    //   })
+    //   $('.sms-table').empty()
+    //   data.running_jobs[2].data.forEach(function(item, index){
+    //     $('.sms-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+    //
+    //   })
+    //   $('.lbe-table').empty()
+    //   data.running_jobs[3].data.forEach(function(item, index){
+    //     $('.lbe-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+    //
+    //   })
+    //   $('.ivm-table').empty()
+    //   data.running_jobs[5].data.forEach(function(item, index){
+    //     $('.ivm-table').append('<tr><td>'+item.job_name+'</td><td>'+item.sendrate+'</td><td>'+item.job_items+'</td><td>'+item.sent_total+'</td><td>'+item.next_send_time+'</td><td>'+item.status+'</td></tr>')
+    //
+    //   })
+    //
+    //   // $('.campaigns').empty()
+    //   // Object.keys(data.summariesc).forEach(function (index) {
+    //   // 	// console.log(item); // key
+    //   // 	// console.log(lunch[item]); // value
+    //   //   $('.campaigns').append('<tr><td>'+data.summariesc[index].type+'</td><td>'+data.summariesc[index].job_name+'</td><td>'+data.summariesc[index].counted+'</td></tr>')
+    //   // });
+    //   // data['summariesc'].forEach(function(item){
+    //   //   $('.campaigns').append('<tr><td>'+item.type+'</td><td>'+item.job_name+'</td><td>'+item.counted+'</td></tr>')
+    //   // })
+    //
+    //   $('.items-today-sent').text('Sent - '+data.sumsent);
+    //   $('.items-today').text('Volume - '+data.sumitem);
+    //
+    //
+    //   $('.sms-today').text('Volume - '+data.sumsec['SMS']);
+    //   $('.lbe-today').text('Volume - '+data.sumsec['LBE']);
+    //   $('.email-today').text('Volume - '+data.sumsec['Email']);
+    //   if (typeof data.sumsec['SMS'] == 'undefined') {
+    //     $('.sms-today').text('Volume - 0');
+    //   }
+    //   if (typeof data.sumsec['LBE'] == 'undefined') {
+    //     $('.lbe-today').text('Volume - 0');
+    //   }
+    //   if (typeof data.sumsec['Email'] == 'undefined') {
+    //     $('.email-today').text('Volume - 0');
+    //   }
+    //
+    //   $('.sms-today-sent').text('Sent - '+data.summariesg[1].counteds);
+    //   $('.lbe-today-sent').text('Sent - '+data.summariesg[2].counteds);
+    //   $('.email-today-sent').text('Sent - '+data.summariesg[0].counteds);
+    //
+    //
+    // })
+
+  }
+}
+</script>

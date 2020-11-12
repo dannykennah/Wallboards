@@ -1,0 +1,183 @@
+<div class="container-fluid">
+	<h2 class=""><span>External Server Statistics</span></h2>
+	<div class="row">
+		<div class="col-md-6 mt-3">
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Server uptime</span></h2>
+                <div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>MyCRS</h3>
+						<div class="circle_outline_zen span mycrs-monitor">
+                            <h3>Uptime Last 30 Days</h3>
+                            <span class="last_30">0</span>
+                            <h3>Uptime Last 7 Days</h3>
+                            <span class="last_7">0</span>
+                            <h3>Current Response Time</h3>
+                            <span class="response_time">0</span>
+                        </div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>DMA Portal</h3>
+                        <div class="circle_outline_zen span dma-monitor">
+                            <h3>Uptime Last 30 Days</h3>
+                            <span class="last_30">0</span>
+                            <h3>Uptime Last 7 Days</h3>
+                            <span class="last_7">0</span>
+                            <h3>Current Response Time</h3>
+                            <span class="response_time">0</span>
+                        </div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>CRS MI</h3>
+                        <div class="circle_outline_zen span crsmi-monitor">
+                            <h3>Uptime Last 30 Days</h3>
+                            <span class="last_30">0</span>
+                            <h3>Uptime Last 7 Days</h3>
+                            <span class="last_7">0</span>
+                            <h3>Current Response Time</h3>
+                            <span class="response_time">0</span>
+                        </div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="col-md-6 mt-3">
+
+			<div class="col-md-12" style="margin-bottom: 60px !important;">
+				<h2 class="ticket-title bounding-screen2">External MySQL Database Stats</span></h2>
+
+				<div class="row row_data cash_crs">
+
+                    <div class="col-md-4">
+                        <div class="card-background-crs">
+                        <div class="circle_outline_zen span emysql-1">
+
+                        </div>
+                    </div>
+                    </div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+                        <div class="circle_outline_zen span emysql-2">
+
+                        </div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+                        <div class="circle_outline_zen span emysql-3">
+
+                        </div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var update_website_stats_status = 0;
+var external_mysql_stats_status = 0;
+
+function update_website_stats(the_id) {
+	if (update_website_stats_status == 0 ||update_website_stats_status == 2) {
+		update_website_stats_status = 1;
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: true,
+            async: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){
+            var obj = JSON.parse(res)
+            console.log(obj)
+
+						console.log(Math.ceil(obj['DMA Portal'].uptime_ratio['last_7']));
+            $('.mycrs-monitor .response_time').text(obj.MyCRS.response_times+'ms')
+            $('.dma-monitor .response_time').text(obj['DMA Portal'].response_times+'ms')
+            $('.crsmi-monitor .response_time').text(obj.CRSmi.response_times+'ms')
+
+            $('.mycrs-monitor .last_7').text(Math.ceil(obj.MyCRS.uptime_ratio.last_7)+'%')
+            $('.dma-monitor .last_7').text(Math.ceil(obj['DMA Portal'].uptime_ratio.last_7)+'%')
+            $('.crsmi-monitor .last_7').text(Math.ceil(obj.CRSmi.uptime_ratio.last_7)+'%')
+
+            $('.mycrs-monitor .last_30').text(Math.ceil(obj.MyCRS.uptime_ratio.last_30)+'%')
+            $('.dma-monitor .last_30').text(Math.ceil(obj['DMA Portal'].uptime_ratio.last_30)+'%')
+            $('.crsmi-monitor .last_30').text(Math.ceil(obj.CRSmi.uptime_ratio.last_30)+'%')
+
+            Object.keys(obj).forEach(function(key) {
+                if (obj[key].status == 0) {
+                    if (key == 'MyCRS') {
+                        $('.card-background-crs .mycrs-monitor h3, .card-background-crs .mycrs-monitor span').addClass('text-danger-orig')
+                        $('.card-background-crs .mycrs-monitor span').text('DOWN')
+                    }
+                    if (key == 'DMA Portal') {
+                        console.log(key)
+                        $('.card-background-crs .dma-monitor h3, .card-background-crs .dma-monitor span').addClass('text-danger-orig')
+                        $('.card-background-crs .dma-monitor span').text('DOWN')
+                    }
+                    if (key == 'CRSmi') {
+                        $('.card-background-crs .crsmi-monitor h3, .card-background-crs .crsmi-monitor span').addClass('text-danger-orig')
+                        $('.card-background-crs .crsmi-monitor span').text('DOWN')
+                    }
+                }
+                else{
+                    $('.card-background-crs .crsmi-monitor h3, .card-background-crs .crsmi-monitor span').removeClass('text-danger-orig')
+                    $('.card-background-crs .dma-monitor h3, .card-background-crs .dma-monitor span').removeClass('text-danger-orig')
+                    $('.card-background-crs .mycrs-monitor h3, .card-background-crs .mycrs-monitor span').removeClass('text-danger-orig')
+
+                }
+            });
+			update_website_stats_status = 2;
+		});
+	}
+}
+function external_mysql_stats(the_id) {
+	if (external_mysql_stats_status == 0 ||external_mysql_stats_status == 2) {
+		external_mysql_stats_status = 1;
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: true,
+            async: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){
+
+            var obj = JSON.parse(res)
+            $('.emysql-1').empty();
+            $('.emysql-2').empty();
+            $('.emysql-3').empty();
+            Object.keys(obj).forEach(function(key) {
+                if (key >= 0 && key <= 2) {
+                    var res = obj[key].split(": ");
+                    $('.emysql-1').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+                if (key >= 3 && key <= 5) {
+                    var res = obj[key].split(": ");
+                    $('.emysql-2').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+                if (key >= 6 && key <= 7) {
+                    var res = obj[key].split(": ");
+                    $('.emysql-3').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+            });
+			external_mysql_stats_status = 2;
+		});
+	}
+}
+
+</script>

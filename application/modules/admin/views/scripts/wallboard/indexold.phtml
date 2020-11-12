@@ -1,0 +1,498 @@
+<?php if (date('Y-m-d')==date('Y-10-31')) { $color="#000000"; } else { $color="#002649"; } ?><style>
+body,
+html {
+	height: 100%;
+}
+.owl-stage-outer{ margin-top: 0px; }
+
+
+</style>
+
+<?php if (date('Y-m-d')==date('Y-10-31')) { ?>
+	<script src="https://previews.envatousercontent.com/files/210626198/lib/js/bats.js"></script>
+
+	<script>
+
+	//bat vars
+	var vars = {
+	container:"bats-container", //id of target container (set the target container z-index as needed), default is the document body
+	src:"https://previews.envatousercontent.com/files/210626198/lib/assets/bat.gif", //path to the image
+	number:10, //number of individuals
+	height:null, //null defaults to document height, or set a number
+	width:null, //null defaults to document width, or set a number
+	speed:5, //1=fast 5=slow
+	scale:80, //bat max size in %
+	scare:true, //if true bats will react to mouseover
+	remove:true //if true bats will be removed on click
+	}
+	var bats = new Bats(vars);
+
+	//kick off
+	$(document).ready(function() {
+	  bats.init();
+	});
+
+	</script>
+<?php } ?>
+<?php
+	$screens=array();
+	foreach ($this->screens as $scr) {
+		$screens['screen_'.$scr['screen_id']]=1;
+	}
+?>
+<script>
+$(document).ready(function() {
+
+	var screen_1=0;
+	var screen_2=0;
+	var screen_3=0;
+	var screen_4=0;
+	var screen_5=0;
+	var screen_6=0;
+	var screen_7=0;
+	var screen_8=0;
+	var screen_9=0;
+	var screen_10=0;
+	var screen_11=0;
+	var screen_12=0;
+	var screen_13=0;
+	var screen_14=0;
+	var screen_17=0;
+	var screen_22=0;
+
+	<?php
+	foreach ($this->screens as $scr) {
+		echo "refresh_screen_".$scr->screen_id."();   ";
+
+		echo "screen_".$scr->screen_id." = 1;  ";
+
+	}
+	?>
+
+
+
+	if (screen_1 === 1) {
+		var ctx_c = document.getElementById('canvas_c').getContext('2d');
+		today_donut = new Chart(ctx_c, today_donut_opt);
+		var ctx_d = document.getElementById('canvas_d').getContext('2d');
+		week_donut = new Chart(ctx_d, week_donut_opt);
+		var ctx_e = document.getElementById('canvas_e').getContext('2d');
+		month_donut = new Chart(ctx_e, month_donut_opt);
+	}
+	if (screen_2 === 1) {
+		var ctx_d = document.getElementById('canvas_d').getContext('2d');
+		week_donut = new Chart(ctx_d, week_donut_opt);
+		var ctx_e = document.getElementById('canvas_e').getContext('2d');
+		month_donut = new Chart(ctx_e, month_donut_opt);
+	}
+
+	// Create the bar chart shown on screen 3
+	if (screen_3 === 1) {
+		var ctx_a = document.getElementById('canvas_a').getContext('2d');
+		myBar_a = new Chart(ctx_a,barChartData_aopt);
+	}
+
+	// Create the bar chart shown on screen 5
+	if (screen_5 === 1) {
+		var ctx_b = document.getElementById('canvas_b').getContext('2d');
+		myBar_b = new Chart(ctx_b,barChartData_bopt);
+	}
+
+	// Create the bar charts shown on screen 14
+	if (screen_14 === 1) {
+		var ctx_f = document.getElementById('canvas_f').getContext('2d');
+		myBar_f = new Chart(ctx_f,barChartData_fopt);
+
+		var ctx_g = document.getElementById('canvas_g').getContext('2d');
+		myBar_g = new Chart(ctx_g,barChartData_gopt);
+	}
+
+	// Create the bar charts seen on screen 17
+	if (screen_17 === 1) {
+		var ctx_a = document.getElementById('canvas_a').getContext('2d');
+		myBar_a = new Chart(ctx_a,barChartData_aopt);
+
+		var ctx_b = document.getElementById('canvas_b').getContext('2d');
+		myBar_b = new Chart(ctx_b,barChartData_bopt);
+	}
+
+});
+</script>
+<div id="owl-example" class="owl-carousel">
+  <?php foreach ($this->screens as $screen) { ?>
+  <div class="owl-slide">
+		<?php if ($this->debug==1) { ?>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 mt-3">
+					DEBUG AREA (<?php echo $screen->more_info; ?>)<br>
+					<?php print_r($this->postdata); ?>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php echo $this->partial('_partials/screen_'.$screen->screen_id.'.phtml',array('scr'=>$this->{'data_'.$screen->screen_id}));?>
+	</div>
+	<?php } ?>
+</div>
+
+<?php
+//foreach ($this->screens as $scr) {
+//	echo "refresh_screen_".$scr->screen_id."()";
+//}
+//echo "<pre>";
+//	print_r($this->screens);
+//echo "</pre>";
+?>
+<script src="https://rawgit.com/chartjs/chartjs.github.io/master/dist/master/Chart.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+<script>
+
+function refresh_screen_3(){
+		group_json_a('update_sector');
+		console.log('END SCREEN 3 - Rerun Every 10 Minutes');
+		setTimeout(refresh_screen_3,600000);
+}
+
+function refresh_screen_5(){
+		group_json_b('update_agent');
+		console.log('END SCREEN 5 - Rerun Every 10 Minutes');
+		setTimeout(refresh_screen_5,600000);
+}
+function refresh_screen_8(){
+		group_screen_eight_all('update_incalldata','update_agentdata');
+		//group_screen('update_incalldata');
+		//group_multiscreen('update_agentdata');
+		console.log('END SCREEN 8 - Rerun Every 1 Seconds');
+		setTimeout(refresh_screen_8,1000);
+}
+function refresh_screen_1(){
+		group_update('update_gdata');
+		//group_update_a('update_adata');
+		//group_update('update_paycrsmoney');
+		group_update_onsite('update_glive');
+		console.log(' END SCREEN 1 - Rerun Every 10 Seconds - Gets data from google every 5 minutes - saved to DB');
+		setTimeout(refresh_screen_1,10000);
+}
+
+function refresh_screen_2(){
+		group_update('update_gdata');
+		group_update_livechat('screen_2_data');
+		//group_update_a('update_adata');
+		//group_update('update_paycrsmoney');
+		group_update_onsite('update_glive');
+		console.log(' END SCREEN 2 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_2,60000);
+}
+
+function refresh_screen_10(){
+		group_update_tickets("zendesk");
+		group_update_email("email_stats");
+		console.log('END SCREEN 10 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_10,300000);
+}
+
+function refresh_screen_11(){
+		group_update_convos("chats_live");
+		console.log('END SCREEN 11 - Rerun Every 1.5 Minute');
+		setTimeout(refresh_screen_11,90000);
+}
+
+function refresh_screen_12(){
+		group_update_tickets_BZ("business_zendesk");
+		sort_cases("cases_report_day");
+		console.log('END SCREEN 12 - Rerun Every 5.5 Minute');
+		setTimeout(refresh_screen_12,360000);
+}
+
+function refresh_screen_14(){
+
+		//combined all now//
+		update_scren_14('chart_f_g_topcharts');
+		//update_chart_f('update_graph_f');
+		//update_chart_g('update_graph_g');
+		//update_leaderboards('update_topcharts');
+
+		console.log('END SCREEN 14 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_14,300000);
+}
+
+function refresh_screen_15(){
+		C1Val = get_accounts('get_accounts');
+		console.log('END SCREEN 15 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_15,300000);
+
+}
+
+function refresh_screen_16(){
+		C2Val = get_cash('get_cash');
+		C3Val = get_cash_month('get_cash_month');
+		console.log('END SCREEN 16 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_16,300000);
+
+}
+
+function refresh_screen_17(){
+		group_json_both('update_sector_agent');
+		//group_json_a('update_sector');
+		//group_json_b('update_agent');
+		console.log('END SCREEN 17 - Rerun Every 15 Mins');
+		setTimeout(refresh_screen_17,900000);
+}
+
+function refresh_screen_18(){
+		update_TMtexts('text_magic_chats');
+		update_TMstats('text_magic_stats');
+		console.log('END SCREEN 18 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_18,60000);
+}
+
+function refresh_screen_22(){
+		update_rpc_board('screen_22_rpc');
+		console.log('END SCREEN 22 - Rerun Every 10 Minutes');
+		setTimeout(refresh_screen_22,600000);
+}
+
+
+$(document).ready(function() {
+
+  $("#owl-example").owlCarousel({
+		singleItem: true,
+		items:1,
+		loop:true,
+		margin:0,
+		autoplay:true,
+		nav:true,
+		//rewind : true,
+		autoplayTimeout:30000,
+	});
+
+});
+
+
+
+
+Chart.plugins.register({
+	afterDatasetsDraw: function(chart) {
+		if (chart.config.options.plugin_attribute == 1) {
+			var ctx = chart.ctx;
+
+			chart.data.datasets.forEach(function(dataset, i) {
+				var meta = chart.getDatasetMeta(i);
+				if (!meta.hidden) {
+					meta.data.forEach(function(element, index) {
+						// Draw the text in black, with the specified font
+						ctx.fillStyle = '<?php echo $color; ?>';
+
+						var fontSize = 25;
+						var fontStyle = 'bold';
+						var fontFamily = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+						ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+						// Just naively convert to string for now
+						var dataString = "£"+dataset.data[index].toString();
+
+						// Make sure alignment settings are correct
+						ctx.textAlign = 'center';
+						ctx.textBaseline = 'middle';
+
+						var padding = 2;
+						var position = element.tooltipPosition();
+						ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+					});
+				}
+			});
+		}
+		if (chart.config.options.plugin_attribute == 2) {
+			var ctx = chart.ctx;
+
+			chart.data.datasets.forEach(function(dataset, i) {
+				var meta = chart.getDatasetMeta(i);
+				if (!meta.hidden) {
+					meta.data.forEach(function(element, index) {
+						// Draw the text in black, with the specified font
+						ctx.fillStyle = '<?php echo $color;?>';
+
+						var fontSize = 20;
+						var fontStyle = 'bold';
+						var fontFamily = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+						ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+						// Just naively convert to string for now
+						var dataString = dataset.data[index].toString();
+
+						// Make sure alignment settings are correct
+						ctx.textAlign = 'center';
+						ctx.textBaseline = 'middle';
+
+						var padding = 2;
+						var position = element.tooltipPosition();
+						ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+					});
+				}
+			});
+		}
+
+	}
+});
+
+
+
+</script>
+
+<?php if (isset($screens['screen_14'])==1 || isset($screens['screen_15'])==1) { ?>
+<link rel="stylesheet" href="/css/flipclock.css?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>">
+<script src="/js/flipclock.js?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>"></script>
+
+<script type="text/javascript">
+
+<?php
+
+	// To start with the counters we have to replicate a chunk of the controller code here to get the data we need
+
+	// For the data for each counter we pull it out of the respective .csv file, trim it down, then push it into a variable
+	$file="/var/www/vhosts/creditresourcesolutions.org.uk/wallboards/data/data_live/totalcases.csv";
+	$csv= file_get_contents($file);
+	$csv = str_replace(array(",","\r","\n"), "", $csv);
+	$C1Val = [$csv];
+
+	$file="/var/www/vhosts/creditresourcesolutions.org.uk/wallboards/data/data_live/totalcashtoday.csv";
+	$csv= file_get_contents($file);
+	$csv = str_replace(array(",","\r","\n"), "", $csv);
+	$C2Val = [$csv];
+
+	$file="/var/www/vhosts/creditresourcesolutions.org.uk/wallboards/data/data_live/totalcashmonth.csv";
+	$csv= file_get_contents($file);
+	$csv = str_replace(array(",","\r","\n"), "", $csv);
+	$C3Val = [$csv];
+
+?>
+
+var padding = "0";
+
+// Echo the PHP variables into the javascript ones, then use the latter in constructing the counters
+/*var C1Val = <?php echo $C1Val[0]; ?>;
+var C2Val = <?php echo $C2Val[0]; ?>;
+var C3Val = <?php echo $C3Val[0]; ?>;*/
+var C1Val = 8346;
+var C2Val = 12326;
+var C3Val = 551704;
+
+var clock
+		clock = new FlipClock($('.clock'), C1Val, {
+					clockFace: 'Counter'
+				});
+var clock2
+		clock2 = new FlipClock($('.clock2'), C2Val, {
+					clockFace: 'Counter'
+				});
+var clock3
+		clock3 = new FlipClock($('.clock3'), C3Val, {
+					clockFace: 'Counter'
+				});
+
+
+
+function get_limit(the_id,clock, CVal){
+	var limit = the_id;
+
+	while (CVal<limit){
+		CVal++;
+		console.log(CVal);
+		clock.increment();
+	};
+
+	return CVal;
+
+	}
+
+function get_accounts(the_id){
+
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+		}).done(function(res){
+
+			total_cases = res[0];
+
+
+			// sets the left padding depending on how many digits there are in the integer returned, amking sure the counter in centralized
+			if(total_cases < 100){
+				padding = "750px";
+			} else if(total_cases < 1000){
+				padding = "570px";
+			}else if(total_cases < 10000){
+				padding = "470px";
+			}else{
+				padding = "390px";
+			}
+
+			$(".clock").css("paddingLeft", padding);
+
+
+			// Increment the counter to the value contained in total_cases
+			C1Val = get_limit(total_cases,clock, C1Val);
+
+		});
+
+		return C1Val;
+
+}
+</script>
+<?php } ?>
+<script>
+function get_cash(the_id){
+
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+		}).done(function(res){
+
+			total_cash = res[0];
+
+			// Increment the counter to the value contained in total_cases
+
+			C2Val = get_limit(total_cash,clock2, C2Val);
+
+		});
+
+		return C2Val;
+
+}
+
+function get_cash_month(the_id){
+
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+		}).done(function(res){
+
+			total_cashm = res[0];
+
+			// Increment the counter to the value contained in total_cases
+
+			C3Val = get_limit(total_cashm,clock3, C3Val);
+
+
+		});
+
+		return C3Val;
+
+}
+
+</script>

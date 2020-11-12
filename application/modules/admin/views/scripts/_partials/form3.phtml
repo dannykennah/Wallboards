@@ -1,0 +1,40 @@
+<?php 
+$this->formcsr->setAction('/admin/campaign_success_report');
+echo $this->formcsr->renderForm();
+echo $this->formcsr->renderForm(false);
+//echo $this->formlsc->renderForm(false); ?>
+
+<div class="form-group row">
+	<div class="col-md-3">
+		<?php echo $this->formcsr->date_from->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formcsr->getElement('date_from'); ?>
+	</div>
+	<div class="col-md-1">
+		<?php echo $this->formcsr->date_to->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formcsr->getElement('date_to'); ?>
+	</div>
+</div>
+
+<div class="form-group row"><div class="col-md-3">
+	<?php echo $this->formcsr->mo_type->getLabel(); ?> <a href="<?php echo $this->url(array(), 'admin-mocodes') ?>"><br>
+	<i class="far fa-edit"></i></a>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formcsr->getElement('mo_type'); ?>
+</div></div>
+
+<div class="form-group row"><div class="col-md-4">
+	<?php echo $this->formcsr->get_csv->getLabel(); ?>
+</div><div class="col-md-8 hide_label">
+	<?php echo $this->formcsr->getElement('get_csv'); ?>
+</div></div>
+					
+
+<div class="form-group row">
+	<div class="col-sm-12">
+		<?php echo $this->formcsr->submit_csr; ?>
+	</div>
+</div>  

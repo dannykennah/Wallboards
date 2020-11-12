@@ -1,0 +1,55 @@
+<?php $this->pageTitle = 'Redwood Users'; ?>
+
+<div class="container-fluid text-white">
+	<div class=" main_padding">
+		<div class="row">
+		<div class="col-md-4">
+
+          <div class="card see-through">
+
+              <div class="card-header crs-card">
+                <h5 class="mb-0 text-white">All Collectors</h5>
+              </div>
+              <div class="out collapse show see-through">
+                <div class="card-block p-0 crs-card">
+                <?php echo $this->partial('_partials/collectors.phtml',array('operators'=>$this->operators,'ex_button'=>false));?>
+                </div>
+              </div>
+
+          </div>
+
+		</div>
+    <div class="col-md-4">
+
+          <div class="card see-through">
+
+              <div class="crs-card card-header">
+                <h5 class="mb-0 text-white">Active Collectors</h5>
+              </div>
+              <div class="out collapse show see-through">
+                <div class="card-block p-0 crs-card">
+                <?php echo $this->partial('_partials/collectors.phtml',array('operators'=>$this->active_operators,'ex_button'=>true));?>
+                </div>
+              </div>
+          </div>
+
+					<a href="<?php echo $this->url(array('user'=>$op->user_id), 'admin-ctt') ?>" class="mt-3 btn btn-block crs-button"> Cash to target </a>
+
+		</div>
+    <div class="col-md-4">
+
+				<div class="card see-through">
+
+						<div class="crs-card card-header">
+							<h5 class="mb-0 text-white">Make Deductions</h5>
+						</div>
+						<div class="out collapse show see-through">
+							<div class="card-block p-0 crs-card">
+							<?php echo $this->form; ?>
+							</div>
+						</div>
+				</div>
+
+		</div>
+	</div>
+</div>

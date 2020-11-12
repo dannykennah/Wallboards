@@ -1,0 +1,139 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 mt-3">
+			<div class="col-md-12">
+
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Live Chats</span></h2>
+
+				<div class="row_1 row row_data" style="height:475px">
+
+						<div class="col-md-4">
+							<div class="card card-blue-white mt-0">
+								<h5 class="card-header zen_text">No Live Chats</h5>
+							</div>
+						</div>
+
+				</div>
+
+				<div class="row_2 row row_data" style="height:500px">
+
+
+
+				</div>
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+function group_update_convos(the_id) {
+
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+		}).done(function(res){
+
+			// clear the rows
+			$(".row_1").html("");
+			$(".row_2").html('<div class="col-md-4">'+
+													'<div class="card card-blue-white mt-0" style="width:250px; left:1450px; top:100px;">'+			// The reason there's so much in-line styling is that a dedicated class for the icon didn't work, so instead we're using a class that does work and building off of it.
+													'<h5 class="card-header" style="font-size:18px; padding-bottom:0px;">Chats with CRiS<div class="livechat_icon_crs" style = "background-color:#fff; padding: 5px 5px; width:42px; margin-top:-31px; margin-left:165px; margin-right:0px;"><img src="http://wallboards.creditresourcesolutions.co.uk/images/paycrs-chatbot.png"></div></h5>'+
+														'<div class="card-body p-0">'+
+														'<div style="line-height:50px; padding-top:100px; padding-bottom:80px; text-align:center;">'+
+														'<span class="zen_text " style="font-size:150px;">'+(res[res.length - 1].CRiS_count)+'</span>'+
+														'</div>'+
+														'</div>'+
+													'</div>'+
+										'</div>');
+
+			if(res.length == 1){
+
+				// If there are no live chats then put back the "No Live Chats" message that is there by default
+				$(".row_1").append('<div class="col-md-4">'+
+										'<div class="card card-blue-white mt-0">'+
+										'<h5 class="card-header zen_text">No Live Chats</h5>'+
+										'</div></div>');
+
+			} else{
+
+
+
+				$msg_count=0;
+				$msg_limit =0;
+				$chat_count =0;
+				$row=1;
+
+				// expand the message capacity of each display depending one how many chats are live
+				if(res.length > 3){
+					$msg_limit = 5
+				}else{
+					$msg_limit = 8
+				}
+
+				for($chat_count=0; ($chat_count<5); $chat_count++){
+
+					if($chat_count == (res.length-1)){
+						// If all of the chats have been displayed before the 6-chat limit's been reached then break the loop
+						console.log("break");
+						break;
+
+					}else if(res[0].length == 0 && res.length == 2){
+						// If there's one blank chat and nothing else
+						$(".row_1").append('<div class="col-md-4">'+
+										'<div class="card card-blue-white mt-0">'+
+										'<h5 class="card-header zen_text">No Live Chats</h5>'+
+										'</div></div>');
+						break;
+
+					}else if (res[$chat_count].length != 0){
+
+						// Set the maximum number of chats per row to 3, switching rows when this amount is surpassed.
+						if($chat_count<4){ $row=1; }else{ $row=2; }
+
+						// Basic filter, stops chat being shown if either the most recent or 2nd most recent message is from CRiS
+						// For each chat, build a window to display it in. While doing this give it a unique class so finding it later on will be easy
+						$(".row_"+$row).append('<div class="col-md-4">'+
+										'<div class="card card-blue-white mt-0">'+
+										'<h5 class="card-header" style="font-size:18px;">Chat started '+res[$chat_count][0].time_diff+'</h5><div class="card-body p-0">'+
+										'<div>'+
+										'<ul class="list-group chat_'+$chat_count+'"></ul>'+
+										'</div></div></div></div>');
+
+						// Set the limit of displayed messages for each chat to 5
+						for($msg_count=0; ($msg_count < $msg_limit); $msg_count++){
+
+							if($msg_count<res[$chat_count].length){
+
+								// Add each message of the chat as a list element
+								if(res[$chat_count][res[$chat_count].length - ($msg_count + 1)].sender == "agent"){
+									$(".chat_"+$chat_count).append("<li class='list-group-item' style='background-color:#d1f3ff;'><span style='text-align:right;'>"+res[$chat_count][res[$chat_count].length - ($msg_count + 1)].text+"</span> <div class='livechat_icon_crs'><img src='http://wallboards.creditresourcesolutions.co.uk/images/logo.png'></div></li>");
+								}else{
+									$(".chat_"+$chat_count).append("<li class='list-group-item'></div><span style='text-align:left;'>"+res[$chat_count][res[$chat_count].length - ($msg_count + 1)].text+"</span><div class='livechat_icon_user'><i class='fas fa-user'> </i></div></li>");
+								}
+
+							}
+						}
+					}
+				}
+
+
+
+			}
+
+
+		});
+
+}
+
+</script>

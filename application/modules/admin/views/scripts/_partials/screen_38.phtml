@@ -1,0 +1,147 @@
+<div class="container-fluid">
+	<h2 class=""><span>Internal Server Statistics</span></h2>
+	<div class="row">
+		<div class="col-md-6 mt-3">
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Internal Sites Status</span></h2>
+                <div class="row row_data internal_site_status">
+
+
+				</div>
+			</div>
+			<div class="col-md-12">
+
+        <h2 class="ticket-title bounding-screen2">Server Uptime</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats Today</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_today" >0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats This Week</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_week" >0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats This Month</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_month">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<br>
+
+		</div>
+		<div class="col-md-6 mt-3">
+
+			<div class="col-md-12" style="margin-bottom: 60px !important;">
+				<h2 class="ticket-title bounding-screen2">Internal MySQL Database Stats</span></h2>
+
+				<div class="row row_data cash_crs">
+
+                    <div class="col-md-4">
+                        <div class="card-background-crs">
+                        <div class="circle_outline_zen span imysql-1">
+
+                        </div>
+                    </div>
+                    </div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+                        <div class="circle_outline_zen span imysql-2">
+
+                        </div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+                        <div class="circle_outline_zen span imysql-3">
+
+                        </div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var get_internal_website_status_status = 0;
+var internal_mysql_stats_status = 0;
+function get_internal_website_status(the_id) {
+    if (get_internal_website_status_status == 0 ||get_internal_website_status_status == 2) {
+        get_internal_website_status_status = 1;
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: true,
+            async: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){
+            var obj = JSON.parse(res)
+            console.log(obj)
+            $('.internal_site_status').empty();
+            Object.keys(obj).forEach(function(key) {
+                if (obj[key] == true) {
+                    $('.internal_site_status').append('<div class="col-md-4"><div class="card-background-crs"><div class="circle_outline_zen span"><h3>'+key+'</h3><span class="">Online</span></div></div></div>')
+                }
+                else{
+                    $('.internal_site_status').append('<div class="col-md-4"><div class="card-background-crs"><div class="circle_outline_zen span"><h3>'+key+'</h3><span class="">Offline</span></div></div></div>')
+                }
+            })
+            get_internal_website_status_status = 2;
+		});
+
+    }
+}
+function internal_mysql_stats(the_id) {
+    if (internal_mysql_stats_status == 0 ||internal_mysql_stats_status == 2) {
+        internal_mysql_stats_status = 1;
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: true,
+            async: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){
+
+            var obj = JSON.parse(res)
+            $('.imysql-1').empty();
+            $('.imysql-2').empty();
+            $('.imysql-3').empty();
+            Object.keys(obj).forEach(function(key) {
+                if (key >= 0 && key <= 2) {
+                    var res = obj[key].split(": ");
+                    $('.imysql-1').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+                if (key >= 3 && key <= 5) {
+                    var res = obj[key].split(": ");
+                    $('.imysql-2').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+                if (key >= 6 && key <= 7) {
+                    var res = obj[key].split(": ");
+                    $('.imysql-3').append('<h3>'+res[0]+'</h3><span class="">'+res[1]+'</span>')
+                }
+            });
+            get_internal_website_status_status = 2;
+		});
+    }
+}
+
+
+
+</script>

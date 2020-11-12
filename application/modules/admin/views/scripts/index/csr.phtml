@@ -1,0 +1,327 @@
+<?php $this->pageTitle = 'Campaign Success Report'; ?>
+<script src="<?php echo $this->baseUrl('js/libs/chartjs/chart.js'); ?>"></script>
+<div class="container-fluid">
+	<div class="container main_padding">
+		<div class="row">
+			<div class="col-md-12">
+		
+			<?php 
+			//print_r($this->debug);
+			$totals=$this->results['totals'];
+			$dates=$this->results['dates'];
+			$comp_totals_expanded=$this->results['comp_totals_expanded'];
+			?>
+			
+			</div>
+			<div class="col-md-6">
+				<?php //echo $this->form; ?>
+				<div class="card">
+					<div class="end_header card-header dblue">
+						<h5 class="mb-0">
+						<a class="collapsed" >
+						  Run Campaign Success Report
+						</a>
+					  </h5>
+					</div>
+					<div class="out collapse show">
+						<div class="card-block">
+						<?php echo $this->partial('_partials/form3.phtml', array('formcsr' => $this->form));?>
+						</div>
+					</div>
+				</div>
+				<br>
+			</div>
+			<div class="col-md-6">
+				<?php if ($hide==1) { ?>
+				<div class="card">	
+					<div class="end_header card-header">
+						<h5 class="mb-0">
+						<a class="collapsed" >
+						  Totals
+						</a>
+					  </h5>
+					</div>
+					<div class="out collapse show">
+						<div class="card-block">
+								
+								<section id="flip-scroll">
+								  <table class="table table-bordered table-striped table-condensed cf">
+									<tbody>
+										<?php foreach ($totals as $key => $total) { ?>
+										<tr>
+											<td data-title="<?php echo $key; ?>"><?php echo $key; ?></td>
+											<td data-title="<?php echo $total; ?>"><?php echo $total; ?></td>
+										</tr>
+										<?php } ?>
+									</tbody>
+								</table>
+								</section>	
+							
+						</div>
+					</div>
+				</div>
+				<br>
+				<?php } ?>
+				<div class="card">	
+					<div class="end_header card-header">
+						<h5 class="mb-0">
+						<a class="collapsed" >
+						  Totals
+						</a>
+					  </h5>
+					</div>
+					<div class="out collapse show">
+						<div class="card-block">
+								
+						<section id="flip-scroll">
+						  <table class="table table-bordered table-striped table-condensed cf">
+							  <thead class="cf">
+								<tr>
+									<th>Label</th>
+									<th class="numeric">Number Sent</th>
+									<th class="numeric">Paid</th>
+									<th class="numeric">Settled</th>
+									<th class="numeric">Forecast</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								foreach ($dates as $date) { 
+								?>
+								<tr>
+									<td data-title="label"><?php echo $date['label']; ?></td>
+									<td data-title="Number Sent"><?php echo $date['total_sent']; ?></td>
+									<td data-title="Paid" class="numeric">£<?php echo number_format($date['total_paid'],2,'.',','); ?></td>
+									<td data-title="Settled" class="numeric">£<?php echo number_format($date['total_settled'],2,'.',','); ?></td>
+									<td data-title="Forecast" class="numeric">£<?php echo number_format($date['total_forecast'],2,'.',','); ?></td>
+								</tr>
+								<?php 
+								} 
+								?>
+							</tbody>
+						</table>
+						</section>	
+						
+							
+							
+						</div>
+					</div>
+				</div>
+				<br>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">	
+				<canvas id="myChart" width="1000" height="300"></canvas>				
+				</div>
+				<BR>
+			</div>
+			<div class="col-md-12">
+				<div class="card">	
+					<div class="end_header card-header">
+						<h5 class="mb-0">
+						<a class="collapsed" >
+						  Extended List
+						</a>
+					  </h5>
+					</div>
+					<div class="out collapse show">
+						<div class="card-block">
+						<style>
+						
+					@media only screen and (max-width: 800px) {
+						
+						#flip-scroll .cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+						#flip-scroll * html .cf { zoom: 1; }
+						#flip-scroll *:first-child+html .cf { zoom: 1; }
+						
+						#flip-scroll table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+					 
+						#flip-scroll th,
+						#flip-scroll td { margin: 0; vertical-align: top; }
+						#flip-scroll th { text-align: left; }
+						
+						#flip-scroll table { display: block; position: relative; width: 100%; }
+						#flip-scroll thead { display: block; float: left; }
+						#flip-scroll tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
+						#flip-scroll thead tr { display: block; }
+						#flip-scroll th { display: block; text-align: right; }
+						#flip-scroll tbody tr { display: inline-block; vertical-align: top; }
+						#flip-scroll td { display: block; min-height: 1.25em; text-align: left; }
+					 
+					 
+						/* sort out borders */
+					 
+						#flip-scroll th { border-bottom: 0; border-left: 0; }
+						#flip-scroll td { border-left: 0; border-right: 0; border-bottom: 0; }
+						#flip-scroll tbody tr { border-left: 1px solid #babcbf; }
+						#flip-scroll th:last-child,
+						#flip-scroll td:last-child { border-bottom: 1px solid #babcbf; }
+					}
+						
+						</style>
+						<section id="flip-scroll">
+						  <table class="table table-bordered table-striped table-condensed cf">
+							  <thead class="cf">
+								<tr>
+									<th>Label</th>
+									<th class="numeric">Number Sent</th>
+									<th class="numeric">Original Balance</th>
+									<th class="numeric">Paid</th>
+									<th class="numeric">Paid %</th>
+									<th class="numeric">Settled</th>
+									<th class="numeric">Settled %</th>
+									<th class="numeric">Forecast</th>
+									<th class="numeric">Paid + Forecast %</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								$gkeys=array();  
+								$gvalues=array();  
+								$gvaluesset=array();  
+								$gvaluesfor=array();  
+								foreach ($comp_totals_expanded as $ct) { 
+								$gkeys[]=$ct['label']."\n".$ct['total_sent']." Sent";
+								$gvalues[]=$ct['total_paid_perc'];
+								$gvaluesset[]=$ct['total_settled_perc'];
+								$gvaluesfor[]=$ct['total_forecast_perc']; 
+								?>
+								<tr>
+									<td data-title="label"><?php echo $ct['label']; ?></td>
+									<td data-title="Number Sent"><?php echo $ct['total_sent']; ?></td>
+									<td data-title="Original Balance">£<?php echo number_format($ct['total_balance'],2,'.',','); ?></td>
+									<td data-title="Paid" class="numeric">£<?php echo number_format($ct['total_paid'],2,'.',','); ?></td>
+									<td data-title="Paid %" class="numeric"><?php echo $ct['total_paid_perc']; ?>%</td>
+									<td data-title="Settled" class="numeric">£<?php echo number_format($ct['total_settled'],2,'.',','); ?></td>
+									<td data-title="Settled %" class="numeric"><?php echo $ct['total_settled_perc']; ?>%</td>
+									<td data-title="Forecast" class="numeric">£<?php echo number_format($ct['total_forecast'],2,'.',','); ?></td>
+									<td data-title="Paid + Forecast %" class="numeric"><?php echo $ct['total_forecast_perc']+$ct['total_paid_perc']; ?>%</td>
+								</tr>
+								<?php } 
+								$gkeys_array = json_encode($gkeys); 
+								$gvalues_array = json_encode($gvalues); 
+								$gvaluesset_array = json_encode($gvaluesset); 
+								$gvaluesfor_array = json_encode($gvaluesfor); 
+								?>
+							</tbody>
+						</table>
+						</section>				
+				<script>
+				window.chartColors = {
+					red: 'rgb(255, 99, 132)',
+					orange: 'rgb(255, 159, 64)',
+					yellow: 'rgb(255, 205, 86)',
+					green: 'rgb(75, 192, 192)',
+					blue: 'rgb(54, 162, 235)',
+					purple: 'rgb(153, 102, 255)',
+					grey: 'rgb(201, 203, 207)',
+					crs1: 'rgb(0,38,73)',
+					crs2: 'rgb(0,183,198)',
+					crs3: 'rgb(0,153,168)'
+				};
+
+				var barChartData = {
+					labels: <?php echo $gkeys_array; ?>,
+					datasets: [{
+						label: 'Paid',
+						backgroundColor: window.chartColors.crs1,
+						data: <?php echo $gvalues_array; ?>
+					}, {
+						label: 'Settled',
+						backgroundColor: window.chartColors.crs2,
+						data: <?php echo $gvaluesset_array; ?>
+					}, {
+						label: 'Forecast',
+						backgroundColor: window.chartColors.crs3,
+						data: <?php echo $gvaluesfor_array; ?>
+					}]
+
+				};
+		
+		
+				var ctx = document.getElementById("myChart").getContext('2d');
+				var myChart = new Chart(ctx, {
+					type: 'bar',
+					data: barChartData,
+					options: {
+						title: {
+							display: false,
+						},
+						tooltips: {
+							mode: 'index',
+							intersect: false
+						},
+						responsive: true,
+						scales: {
+							xAxes: [{
+								stacked: false,
+								ticks: {
+									autoSkip: false,
+									maxRotation: 90,
+									minRotation: 90
+								}
+							}],
+							yAxes: [{
+								stacked: false,
+								ticks: {
+									autoSkip: false,
+									maxRotation: 90,
+									minRotation: 90
+								}
+							}]
+						}
+					},
+					plugins: [{
+					   beforeInit: function(chart) {
+						  chart.data.labels.forEach(function(e, i, a) {
+							 if (/\n/.test(e)) {
+								a[i] = e.split(/\n/);
+							 }
+						  });
+					   }
+					}]
+				});
+				
+			
+			$(function() {
+              $( ".from" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $( ".to" ).datepicker( "option", "minDate", selectedDate );
+                }
+              });
+              $( ".to" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $( ".from" ).datepicker( "option", "maxDate", selectedDate );
+                }
+              });
+            });
+			
+				</script>							
+								
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

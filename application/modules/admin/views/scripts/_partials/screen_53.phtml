@@ -1,0 +1,1113 @@
+<style media="screen">
+	.sage{
+		font-size: 30px !important;
+		line-height: 10px !important;
+		height: 40px !important;
+	}
+</style>
+<style media="screen">
+	.sage{
+		font-size: 30px !important;
+		line-height: 10px !important;
+		height: 40px !important;
+	}
+  .bluetext{
+
+  }
+</style>
+
+<?php
+
+//var_dump($this->googlestat);
+
+// <?php $rowt=0; $rowt=(($row->users-$row->login)/$row->users)*100; echo number_format($rowt,2); $rowtt=$rowtt+$rowt;  ?>%
+
+<?php
+$payment_success = $this->googlestat[0]->payments;
+
+$users = $this->googlestat[0]->users;
+$login = $this->googlestat[0]->login;
+$dropoff=(($users-$login)/$users)*100;
+
+$success=($payment_success/$login)*100;
+
+//echo 'dropoff is: '.ceil($dropoff).' and payment success is: '.$success;
+
+// echo '<pre style="color:white;">';
+// echo print_r($this->googlestat);
+// echo '</pre>';
+ ?>
+
+<div class="container-fluid" style="">
+	<h2 class=""><span>MyCRS Board</span></h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="col-md-12 mt-0">
+				<h2 class="ticket-title bounding-screen3">Active Users on myCRS</span></h2>
+				<div class="row_data">
+					<ul class="people_online">
+					<li><i class="fas fa-male"></i></li>
+					</ul>
+					<div class="online_usersa update_fields update_glive" id="update_glive">
+						Updating
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-12">
+
+        <h2 class="ticket-title bounding-screen3">LiveChat</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 class="card-background-crs2" style="color: #1f2e4b;">Chats Today</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_today" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">Chats This Week</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_week" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">Chats This Month</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_month" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<br>
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen3">Active Users on LiveChat</span></h2>
+				<div class="row_data">
+					<ul class="users_online">
+					<li><i class="fas fa-male"></i></li>
+					</ul>
+					<div class="online_usersa user_no" id="test_test">
+						Updating
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="col-md-6">
+
+			<div class="col-md-12" style="margin-bottom: 60px !important;">
+				<h2 class="ticket-title bounding-screen3">Arrangements Online</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+
+							<div class="col-xs-12" style="background-image:url('https://i.imgur.com/hoSsyQ6.gif');">
+								&nbsp;
+							</div>
+						<h3 style="color: #1f2e4b;">Today</h3>
+						<img src="https://i.imgur.com/hoSsyQ6.gif" class="img-fluid">
+						<div class="circle_outline_zen span"><span class="" style="color: #1f2e4b;">0</span></div>
+						<div style="bottom:0px; bottom-left:10px;">test</div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Week</h3>
+						<div class="circle_outline_zen span"><span class="tw_arrangements" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Month</h3>
+						<div class="circle_outline_zen span"><span class="tm_arrangements" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen3">Website Visits</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<h3 style="color: #1f2e4b;">Today</h3>
+						<canvas height="250" width="700" id="canvas_c" ></canvas>
+					</div>
+					<div class="col-md-4">
+						<h3>This Week</h3>
+						<canvas height="250" width="700" id="canvas_d"></canvas>
+					</div>
+					<div class="col-md-4">
+						<h3 style="color: #1f2e4b;">This Month</h3>
+						<canvas height="250" width="700" id="canvas_e"></canvas>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12 card-background-crs2">
+				<h2 class="ticket-title bannercard2">Drop off and payment success</span></h2>
+
+				<div class="row cash_crs">
+
+					<div class="col-md-6 card-background-crs">
+						<h1>Dropoff</h1>
+            <h2><?php echo $dropoff; ?></h2>
+					</div>
+
+					<div class="col-md-6 text-center">
+						<h1>Payment success</h1>
+						<h2><?php echo $payment_success; ?>%</h2>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen3">Cash Collected on myCRS</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">Today</h3>
+						<div class="circle_outline_zen span money"><span class="tt_cashcollected" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Week</h3>
+						<div class="circle_outline_zen span money"><span class="tw_cashcollected" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Month</h3>
+						<div class="circle_outline_zen span money"><span class="tm_cashcollected" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen3">Number of Payments on myCRS</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">Today</h3>
+						<div class="circle_outline_zen span money"><span class="sage tt_payments" style="color: #1f2e4b;">0</span><span class="sage tt_failure_payments" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Week</h3>
+						<div class="circle_outline_zen span money"><span class="sage tw_payments" style="color: #1f2e4b;">0</span><span class="sage tw_failure_payments" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs2">
+						<h3 style="color: #1f2e4b;">This Month</h3>
+						<div class="circle_outline_zen span money"><span class="sage tm_payments" style="color: #1f2e4b;">0</span><span class="sage tm_failure_payments" style="color: #1f2e4b;">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
+<!-- <div class="container-fluid">
+	<h2 class=""><span>MyCRS Board</span></h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="col-md-12 mt-0">
+				<h2 class="ticket-title bounding-screen2">Active Users on myCRS</span></h2>
+				<div class="row_data">
+					<ul class="people_online">
+					<li><i class="fas fa-male"></i></li>
+					</ul>
+					<div class="online_usersa update_fields update_glive" id="update_glive">
+						Updating
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-12">
+
+        <h2 class="ticket-title bounding-screen2">LiveChat</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats Today</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_today" >0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats This Week</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_week" >0</span></div>
+					</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Chats This Month</h3>
+						<div class="circle_outline_zen circle_outline_chats span"><span class="chats_month">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<br>
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Active Users on LiveChat</span></h2>
+				<div class="row_data">
+					<ul class="users_online">
+					<li><i class="fas fa-male"></i></li>
+					</ul>
+					<div class="online_usersa user_no" id="test_test">
+						Updating
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="col-md-6">
+
+			<div class="col-md-12" style="margin-bottom: 60px !important;">
+				<h2 class="ticket-title bounding-screen2">Arrangements Online</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Today</h3>
+						<div class="circle_outline_zen span"><span class="tt_arrangements">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Week</h3>
+						<div class="circle_outline_zen span"><span class="tw_arrangements">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Month</h3>
+						<div class="circle_outline_zen span"><span class="tm_arrangements">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Website Visits</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<h3>Today</h3>
+						<canvas height="250" width="700" id="canvas_c"></canvas>
+					</div>
+					<div class="col-md-4">
+						<h3>This Week</h3>
+						<canvas height="250" width="700" id="canvas_d"></canvas>
+					</div>
+					<div class="col-md-4">
+						<h3>This Month</h3>
+						<canvas height="250" width="700" id="canvas_e"></canvas>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Cash Collected on myCRS</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Today</h3>
+						<div class="circle_outline_zen span money"><span class="tt_cashcollected">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Week</h3>
+						<div class="circle_outline_zen span money"><span class="tw_cashcollected">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Month</h3>
+						<div class="circle_outline_zen span money"><span class="tm_cashcollected">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Number of Payments on myCRS</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>Today</h3>
+						<div class="circle_outline_zen span money"><span class="sage tt_payments">0</span><span class="sage tt_failure_payments">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Week</h3>
+						<div class="circle_outline_zen span money"><span class="sage tw_payments">0</span><span class="sage tw_failure_payments">0</span></div>
+					</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+						<h3>This Month</h3>
+						<div class="circle_outline_zen span money"><span class="sage tm_payments">0</span><span class="sage tm_failure_payments">0</span></div>
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div> -->
+
+<!-- <div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-xs-12 col-md-12">
+      <h1 style="padding:10px; text-align:center; color:white; text-shadow: 3px 2px 2px #000000;"><span>MyCRS
+          Board</span></h1>
+    </div>
+    <div class="col-md-12">
+
+      <div class="row">
+
+        <div class="col-xs-12 col-md-5" style="padding-left:30px;">
+
+          <div class="row">
+
+            <div class="col-md-12 box transparent" style="margin-bottom:30px; height:206px;">
+
+              <div class="row">
+
+                <div class="col-md-6" style="">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tt_cashcollected"></p>
+                      <p class="boxcardnumbertextsmallblue">Total cash collected today</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tt_payments1"></p>
+                      <p class="boxcardnumbertextsmallblue">Total payments today</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-md-12 box transparent" style="height:289px; margin-top:45px;">
+
+              <div class="row">
+
+                <div class="col-md-6">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tw_cashcollected"></p>
+                      <p class="boxcardnumbertextsmallblue">Total cash collected this week</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tw_payments1"></p>
+                      <p class="boxcardnumbertextsmallblue">Total payments this week</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-md-12 box transparent" style="height:289px; margin-top:60px;">
+
+              <div class="row">
+
+                <div class="col-md-6" style="">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tm_cashcollected"></p>
+                      <p class="boxcardnumbertextsmallblue">Total cash collected this month</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <div class="row">
+
+                    <div class="col-md-12 boxtextlgpadding">
+                      <p class="boxblocktitle tm_payments1"></p>
+                      <p class="boxcardnumbertextsmallblue">Total payments this month</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-7">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-12" style="padding-left:50px; margin-bottom:20px;">
+
+              <div class="row">
+
+                <div class="col-md-5 box transparent">
+
+                  <div class="row">
+
+                    <div class="col-xs-12 col-md-4 boxcardnumberlg">
+                      <p class="boxcardnumberlg user_no">22</p>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6" style="margin-top:50px;">
+                      <p class="boxcardnumbertext">Active users on LiveChat</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-6 box transparent" style="margin-left:10px;">
+
+                  <div class="row">
+
+                    <div class="col-xs-12 col-md-4 boxcardnumberlg">
+                      <p class="boxcardnumberlg update_glive">22</p>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6" style="margin-top:50px;">
+                      <p class="boxcardnumbertext">Active users on myCRS</p>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xs-12 col-md-12" style="padding-left:50px;">
+
+              <div class="row">
+
+                <div class="col-md-4 blockpaddingspacer30">
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_today"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Users today</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_new_today"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">New users</p>
+
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-md-4 blockpaddingspacer30">
+
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_week"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Users this week</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_new_week"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">New users</p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-4 blockpaddingspacer30">
+
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_month"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Users this month</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall tt_users_new_month"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">New users</p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xs-12 col-md-12" style="padding-left:50px;">
+
+              <div class="row">
+
+                <div class="col-md-4 blockpaddingspacer30">
+
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_today2"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Chats today</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_today3"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Average response</p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-4 blockpaddingspacer30">
+
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_week2"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Chats this week</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_week3"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Average response</p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="col-md-4 blockpaddingspacer30">
+
+                  <div class="row box transparent boxinternalpadding5">
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_month1"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Chats this month</p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmall chats_month2"></p>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                      <p class="boxcardnumbertextsmallblue">Average response</p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div> -->
+
+
+
+
+
+<?php if (date('Y-m-d')==date('Y-10-31')) {
+$colora="#000000";
+$colorb="#000000";
+$colorc="#000000";
+} else {
+$colora="#00b7c6";
+$colorb="#7A7A7A";
+$colorc="#dadf00";
+} ?>
+<script>
+function group_update_onsite(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){ //
+
+			if (res>25) {
+				$('.people_online').css("font-size", "25px","color","red");
+			} else {
+				$('.people_online').css("font-size", "75px","color","red");
+			}
+
+			var cookiecount = getCookie('active_users');
+			if (res>50) {
+							var current_value = parseInt(getCookie('active_users'))+parseInt("1");
+							let timerInterval
+							Swal.fire({
+								title: 'Active Users on myCRS',
+								html: '<span class="cashcollected">'+numberWithThous(res)+' Users online. </span> <br>I will close in <b></b> milliseconds.',
+								timer: 3500,
+								backdrop: false,
+								padding: '100px',
+								heightAuto: true,
+								timerProgressBar: true,
+								onBeforeOpen: () => {
+									Swal.showLoading()
+
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+									create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+
+									timerInterval = setInterval(() => {
+										Swal.getContent().querySelector('b')
+											.textContent = Swal.getTimerLeft()
+									}, 100)
+								},
+								onClose: () => {
+									clearInterval(timerInterval)
+								}
+							}).then((result) => {
+								if (
+									/* Read more about handling dismissals below */
+									result.dismiss === Swal.DismissReason.timer
+								) {
+									console.log('I was closed by the timer') // eslint-disable-line
+								}
+							})
+			}
+
+			var i;
+			$('.people_online').empty();
+			for (i = 0; i < res; i++) {
+				$('.people_online').append('<li><i class="fas fa-male"></i></li>');
+			}
+				$("."+the_id).html(res);
+
+				//setTimeout(worker, 5000);
+		});
+}
+
+function group_update_livechat(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){
+      //console.log(res);
+			// construct each class as html input, containing the total number of chats and the average response time
+			// the main goal of the tc_text and rc_text classes is to regulate spacing between the data in the circles
+
+      $('.chats_today3').html(res.avrg_RT_day);
+
+      $('.chats_today2').html(res.chats_today);
+
+			$('.chats_today').html("<div class='tc_text'>" + res.chats_today+
+											  "<div class='rt_text'><h6>Average Response Time:</h6>"
+											  + res.avrg_RT_day + "</div></div>");
+
+      $('.chats_week3').html(res.avrg_RT_week);
+
+      $('.chats_week2').html(res.chats_week);
+
+			$('.chats_week').html("<div class='tc_text'>" + res.chats_week +
+											  "<div class='rt_text'><h6>Average Response Time:</h6>"
+											  + res.avrg_RT_week + "</div></div>");
+
+      $('.chats_month2').html(res.avrg_RT_month);
+
+      $('.chats_month1').html(res.chats_month);
+
+			$('.chats_month').html("<div class='tc_text'>" + res.chats_month +
+											  "<div class='rt_text'><h6>Average Response Time:</h6>"
+											  + res.avrg_RT_month + "</div></div>");
+
+
+			if (res.live_users>25) {
+				$('.users_online').css("font-size", "50px");
+			} else {
+				$('.users_online').css("font-size", "75px");
+			}
+
+			var i;
+			$('.users_online').empty();
+			for (i = 0; i < res.live_users; i++) {
+				$('.users_online').append('<li><i class="fas fa-male"></i></li>');
+			}
+
+			$(".user_no").html(res.live_users);
+		});
+
+
+}
+
+function group_update(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){ //
+      //console.log(res);
+			//alert(1);
+			//var obj = JSON.parse(res);
+			//console.log(res.today);
+			//console.log(res.today.users);
+
+      $('.tt_users_today').html(res.today.users);
+      $('.tt_users_new_today').html(res.today.newusers);
+      $('.tt_users_week').html(res.week.users);
+      $('.tt_users_new_week').html(res.week.newusers);
+      $('.tt_users_month').html(res.month.users);
+      $('.tt_users_new_month').html(res.month.newusers);
+
+			$('.tt_arrangements').html(res.arrangement.today);
+			$('.tw_arrangements').html(res.arrangement.week);
+			$('.tm_arrangements').html(res.arrangement.month);
+
+			$('.tt_cashcollected').html(res.cashcollected.today);
+			$('.tw_cashcollected').html(res.cashcollected.week);
+			$('.tm_cashcollected').html(res.cashcollected.month);
+
+      $('.tt_payments1').html(res.sagepay.today.SUCCESS);
+      $('.tw_payments1').html(res.sagepay.week.SUCCESS);
+      $('.tm_payments1').html(res.sagepay.month.SUCCESS);
+
+			$('.tt_payments').html('Successful: '+res.sagepay.today.SUCCESS);
+			$('.tw_payments').html('Successful: '+res.sagepay.week.SUCCESS);
+			$('.tm_payments').html('Successful: '+res.sagepay.month.SUCCESS);
+
+			$('.tt_failure_payments').html('Failed: '+res.sagepay.today.FAILURE);
+			$('.tw_failure_payments').html('Failed: '+res.sagepay.week.FAILURE);
+			$('.tm_failure_payments').html('Failed: '+res.sagepay.month.FAILURE);
+
+			$('.today_visits').html(res.today.users);
+			//alert(res.today.users);
+			today_donut.data.datasets[0].data = res.today_data;
+			today_donut.options.scales.yAxes[0].ticks.max = parseInt(res.today_data[0])+parseInt(100);
+			today_donut.update();
+
+			week_donut.data.datasets[0].data = res.week_data;
+			week_donut.options.scales.yAxes[0].ticks.max = parseInt(res.week_data[0])+parseInt(1000);
+			week_donut.update();
+
+			month_donut.data.datasets[0].data = res.month_data;
+			month_donut.options.scales.yAxes[0].ticks.max = parseInt(res.month_data[0])+parseInt(4000);
+			month_donut.update();
+
+			//console.log(res.today_data);
+			//console.log(res.week_data);
+			//console.log(res.month_data);
+			//console.log(res.arrangement);
+			//console.log(res.cashcollected);
+			//console.log(res.today);
+		});
+}
+
+
+var today_donut_data = {
+		labels: ["Users","New Users"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			borderColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			data:[100,80,20]
+		}]
+
+	};
+var today_donut_opt = {
+		type: 'bar',
+		data: today_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 14,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						max:2000,
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }]
+			}
+		}
+	};
+var week_donut_data = {
+		labels: ["Users","New Users"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			borderColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			data:[100,80,20]
+		}]
+
+	};
+var week_donut_opt = {
+		type: 'bar',
+		data: week_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 11,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }]
+			}
+		}
+	};
+var month_donut_data = {
+		labels: ["Users","New Users"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			borderColor: ['<?php echo $colora; ?>','<?php echo $colorb; ?>','<?php echo $colorc; ?>'],
+			data:[1001,80,20]
+		}]
+
+	};
+var month_donut_opt = {
+		type: 'bar',
+		data: month_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#fff'
+					}
+			  }]
+			}
+		}
+	};
+</script>

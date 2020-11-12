@@ -1,0 +1,200 @@
+<div class="container-fluid">
+	<h2 class=""><span>MyResponse Boards</span></h2>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2">Email Mailboxes</span></h2>
+
+				<div class="row row_dataEboards" style="height:250px">
+
+				</div>
+
+				<div class="row row_data" style="height:250px">
+
+				</div>
+
+				<div class="row row_data" style="height:280px">
+
+
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<div class="col-md-6">
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2 tickets-condensed-titles"><span class="">Solved Emails</span></h2>
+
+				<div class="row cash_crs custom-spacing-tickets">
+
+					<div class="col-md-4">
+						<div class="card-background-crs">
+							<h3>Today</h3>
+							<div class="circle_outline_zen" ><span class="ST_today">0</span></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+							<h3>This Week</h3>
+							<div class="circle_outline_zen"><span class="ST_week">0</span></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card-background-crs">
+							<h3>This Month</h3>
+							<div class="circle_outline_zen"><span class="ST_month">0</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="col-md-12">
+				<h2 class="ticket-title bounding-screen2"><span class="">Total E-Bot Solved Emails</span></h2>
+
+				<div class="row cash_crs">
+
+					<div class="col-md-3">
+						<div class="card-background-crs">
+							<h3>Today</h3>
+							<div class=" text-white circle_outline_zen"><span class="EST_today">0</span></div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card-background-crs">
+							<h3>This Week</h3>
+							<div class=" circle_outline_zen"><span class="EST_week">0</span></div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card-background-crs">
+							<h3>This Month</h3>
+							<div class=" circle_outline_zen"><span class="EST_month">0</span></div>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="card-background-crs">
+							<h3>Percent this Month</h3>
+							<div class="text-white circle_outline_zen"><span class="percent">0</span></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-md-12" style="padding:10px;">
+
+				<div class="row">
+
+					<div class="col-md-12">
+					  	<h2 class="ticket-title bounding-screen2" style="width:100%;"><span class="">White Label Email Boards</span></h2>
+					</div>
+
+					<div class="row row_datascreen12" style="height:auto;">
+
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+</div>
+
+<script>
+
+function group_update_tickets_BZ(the_id) {
+	var textcolor = '';
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: false,
+			success: function(res){
+				$('.row_datascreen12').empty()
+				Object.keys(res).forEach(function(mailbox,value){
+					if (res[mailbox]['total'] > 50) {
+						textcolor = 'text-warning';
+					}
+					if (res[mailbox]['total'] > 100) {
+						textcolor = 'text-danger';
+					}
+					$('.row_datascreen12').append('<div class="col-md"><div class="card-background-crs mt-0 m-1"><h5 class="card-header mt-0" style="font-size:16px; ">'+mailbox+'</h5><div class="card-body p-0"><div style="line-height:25px; padding-top:20px; padding-bottom:20px; text-align:center;"><span class="zen_text">'+res[mailbox]['total']+'</span><div style="font-size:25px"><b>open</b></div></div></div><div class="card-footer date_text">Oldest Email<br><span class="ticket">'+res[mailbox]['old']+'</span></div></div></div>')
+					textcolor = '';
+				})
+			}
+		});
+
+}
+
+
+</script>
+<script>
+
+function group_update_tickets(the_id) {
+	var textcolor = '';
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: false,
+			success: function(res){
+				$('.row_dataEboards').empty()
+				Object.keys(res['open']).forEach(function(mailbox,value){
+					if (res['open'][mailbox]['total'] > 50) {
+						textcolor = 'text-warning';
+						textcatch = '50';
+					}
+					if (res['open'][mailbox]['total'] > 100) {
+						textcolor = 'text-danger';
+						textcatch = '100';
+					}
+
+					$('.row_dataEboards').append('<div class="col-md-4 boxesemails"><div class="card-background-crs mt-0 m-1"><h5 class="card-header mt-0" style="font-size:16px; ">'+mailbox+'</h5><div class="card-body p-0"><div style="line-height:25px; padding-top:20px; padding-bottom:20px; text-align:center;"><span class="zen_text '+textcolor+'">'+res['open'][mailbox]['total']+'</span><div style="font-size:25px"><b>open</b></div></div></div><div class="card-footer date_text">Oldest Email<br><span class="ticket">'+res['open'][mailbox]['old']+'</span></div></div></div>')
+					textcolor = '';
+				});
+
+				if(textcatch === '50'){
+					$( ".row_dataEboards" ).effect( "bounce", {times:1}, 1000 );
+					$(".boxesemails").delay(5000).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+				}
+				if(textcatch === '100'){
+					$( ".row_dataEboards" ).effect( "shake", {times:1}, 1000 );
+					$(".boxesemails").delay(5000).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+				}
+
+				//$( ".row_dataEboards" ).effect( "shake", {times:3}, 1000 );
+
+				$('.ST_today').text(res['solved']['today'])
+				$('.ST_week').text(res['solved']['week'])
+				$('.ST_month').text(res['solved']['month'])
+
+				$('.EST_today').text(res['bot']['today'])
+				$('.EST_week').text(res['bot']['week'])
+				$('.EST_month').text(res['bot']['month'])
+
+				$('.percent').text(res['botperc']+'%')
+
+			}
+		});
+
+}
+
+
+function group_update_email(the_id) {
+
+
+}
+
+
+</script>

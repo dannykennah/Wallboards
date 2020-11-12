@@ -1,0 +1,139 @@
+<?php
+$file="/var/www/vhosts/creditresourcesolutions.org.uk/wallboards/data/data_live/S -Cash Collected - Agent.csv";
+$csv= file_get_contents($file);
+$csv= str_replace(array('£'),'',$csv);
+$array = array_map("str_getcsv", explode("\n", $csv));
+foreach ($array as $key=>$arr) {
+	if ($arr[0]) {
+			$out['data'][$arr[0]]=substr(str_replace(array(',','"'),'',$arr[1].$arr[2]),0,'-3');
+	}
+}
+
+
+foreach ($out['data'] as $key=>$data) {
+	if ($key=="Profiling" || $key=="Claims" || $key=="Eagle") {
+			$fique_all = $fique_all + $data;
+			$outp['data']['Legal']=$fique_all;
+	} else {
+			$fique_other = $fique_other + $data;
+			$outp['data'][$key]=$data;
+	}
+}
+$out['data']['Legal']=$fique_all;
+arsort($outp['data']);
+foreach ($outp['data'] as $lkey=>$data){
+	$outp['labels'][]=$lkey;
+}
+
+$json_labels = json_encode($outp['labels']);
+$json_data = json_encode(array_values($outp['data']));
+
+if (date('Y-m-d')==date('Y-10-31')) { $color="#000000"; } else { $color="#7A7A7A"; }
+//echo "<pre>";
+//print_r($outp);
+//echo "</pre>";
+
+//print_r($json_labels);
+//echo "<br>";
+//print_r($json_data);
+
+?>
+<script>
+
+
+var barChartData_b = {
+	labels: <?php echo $json_labels; ?>,
+	datasets: [{
+		label: 'Dataset 1',
+		borderWidth: 1,
+		backgroundColor: '<?php echo $color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:<?php echo $json_data; ?>
+	}]
+
+};
+var barChartData_bopt = {
+			type: 'bar',
+			data: barChartData_b,
+			options: {
+				plugin_attribute:1,
+				responsive: true,
+				legend: {
+					display: false
+				},
+				title: {
+					display: false
+				},
+				scales: {
+				   xAxes: [{
+						ticks: {
+							fontSize: 20,
+							fontStyle:'bold',
+							fontColor:'<?php echo $color; ?>'
+						}
+				  }],
+				  yAxes: [{
+						display: false,
+						ticks: {
+							max: 75000,
+							fontSize: 20,
+							fontStyle:'bold',
+							fontColor:'<?php echo $color; ?>'
+						}
+				  }]
+				}
+			}
+		};
+
+
+function group_json_b(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+			//alert(1);
+			var total = '0';
+			for (i in res.data) {
+				var total = parseInt(total) + parseInt(res.data[i]);
+
+			}
+
+			$('.screen5figure').html(total.toLocaleString());
+			$('.screen5figure_test').html(res.updated_time);
+
+			//alert(total+parseInt(1000));
+
+			myBar_b.data.labels = res.labels;
+			myBar_b.data.datasets[0].data = res.data;
+			myBar_b.options.scales.yAxes[0].ticks.max = parseInt(res.data[0])+parseInt(5000);
+			myBar_b.update();
+
+			//console.log('total agent : '+total);
+			//console.log(res);
+		});
+}
+
+
+
+
+</script>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 mt-3 mb-0">
+			<div class="col-md-12 mt-3 title">
+			  CRS <?php echo $this->scr->more_info; ?> <span class="screen5figure_test float-right" ></span>
+			</div>
+			<br>
+			<h3 class="ticket-title bounding-screen2 float-right">Total Cash</h3>
+			<span class="total_cash mt-4"><span class="">£</span><span class="screen5figure"><?php echo number_format($fique_other+$fique_all); ?></span></span>
+			<canvas height="800" width="1800" id="canvas_b"></canvas>
+
+		</div>
+	</div>
+</div>

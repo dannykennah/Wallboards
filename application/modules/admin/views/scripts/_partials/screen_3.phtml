@@ -1,0 +1,147 @@
+<?php
+$file="/var/www/vhosts/creditresourcesolutions.org.uk/wallboards/data/data_live/S - Cash Collected - Sectors.csv";
+$csv= file_get_contents($file);
+$csv= str_replace(array('£'),'',$csv);
+$array = array_map("str_getcsv", explode("\n", $csv));
+foreach ($array as $key=>$arr) {
+	if ($arr[0]) {
+			$out['data'][$arr[0]]=substr(str_replace(array(',','"'),'',$arr[1].$arr[2]),0,'-3');
+	}
+}
+
+// The code used for Screen 3 and screen 5 is identical except for the file being extracted, so any comments here apply to screen 5 to. This can be changed.
+// Looks like the php is to run when the page is initialized, since the variables initialized here are used throughout the rest of the page's scripts
+foreach ($out['data'] as $key=>$data) {
+
+	// If money is labeled as belonging to the claims, profiling or legal sectors then lump them into the eagle bar; Otherwise put it under its own bar.
+	if ($key=="Profiling" || $key=="Claims" || $key=="Eagle") {
+			$fique_all = $fique_all + $data;
+			$outp['data']['Legal']=$fique_all;
+	} else {
+			$fique_other = $fique_other + $data;
+			$outp['data'][$key]=$data;
+	}
+}
+$out['data']['Legal']=$fique_all;
+// Sort the array
+arsort($outp['data']);
+foreach ($outp['data'] as $lkey=>$data){
+	$outp['labels'][]=$lkey;
+}
+
+// Separate out the data into labels and data, encoding them so they can be processed in javascript
+$json_labels = json_encode($outp['labels']);
+$json_data = json_encode(array_values($outp['data']));
+
+// if today is Halloween make the bars and text black, otherwise make them dark blue.
+if (date('Y-m-d')==date('Y-10-31')) { $color="#000000"; } else { $color="#002649"; }
+
+//echo "<pre>";
+//print_r($outp);
+//echo "</pre>";
+
+//print_r($json_labels);
+//echo "<br>";
+//print_r($json_data);
+
+?>
+<script>
+
+// This variable holds all of the data represented by the bars on the graph, as well as the labels.
+var barChartData_a = {
+	labels: <?php echo $json_labels; ?>,
+	datasets: [{
+		label: 'Dataset 1',
+		borderWidth: 1,
+		backgroundColor: '<?php echo $color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:<?php echo $json_data; ?>
+	}]
+
+};
+
+// This variable holds all the data that controls aspects of the chart itself.
+var barChartData_aopt = {
+		// The data names are fairly self-explanatory
+		type: 'bar',
+		data: barChartData_a,
+		options: {
+			plugin_attribute:1,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 20,
+						fontStyle:'bold',
+						fontColor:'<?php echo $color; ?>'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						max: 75000,
+						fontSize: 20,
+						fontStyle:'bold',
+						fontColor:'<?php echo $color; ?>'
+					}
+			  }]
+			}
+		}
+	};
+
+// We are left with a function that runs an AJAX query and returns with updated data
+function group_json_a(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+			//alert(1);
+			var total = '0';
+			for (i in res.data) {
+
+				// adds all of the money together for the "total cash" display
+				var total = parseInt(total) + parseInt(res.data[i]);
+				$('.screen3figure').html(total.toLocaleString());
+				$('.screen3figure_test').html(res.updated_time);
+
+
+			}
+
+			myBar_a.data.labels = res.labels;
+			myBar_a.data.datasets[0].data = res.data;
+			myBar_a.options.scales.yAxes[0].ticks.max = parseInt(res.data[0])+parseInt(5000);
+			myBar_a.update();
+
+			//console.log('total sectors : '+total);
+			//console.log(res.data);
+		});
+}
+
+
+
+
+</script>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 mt-3 mb-0">
+
+			<h5 class="header-bar bg-crsdblue text-white"><span>CRS</span> <?php echo $this->scr->more_info; ?>  <span class="screen3figure_test float-right" ></span></h5>
+			<br>
+			<span class="total_cash"><span class="symbol">£</span><span class="screen3figure"><?php echo number_format($fique_other+$fique_all); ?></span></span>
+			<canvas height="800" width="1800" id="canvas_a"></canvas>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,566 @@
+<style>
+.boxgreen{
+  background-color:rgba(25, 191, 25, 0.4);
+}
+</style>
+<?php
+
+$tasks['bugs'] = array();
+$taskscomplete['bugs'] = array();
+$tasksmissed['bugs'] = array();
+
+$tasks['alterations'] = array();
+$taskscomplete['alterations'] = array();
+$tasksmissed['alterations'] = array();
+
+$tasks['newdev'] = array();
+$taskscomplete['newdev'] = array();
+$tasksmissed['newdev'] = array();
+
+$tasks['actions'] = array();
+$taskscomplete['actions'] = array();
+
+$bugsoverdue = 0;
+$alterationsoverdue = 0;
+$newdevoverdue = 0;
+$projectsoverdue = 0;
+$actionsoverdue = 0;
+
+for($i=0;$i<count($this->tasks2);$i++){
+
+    if($this->tasks2[$i]['web_type'] === '0'){
+
+        array_push($taskscomplete['bugs'],$this->tasks2[$i]);
+
+        $finalduedate = date('Y-m-d', strtotime($this->tasks2[$i]['due_date']. ' + 15 days'));
+
+        if($this->tasks2[$i]['complete_date'] > $finalduedate){
+            array_push($tasksmissed['bugs'],$this->tasks2[$i]);
+        }
+    }
+
+    if($this->tasks2[$i]['web_type'] === '1'){
+
+        array_push($taskscomplete['alterations'],$this->tasks2[$i]);
+
+        $finalduedate = date('Y-m-d', strtotime($this->tasks2[$i]['due_date']. ' + 15 days'));
+
+        if($this->tasks2[$i]['complete_date'] > $finalduedate){
+            array_push($tasksmissed['alterations'],$this->tasks2[$i]);
+        }
+
+    }
+
+    if($this->tasks2[$i]['web_type'] === '2'){
+
+        array_push($taskscomplete['newdev'],$this->tasks2[$i]);
+
+        $finalduedate = date('Y-m-d', strtotime($this->tasks2[$i]['due_date']. ' + 15 days'));
+
+        if($this->tasks2[$i]['complete_date'] > $finalduedate){
+            array_push($tasksmissed['newdev'],$this->tasks2[$i]);
+        }
+
+    }
+
+    if($this->tasks2[$i]['web_type'] === '3'){
+
+        array_push($taskscomplete['projects'],$this->tasks2[$i]);
+
+    }
+
+    if($this->tasks2[$i]['web_type'] === '4'){
+
+        array_push($taskscomplete['actions'],$this->tasks2[$i]);
+
+    }
+
+}
+
+foreach ($this->redwoodtasks as $key => $t) {
+
+    if($t['web_type'] === '0'){
+        array_push($tasks['bugs'],$t);
+
+        if(date('Y-m-d') > $t['due_date']){
+            $bugsoverdue++;
+        }
+
+    }
+
+    if($t['web_type'] === '1'){
+
+        array_push($tasks['alterations'],$t);
+
+        if(date('Y-m-d') > $t['due_date']){
+            $alterationsoverdue++;
+        }
+
+    }
+
+    if($t['web_type'] === '2'){
+
+        array_push($tasks['newdev'],$t);
+
+        if(date('Y-m-d') > $t['due_date']){
+            $newdevoverdue++;
+        }
+
+    }
+
+    if($t['web_type'] === '3'){
+        array_push($tasks['projects'],$t);
+
+        if(date('Y-m-d') > $t['due_date']){
+            $projectsvoverdue++;
+        }
+
+    }
+
+    if($t['web_type'] === '4'){
+
+        array_push($tasks['actions'],$t);
+
+        if(date('Y-m-d') > $t['due_date']){
+            $projectsvoverdue++;
+        }
+
+    }
+}
+
+$bugsoverdue = 0;
+$alterationsoverdue = 0;
+$newdevoverdue = 0;
+
+// for($i=0;$i<count($this->tasks);$i++){
+//
+//     if($this->tasks[$i]['web_type'] === '0'){
+//
+//         array_push($tasks['bugs'],$this->tasks[$i]);
+//
+//         if(date('Y-m-d') > $this->tasks[$i]['due_date']){
+//             $bugsoverdue++;
+//         }
+//
+//     }
+//
+//     if($this->tasks[$i]['web_type'] === '1'){
+//
+//         array_push($tasks['alterations'],$this->tasks[$i]);
+//
+//         if(date('Y-m-d') > $this->tasks[$i]['due_date']){
+//             $alterationsoverdue++;
+//         }
+//
+//     }
+//
+//     if($this->tasks[$i]['web_type'] === '2'){
+//
+//         array_push($tasks['newdev'],$this->tasks[$i]);
+//
+//         if(date('Y-m-d') > $this->tasks[$i]['due_date']){
+//             $newdevoverdue++;
+//         }
+//
+//     }
+//
+//     if($this->tasks[$i]['web_type'] === '3'){
+//         array_push($tasks['projects'],$this->tasks[$i]);
+//
+//         if(date('Y-m-d') > $this->tasks[$i]['due_date']){
+//             $projectsvoverdue++;
+//         }
+//
+//     }
+//
+//     if($this->tasks[$i]['web_type'] === '4'){
+//
+//         array_push($tasks['actions'],$this->tasks[$i]);
+//
+//         if(date('Y-m-d') > $this->tasks[$i]['due_date']){
+//             $projectsvoverdue++;
+//         }
+//
+//     }
+//
+// }
+
+//Bugs adherence
+$totalbugscomplete = count($tasks['bugs']) + count($taskscomplete['bugs']) - count($tasksmissed['bugs']);
+
+$totalbugscomplete = $totalbugscomplete / count($taskscomplete['bugs']) * 100;
+
+$bugsadherence = round($totalbugscomplete);
+
+//Alterations adherence
+$totalbugscomplete = count($tasks['alterations']) + count($taskscomplete['alterations']) - count($tasksmissed['alterations']);
+
+$totalbugscomplete = $totalbugscomplete / count($taskscomplete['alterations']) * 100;
+
+$alterationsadherence = round($totalbugscomplete);
+
+//Newdev adherence
+$totalbugscomplete = count($tasks['newdev']) + count($taskscomplete['newdev']) - count($tasksmissed['newdev']);
+
+$totalbugscomplete = $totalbugscomplete / count($taskscomplete['newdev']) * 100;
+
+$newdevadherence = round($totalbugscomplete);
+
+
+$totalcomplete = count($taskscomplete['bugs']) + count($taskscomplete['newdev']) + count($taskscomplete['newdev']);
+
+
+//Our array, which contains a set of numbers.
+$array = array($bugsadherence, $alterationsadherence, $newdevadherence);
+$total = array_sum($array);
+
+//Calculate the average.
+$average = ceil(array_sum($array) / count($array));
+
+$efficiency = $average;
+
+?>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-xs-12 col-md-5">
+
+        <div class="card transparent text-white no-overlap mt-3" style="height:350px;">
+          <h5 class="card-headedfr borderbottom mt-0 no-overlap" style="padding:15px;">Overview</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0" style="table-layout: fixed;">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Bugs</th>
+                  <th>Alterations</th>
+                  <th>New dev</th>
+                  <th>Projects</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody class="update_incalldata transparent white-text">
+                  <tr>
+                      <th rowspan="1">Outstanding</th>
+                      <td style="color:#16BBFE;"><?php echo count($tasks['bugs']); ?></td>
+                      <td style="color:red;"><?php echo count($tasks['alterations']); ?></td>
+                      <td style="color:red;"><?php echo count($tasks['newdev']); ?></td>
+                      <td style="color:red;"><?php echo count($tasks['projects']); ?></td>
+                      <td style="color:#16BBFE;"><?php echo count($tasks['actions']); ?></td>
+                  </tr>
+                  <tr>
+                      <th rowspan="1">Overdue</th>
+                      <td style="color:#16BBFE;"><?php echo $bugsoverdue; ?></td>
+                      <td><?php echo $alterationsoverdue; ?></td>
+                      <td><?php echo $newdevoverdue; ?></td>
+                      <td><?php echo "N/A"; ?></td>
+                      <td><?php echo "N/A"; ?></td>
+                  </tr>
+                  <tr>
+                      <th rowspan="1">Completed</th>
+                      <td style="color:yellow;"><?php echo count($taskscomplete['bugs']); ?></td>
+                      <td style="color:yellow;"><?php echo count($taskscomplete['alterations']); ?></td>
+                      <td style="color:yellow;"><?php echo count($taskscomplete['newdev']); ?></td>
+                      <td style="color:yellow;"><?php echo count($taskscomplete['projects']); ?></td>
+                      <td style="color:yellow;"><?php echo count($taskscomplete['actions']); ?></td>
+                  </tr>
+                  <tr>
+                      <th rowspan="1">Missed deadline</th>
+                      <td><?php echo count($tasksmissed['bugs']); ?></td>
+                      <td><?php echo count($tasksmissed['alterations']); ?></td>
+                      <td><?php echo count($tasksmissed['newdev']); ?></td>
+                      <td>N/A</td>
+                      <td>N/A</td>
+                  </tr>
+                  <tr>
+                      <th rowspan="1">% Adherence</th>
+                      <td style="color:#16BBFE;"><?php echo $bugsadherence; ?>%</td>
+                      <td style="color:#16BBFE;"></td>
+                      <td style="color:#16BBFE;"></td>
+                      <td style="color:#16BBFE;"></td>
+                      <td style="color:#16BBFE;"></td>
+                  </tr>
+              </tbody>
+              </table>
+
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-2">
+        <div class="card transparent text-white no-overlap mt-3" style="height:350px;">
+          <div class="card-body p-2">
+
+              <div class="container">
+                  <div class="row">
+
+                      <div class="col-xs-12 col-md-12">
+                          <h3>Efficiency:</h3>
+                          <p><?php echo $efficiency; ?>% completed on time</p>
+                      </div>
+                      <div class="col-xs-12 col-md-12 mt-1">
+                          <h3>Calendar Reviews:</h3>
+                          <p><strong>Billy:</strong> CRSMI</p>
+                          <p><strong>Bradley:</strong> Mastersite</p>
+                          <p><strong>Jonathon:</strong> Wallboards</p>
+                      </div>
+
+                      </div>
+                  </div>
+              </div>
+
+
+
+          </div>
+    </div>
+
+    <div class="col-xs-12 col-md-5">
+      <div class="card transparent text-white no-overlap mt-3" style="height:350px; overflow:scroll;">
+        <h5 class="card-header borderbottom mt-0 no-overlap"><i class="fas fa-directions"></i>&nbsp;Actions</h5>
+        <div class="card-body p-2">
+          <table class="table m-0"  style="table-layout: fixed;">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Assignee</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody class="update_incalldata transparent white-text">
+              <?php
+              foreach($this->fetchActions AS $entry){
+              ?>
+              <tr>
+                <td><?php echo $entry['job']; ?></td>
+                <td>
+                    <?php
+                    for($i=0;$i<count($entry['assign_user_id']);$i++){
+                        ?>
+                        <?php echo $entry['assign_user_id'][$i];?><br>
+                        <?php
+                    } ?>
+                </td>
+                <td><?php echo date('d-m-y',strtotime($entry['created'])); ?></td>
+              </tr>
+              <?php
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class="col-xs-12 col-md-3">
+
+        <div class="card transparent text-white no-overlap mt-3" style="height:1000px;">
+          <h5 class="card-header borderbottom mt-0 no-overlap"><i class="fas fa-bug"></i>&nbsp;Bugs</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0" style="table-layout: fixed;">
+              <thead>
+                <tr>
+                  <th>Details</th>
+                  <th>Request date</th>
+                  <th>Due Date</th>
+                  <th>Assignee</th>
+                </tr>
+              </thead>
+              <tbody class="update_incalldata transparent white-text">
+                  <?php
+                  foreach($tasks['bugs'] AS $entry){
+                      ?>
+                      <tr <?php if($entry['request_state'] === '1'){?> class="boxgreen" <?php } ?>>
+                    <td><a href="#" title="<?php echo $entry['description']; ?>" style="color:white; text-decoration:none;"><?php echo $entry['request_name']; ?></a></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['request_date'])); ?></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['due_date'])); ?></td>
+                    <td><?php echo $entry['fullname']; ?></td>
+                    </tr>
+                      <?php
+                  }
+                  ?>
+              </tbody>
+              </table>
+
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-3">
+
+        <div class="card transparent text-white no-overlap mt-3 no-overlap" style="height:1000px;">
+          <h5 class="card-header borderbottom mt-0"><i class="fas fa-exchange-alt"></i>&nbsp;Alterations</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0" style="table-layout: fixed;">
+              <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Request date</th>
+                    <th>Due Date</th>
+                    <th>Assignee</th>
+                </tr>
+              </thead>
+              <tbody class="update_incalldata transparent white-text">
+                  <?php
+                  foreach($tasks['alterations'] AS $entry){
+                      ?>
+                      <tr <?php if($entry['request_state'] === '1'){?> class="boxgreen" <?php } ?>>
+                    <td><a href="#" title="<?php echo $entry['description']; ?>" style="color:white; text-decoration:none;"><?php echo $entry['request_name']; ?></a></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['request_date'])); ?></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['due_date'])); ?></td>
+                    <td><?php echo $entry['fullname']; ?></td>
+                    </tr>
+                      <?php
+                  }
+                  ?>
+              </tbody>
+              </table>
+
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-3">
+
+        <div class="card transparent text-white no-overlap mt-3 no-overlap" style="height:1000px;">
+          <h5 class="card-header borderbottom mt-0"><i class="fas fa-arrow-up"></i>&nbsp;New dev</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0" style="table-layout: fixed;">
+              <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Request date</th>
+                    <th>Due Date</th>
+                    <th>Assignee</th>
+                </tr>
+              </thead>
+              <tbody class="update_incalldata transparent white-text">
+                  <?php
+                  foreach($tasks['newdev'] AS $entry){
+                      ?>
+                      <tr <?php if($entry['request_state'] === '1'){?> class="boxgreen" <?php } ?>>
+                    <td><a href="#" title="<?php echo $entry['description']; ?>" style="color:white; text-decoration:none;"><?php echo $entry['request_name']; ?></a></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['request_date'])); ?></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['due_date'])); ?></td>
+                    <td><?php echo $entry['fullname']; ?></td>
+                    </tr>
+                      <?php
+                  }
+                  ?>
+              </tbody>
+              </table>
+
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-3">
+
+        <div class="card transparent text-white no-overlap mt-3" style="height:1000px;">
+          <h5 class="card-header borderbottom mt-0 no-overlap"><i class="far fa-sticky-note"></i>&nbsp;Project</h5>
+          <div class="card-body p-2">
+
+            <table class="table m-0" style="table-layout: fixed;">
+              <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Request date</th>
+                    <th>Assignee</th>
+                </tr>
+              </thead>
+              <tbody class="update_incalldata transparent white-text">
+                  <?php
+                  foreach($this->fetchProjects AS $entry){
+                      ?>
+                      <tr <?php if($entry['request_state'] === '1'){?> class="boxgreen" <?php } ?>>
+                    <td><a href="#" title="<?php echo $entry['project_description']; ?>" style="color:white; text-decoration:none;"><?php echo $entry['project_title']; ?></a></td>
+                    <td><?php echo date('d-m-y',strtotime($entry['project_live_datetime'])); ?></td>
+                    <td><?php echo $entry['fullname']; ?></td>
+                    </tr>
+                      <?php
+                  }
+                  ?>
+              </tbody>
+              </table>
+
+          </div>
+        </div>
+
+    </div>
+
+  </div>
+</div>
+<!-- <div class="col-xs-12 col-md-3">
+
+    <div class="card transparent text-white no-overlap mt-3">
+      <h5 class="card-header borderbottom mt-0 no-overlap">New dev</h5>
+      <div class="card-body p-2">
+
+        <?php
+        $allcount = count($tasks['newdev']);
+          ?>
+          <table class="table m-0" style="table-layout: fixed;">
+            <thead>
+              <tr>
+                  <th>Details</th>
+                  <th>Request date</th>
+                  <th>Due Date</th>
+                  <th>Assignee</th>
+              </tr>
+            </thead>
+            <tbody class="update_incalldata transparent white-text">
+                <?php
+                foreach($tasks['newdev'] AS $entry){
+                    ?>
+                    <tr>
+                  <td><a href="#" title="<?php echo $entry['description']; ?>" style="color:white; text-decoration:none;"><?php echo $entry['request_name']; ?></a></td>
+                  <td><?php echo date('d-m-y',strtotime($entry['request_date'])); ?></td>
+                  <td><?php echo date('d-m-y',strtotime($entry['due_date'])); ?></td>
+                  <td><?php echo $entry['fullname']; ?></td>
+                  </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            </table>
+
+      </div>
+    </div>
+
+</div>
+
+<div class="block1" style="">
+Test block 1
+</div>
+
+<div class="block2" style="display:none;">
+Test block 2
+</div>
+
+<script type="text/javascript">
+
+function screen_51(){
+
+console.log($('#block1').is(':visible'));
+
+  if($('.block1').is(':visible') === true){
+    $('.block1').hide();
+    $('.block2').show();
+  }
+  else {
+    $('.block2').hide();
+    $('.block1').show();
+  }
+
+}
+</script> -->

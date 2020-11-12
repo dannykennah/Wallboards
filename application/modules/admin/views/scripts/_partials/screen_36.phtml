@@ -1,0 +1,240 @@
+<style>
+
+
+th,td {
+	padding-left: 18px !important;
+}
+
+.clock21{
+	padding-top:100px;
+}
+
+
+.mod-paddingleftbw3 {
+    padding-left: 238px !important;
+}
+.mod-poundsign{
+	position: absolute!important;
+    top: 14px !important;
+    left: 165px !important;
+}
+.mod-flip-clock-wrapper ul {
+    width: 78px !important;
+    height: 134px !important;
+}
+
+.mod-flip-clock-wrapper ul li a div div .mod-inn{
+    padding-top: 23px !important;
+    font-size: 109px !important;
+}
+.mod-inn{
+	padding-top: 23px !important;
+	font-size: 109px !important;
+}
+.mod-flip-clock-wrapper ul li a div div{
+	padding-top: 23px !important;
+	font-size: 109px !important;
+}
+.mod-clock, .mod-clock2, .mod-clock3, .mod-clock4 {
+	padding-top: 25px !important;
+}
+.mod-header-bar-col-6 .mod-title {
+	right: -200px !important;
+}
+
+.mod-right{
+  right: -100px;
+}
+
+.sectorbuisness td{
+	padding-right: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 20px;
+}
+.sectorbuisnessheaders th{
+	padding: 10px !important;
+}
+
+</style>
+
+
+<div class="container-fluid">
+	<div class="row">
+
+		<div class="col-md-12 mt-3 title">
+		  Cases Loaded Board
+		</div>
+
+        <div class="col-md-6 mt-3">
+            <div class="col-md-12">
+							<div class="card transparent text-white">
+                <h2 class="card-header borderbottom mt-0">New Cases Today By Sector</span></h2>
+                <div class="row" >
+
+                    <div class="col-md-12">
+                                        <div class="no-overlap mt-0">
+                                        <div class="no-overlap p-0">
+                                        <div>
+                                            <table style="width:100%;" class="sectorcasesToday BS">
+                                            <tr style=" color:#fff;"><th>Sector</th><th>Number of Cases</th><th>Total Value of Cases</th></tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                    </div>
+                </div>
+							</div>
+                <h2 class="title">New Cases This Month</span></h2>
+                <div class="clock21 mod-clock3  mod-flip-clock-wrapper" style="padding-right:50px;"></div>
+            </div>
+
+
+        </div>
+        <div class="col-md-6 mt-3">
+            <div class="col-md-14 crs-card">
+							<div class="card transparent text-white">
+                <h2 class="card-header borderbottom mt-0">New Cases Today By Client</span></h2>
+                <div class="row" style="height:750px;">
+
+                    <div class="col-md-12 crs-card">
+                                        <div class="no-overlap mt-0">
+                                        <div class="no-overlap p-0">
+                                        <div>
+                                            <table class"crs-card card transparent" style="width:100%;" class="casesToday BS">
+                                            <tr style="color:#fff;"><th>Client</th><th>Number of Cases</th><th>Total Value of Cases</th></tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+							</div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+if (!result_complete_sort_cases) {
+	var result_complete_sort_cases=0;
+}
+if (!result_complete_sort_cases_sector) {
+	var result_complete_sort_cases_sector=0;
+}
+
+function sort_cases(the_id){
+
+    if (result_complete_sort_cases==2 || result_complete_sort_cases==0) {
+        result_complete_sort_cases=1;
+
+	// Initialize variables early so we can use them from the start of the program
+	var deptName = "";
+	var dataArray;
+	var count = 0;
+	var money = "";
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: false,
+			processData: false,
+		}).done(function(res){
+
+
+
+			if (the_id=="cases_report_day"){
+
+				$(".casesToday").html("");
+				$(".casesToday").append('<tr style="background-color:rgba(255,255,255,0.1); color:#fff;"><th>Client</th><th>Number of Cases</th><th>Total Value of Cases</th></tr>');
+
+				// Run through all of the departments that we've been given
+				for (department in res.data){
+
+					// Push the arrays held in the current department into a new array so that it's easier to process
+					dataArray = res.data[department];
+
+					// Make a header for the current department, then deposit a row of data for each entry into the department.
+					$(".casesToday").append('<tr style="background-color:rgba(255,255,255,0.1); color:#fff;"><th>'+department+'</th><th></th><th></th></tr>');
+
+					for (count = 0; count < dataArray.length; count++) {
+
+
+							money = "£"+numberWithThous(dataArray[count][3]);
+
+
+						$(".casesToday").append('<tr>'+
+															'<td>'+dataArray[count][1]+'</td>'+
+															'<td>'+dataArray[count][2]+'</td>'+
+															'<td>'+money+'</td>'+
+															'</tr>');
+
+					}
+				}
+			}
+
+            result_complete_sort_cases=2;
+		}).fail(function(e){
+			console.log(e);
+		});
+
+    }
+
+}
+function sort_cases_sector(the_id){
+
+    if (result_complete_sort_cases_sector==2 || result_complete_sort_cases_sector==0) {
+        result_complete_sort_cases_sector=1;
+
+	// Initialize variables early so we can use them from the start of the program
+	var deptName = "";
+	var dataArray;
+	var count = 0;
+	var money = "";
+
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: false,
+			processData: false,
+		}).done(function(res){
+
+
+
+			if (the_id=="cases_report_day_sector"){
+
+				$(".sectorcasesToday").html("");
+				$(".sectorcasesToday").append('<tr style="background-color:rgba(255,255,255,0.1); color:#fff;"><th>Sector</th><th>Number of Cases</th><th>Total Value of Cases</th></tr>');
+
+				// Run through all of the departments that we've been given
+				for (department in res.data){
+                    $(".sectorcasesToday").append(
+                        "<tr>"+
+                        "<td>"+department+"</td>"+
+                        "<td>"+res.data[department][0][1]+"</td>"+
+                        "<td>£"+res.data[department][0][2]+"</td>"+
+                        "</tr>"
+                    )
+				}
+			}
+
+            result_complete_sort_cases_sector=2;
+		}).fail(function(e){
+			console.log(e);
+		});
+
+    }
+}
+</script>

@@ -1,0 +1,1254 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script>
+
+function numberWithThous(x) {
+    x = x.toString();
+    var pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(x))
+        x = x.replace(pattern, "$1,$2");
+    return x;
+}
+
+jQuery.extend({
+    getValues: function(url) {
+        var result = null;
+        $.ajax({
+            url: url,
+            type: 'get',
+            async: false,
+            success: function(data) {
+                result = data;
+            }
+        });
+       return result;
+    }
+});
+
+function counting_method(sid,current_value,new_value,clock_data,actual_counter){
+			var current_clock_value = clock_data.getTime().time;
+			var dif = parseInt(new_value-current_clock_value);
+			//console.log(go+" "+dif);
+			if (current_clock_value==new_value) {
+				clearInterval(actual_counter);
+				clock_data.stop();
+				go = 0;
+				//console.log("Stop counting "+current_value+" | "+new_value);
+			} else if (current_clock_value<new_value) {
+				if (dif>=2501) {
+					var step; for (step = 0; step < 500; step++) { clock_data.increment(); }
+				} else if (dif>=500 && dif<=2500) {
+					var step; for (step = 0; step < 150; step++) { clock_data.increment(); }
+				} else if (dif>=151 && dif<=499) {
+					var step; for (step = 0; step < 25; step++) { clock_data.increment(); }
+				} else {
+					clock_data.increment();
+				}
+				go = 1;
+			} else if (current_clock_value>new_value) {
+				if (dif>=2501) {
+					var step; for (step = 0; step < 500; step++) { clock_data.decrement(); }
+				} else if (dif>=500 && dif<=2500) {
+					var step; for (step = 0; step < 150; step++) { clock_data.decrement(); }
+				} else if (dif>=151 && dif<=499) {
+					var step; for (step = 0; step < 25; step++) { clock_data.decrement(); }
+				} else {
+					clock_data.decrement();
+				}
+				go = 1;
+			}
+
+      if (sid=="get_cash_month") {
+
+        if (current_clock_value==new_value) {
+
+
+        //console.log('Current Clock '+current_clock_value);
+        //console.log('New Value Clock '+new_value);
+        var round = 10000;
+        var nextalert = (round * Math.round(new_value / round))+10000;
+        var nextasd = round * Math.round(new_value / round);
+
+        //console.log('Current Round Alert '+nextasd);
+        //setCookie('get_cash_month',nextalert,1);
+
+        var cookie = getCookie('get_cash_month');
+
+        console.log('Current Value '+new_value);
+        console.log('Current Alert '+nextasd);
+        console.log('Next Alert '+nextalert);
+        // console.log('Cookie '+cookie);
+
+
+        if (cookie!=nextalert){
+          //console.log('Set New Cookie');
+          setCookie('get_cash_month',nextalert,1);
+
+          if (new_value>=cookie){
+
+
+            let timerInterval
+            Swal.fire({
+              title: '10k Event Cash Collected',
+              html: '<span class="cashcollected">Collected '+numberWithThous(new_value)+' </span> <br>I will close in <b></b> milliseconds.',
+              timer: 5000,
+              backdrop: false,
+              padding: '100px',
+              heightAuto: true,
+              timerProgressBar: true,
+              onBeforeOpen: () => {
+                Swal.showLoading()
+
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+                create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000)); create(Math.ceil(Math.random() * 10000));
+
+                timerInterval = setInterval(() => {
+                  Swal.getContent().querySelector('b')
+                    .textContent = Swal.getTimerLeft()
+                }, 100)
+              },
+              onClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {
+              if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.timer
+              ) {
+                console.log('I was closed by the timer') // eslint-disable-line
+              }
+            })
+
+
+            console.log(' Run Confetti ');
+          }
+
+
+        } else {
+          //console.log('Dont Set New Cookie');
+        }
+
+        //console.log(' ---- ');
+
+        }
+      }
+
+
+
+}
+</script>
+
+<?php if (date('Y-m-d')==date('Y-10-31')) { $color="#000000"; } else { $color="#fff"; } ?><style>
+body,
+html {
+	height: 100%;
+}
+.owl-stage-outer{ margin-top: 0px; }
+
+
+</style>
+
+<?php if (date('Y-m-d')==date('Y-10-31')) { ?>
+	<script src="https://previews.envatousercontent.com/files/210626198/lib/js/bats.js"></script>
+
+	<script>
+
+	//bat vars
+	var vars = {
+	container:"bats-container", //id of target container (set the target container z-index as needed), default is the document body
+	src:"https://previews.envatousercontent.com/files/210626198/lib/assets/bat.gif", //path to the image
+	number:10, //number of individuals
+	height:null, //null defaults to document height, or set a number
+	width:null, //null defaults to document width, or set a number
+	speed:5, //1=fast 5=slow
+	scale:80, //bat max size in %
+	scare:true, //if true bats will react to mouseover
+	remove:true //if true bats will be removed on click
+	}
+	var bats = new Bats(vars);
+
+	//kick off
+	$(document).ready(function() {
+	  bats.init();
+	});
+
+	</script>
+<?php } ?>
+<?php
+	$screens=array();
+	foreach ($this->screens as $scr) {
+		$screens['screen_'.$scr['screen_id']]=1;
+	}
+?>
+<script>
+$(document).ready(function() {
+
+	var screen_1=0;
+	var screen_2=0;
+	var screen_3=0;
+	var screen_4=0;
+	var screen_5=0;
+	var screen_6=0;
+	var screen_7=0;
+	var screen_8=0;
+	var screen_9=0;
+	var screen_10=0;
+	var screen_11=0;
+	var screen_12=0;
+	var screen_13=0;
+	var screen_14=0;
+	var screen_17=0;
+	var screen_20=0;
+	var screen_22=0;
+	var screen_26=0;
+	var screen_37=0;
+  var screen_50=0;
+  var screen_52=0;
+  var screen_53=0;
+  var screen_54=0;
+  var screen_55=0;
+  var screen_56=0;
+  var screen_60=0;
+
+	<?php
+	foreach ($this->screens as $scr) {
+		echo "refresh_screen_".$scr->screen_id."();   ";
+
+		echo "screen_".$scr->screen_id." = 1;  ";
+
+	}
+	?>
+
+
+
+	if (screen_1 === 1) {
+		var ctx_c = document.getElementById('canvas_c').getContext('2d');
+		today_donut = new Chart(ctx_c, today_donut_opt);
+		var ctx_d = document.getElementById('canvas_d').getContext('2d');
+		week_donut = new Chart(ctx_d, week_donut_opt);
+		var ctx_e = document.getElementById('canvas_e').getContext('2d');
+		month_donut = new Chart(ctx_e, month_donut_opt);
+	}
+	if (screen_2 === 1) {
+    var ctx_c = document.getElementById('canvas_c').getContext('2d');
+		today_donut = new Chart(ctx_c, today_donut_opt);
+		var ctx_d = document.getElementById('canvas_d').getContext('2d');
+		week_donut = new Chart(ctx_d, week_donut_opt);
+		var ctx_e = document.getElementById('canvas_e').getContext('2d');
+		month_donut = new Chart(ctx_e, month_donut_opt);
+	}
+
+	// Create the bar chart shown on screen 3
+	if (screen_3 === 1) {
+		var ctx_a = document.getElementById('canvas_a').getContext('2d');
+		myBar_a = new Chart(ctx_a,barChartData_aopt);
+	}
+
+	// Create the bar chart shown on screen 5
+	if (screen_5 === 1) {
+		var ctx_b = document.getElementById('canvas_b').getContext('2d');
+		myBar_b = new Chart(ctx_b,barChartData_bopt);
+	}
+
+	// Create the bar charts shown on screen 14
+	if (screen_14 === 1) {
+		var ctx_f = document.getElementById('canvas_f').getContext('2d');
+		myBar_f = new Chart(ctx_f,barChartData_fopt);
+
+		var ctx_g = document.getElementById('canvas_g').getContext('2d');
+		myBar_g = new Chart(ctx_g,barChartData_gopt);
+	}
+
+
+	// Create the bar charts seen on screen 17
+	if (screen_17 === 1) {
+		var ctx_a = document.getElementById('canvas_a').getContext('2d');
+		myBar_a = new Chart(ctx_a,barChartData_aopt);
+
+		var ctx_b = document.getElementById('canvas_b').getContext('2d');
+		myBar_b = new Chart(ctx_b,barChartData_bopt);
+	}
+
+  if (screen_53 === 1) {
+    var ctx_c = document.getElementById('canvas_c').getContext('2d');
+    today_donut = new Chart(ctx_c, today_donut_opt);
+    var ctx_d = document.getElementById('canvas_d').getContext('2d');
+    week_donut = new Chart(ctx_d, week_donut_opt);
+    var ctx_e = document.getElementById('canvas_e').getContext('2d');
+    month_donut = new Chart(ctx_e, month_donut_opt);
+  }
+
+});
+
+
+</script>
+
+
+<script id="rendered-js">
+
+
+
+
+function create(i) {
+  var width = Math.random() * 8;
+  var height = width * 1.8;
+  var colourIdx = Math.ceil(Math.random() * 4);
+  var colour = "red";
+  switch (colourIdx) {
+    case 1:
+      colour = "white";
+      break;
+    case 2:
+      colour = "blue";
+      break;
+    case 3:
+      colour = "green";
+      break;
+    default:
+      colour = "red";}
+
+  $('<div class="confetti-' + i + ' ' + colour + '"></div>').css({
+    "width": width + "px",
+    "height": height + "px",
+    "z-index":999999999,
+    "top": -Math.random() * 20 + "%",
+    "left": Math.random() * 100 + "%",
+    "opacity": Math.random() + 0.5,
+    "transform": "rotate(" + Math.random() * 360 + "deg)" }).
+  appendTo('.confetti_wrapper');
+
+  drop(i);
+}
+
+function drop(x) {
+  $('.confetti-' + x).animate({
+    top: "100%",
+    left: "+=" + Math.random() * 15 + "%" },
+  Math.random() * 3000 + 3000, function () {
+    //reset(x);
+    $('.confetti-' + x).remove();
+  });
+}
+
+function reset(x) {
+  $('.confetti-' + x).animate({
+    "top": -Math.random() * 20 + "%",
+    "left": "-=" + Math.random() * 15 + "%" },
+  0, function () {
+    drop(x);
+  });
+}
+      //# sourceURL=pen.js
+    </script>
+
+<div class="confetti_wrapper"></div>
+<?php
+ if ($_SERVER['HTTP_HOST']!="wallboards.halifax.creditresourcesolutions.co.uk") { $static=1; } else { $static=0; }
+?>
+<div id="owl-example" class="owl-carousel">
+  <?php foreach ($this->screens as $screen) { ?>
+  <div class="owl-slide">
+		<?php if ($this->debug==1) { ?>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 mt-3">
+					DEBUG AREA (<?php echo $screen->more_info; ?>)<br>
+					<?php print_r($this->postdata); ?>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php echo $this->partial('_partials/screen_'.$screen->screen_id.'.phtml',array('static'=>$static,'scr'=>$this->{'data_'.$screen->screen_id},'redwoodtasks'=>$this->redwoodtasks,'status'=>$this->status,'status1'=>$this->status1,'status2'=>$this->status2,'status3'=>$this->status3, 'tasks'=>$this->tasks,'tasks2'=>$this->tasks2,'type'=>$this->type,'type1'=>$this->type1,'fetchActions'=>$this->fetchActions,'fetchProjects'=>$this->fetchProjects,'fetchReps'=>$this->fetchReps,'batchCards'=>$this->batchCards,'googlestat'=>$this->googlestat));?>
+	</div>
+	<?php } ?>
+</div>
+
+<?php
+//foreach ($this->screens as $scr) {
+//	echo "refresh_screen_".$scr->screen_id."()";
+//}
+//echo "<pre>";
+//	print_r($this->screens);
+//echo "</pre>";
+?><script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script
+            src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"
+        ></script>
+<script>
+
+
+function refresh_screen_39(){
+    contact_get_sent()
+        // update_website_stats('websites_uptime_robot');
+        // external_mysql_stats('external_mysql_stats');
+		// console.log('END SCREEN 3 - Rerun Every 10 Seconds');
+		setTimeout(refresh_screen_39,10000);
+}
+
+function refresh_screen_3(){
+		group_json_a('update_sector');
+		console.log('END SCREEN 3 - Rerun Every 10 Minutes');
+		setTimeout(refresh_screen_3,600000);
+}
+
+function refresh_screen_37(){
+        update_website_stats('websites_uptime_robot');
+        external_mysql_stats('external_mysql_stats');
+		console.log('END SCREEN 3 - Rerun Every 10 Seconds');
+		setTimeout(refresh_screen_37,5000);
+}
+function refresh_screen_38(){
+        get_internal_website_status('check_internal_sites');
+        internal_mysql_stats('internal_mysql_stats');
+		console.log('END SCREEN 3 - Rerun Every 10 Seconds');
+		setTimeout(refresh_screen_38,5000);
+}
+function refresh_screen_50(){
+  get_internal_website_status('check_internal_sites');
+  get_uptime('websites_uptime_robot');
+  flipInternalSites();
+  sitetrafficFlip();
+  sitetrafficFlipdmacrs();
+  //internal_mysql_stats('internal_mysql_stats');
+console.log('END SCREEN 50 - Rerun Every 10 Seconds');
+setTimeout(refresh_screen_50,5000);
+}
+
+function refresh_screen_52(){
+		group_screen_eight_all('update_incalldata','update_agentdata');
+		//group_screen('update_incalldata');
+		//group_multiscreen('update_agentdata');
+		console.log('END SCREEN 52 - Rerun Every 1.8 Seconds');
+		setTimeout(refresh_screen_52,1800);
+}
+
+function refresh_screen_53(){
+		group_update('update_gdata');
+		group_update_livechat('screen_2_data');
+		//group_update_a('update_adata');
+		//group_update('update_paycrsmoney');
+		group_update_onsite('update_glive');
+		console.log(' END SCREEN 53 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_53,60000);
+}
+
+function refresh_screen_54(){
+        updateTicker();
+        updateFeed();
+        updateMosts();
+		console.log('END SCREEN 54 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_54,120000);
+}
+
+function refresh_screen_55(){
+  group_update('update_gdata');
+  group_update_livechat('screen_2_data');
+  //group_update_a('update_adata');
+  //group_update('update_paycrsmoney');
+  group_update_onsite('update_glive');
+  console.log(' END SCREEN 2 - Rerun Every 1 Minute');
+  console.log('END SCREEN 55 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_55,60000);
+}
+
+function refresh_screen_56(){
+  get_internal_website_status('check_internal_sites');
+  get_uptime('websites_uptime_robot');
+  flipInternalSites();
+  sitetrafficFlip();
+  sitetrafficFlipdmacrs();
+  //initiatevideo('https://media0.giphy.com/media/LCdPNT81vlv3y/giphy.gif?cid=ecf05e476io3o39c5qba10qfnzaprpim6mgxpw2lnmoyettt&rid=giphy.gif','This is a rollover!');
+  //internal_mysql_stats('internal_mysql_stats');
+console.log('END SCREEN 50 - Rerun Every 10 Seconds');
+setTimeout(refresh_screen_56,5000);
+}
+
+function refresh_screen_5(){
+		group_json_b('update_agent');
+		console.log('END SCREEN 5 - Rerun Every 10 Minutes');
+		setTimeout(refresh_screen_5,600000);
+}
+function refresh_screen_51(){
+  // flipInternalSites();
+        //screen_51();
+        setTimeout(refresh_screen_51,5000);
+}
+function refresh_screen_8(){
+		group_screen_eight_all('update_incalldata','update_agentdata');
+		//group_screen('update_incalldata');
+		//group_multiscreen('update_agentdata');
+		console.log('END SCREEN 8 - Rerun Every 1.8 Seconds');
+		setTimeout(refresh_screen_8,1800);
+}
+function refresh_screen_60(){
+		group_screen_eight_all('update_incalldata','update_agentdata');
+		//group_screen('update_incalldata');
+		//group_multiscreen('update_agentdata');
+		console.log('END SCREEN 60 - Rerun Every 1.8 Seconds');
+		setTimeout(refresh_screen_60,1800);
+}
+function refresh_screen_1(){
+		/*group_update('update_gdata');
+		//group_update_a('update_adata');
+		//group_update('update_paycrsmoney');
+		group_update_onsite('update_glive');
+		console.log(' END SCREEN 1 - Rerun Every 10 Seconds - Gets data from google every 5 minutes - saved to DB');
+		setTimeout(refresh_screen_1,10000);*/
+}
+
+function refresh_screen_2(){
+		group_update('update_gdata');
+		group_update_livechat('screen_2_data');
+		//group_update_a('update_adata');
+		//group_update('update_paycrsmoney');
+		group_update_onsite('update_glive');
+		console.log(' END SCREEN 2 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_2,10000);
+}
+
+function refresh_screen_10(){
+		group_update_tickets("zendesk");
+		group_update_email("email_stats");
+    group_update_tickets_BZ("business_zendesk");
+		console.log('END SCREEN 10 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_10,300000);
+}
+
+function refresh_screen_11(){
+		group_update_convos("chats_live");
+		console.log('END SCREEN 11 - Rerun Every 1.5 Minute');
+		setTimeout(refresh_screen_11,90000);
+}
+
+function refresh_screen_12(){
+		group_update_tickets_BZ("business_zendesk");
+
+		console.log('END SCREEN 12 - Rerun Every 5.5 Minute');
+		setTimeout(refresh_screen_12,360000);
+}
+function refresh_screen_26(){
+		sort_cases("cases_report_day");
+        sort_cases_sector("cases_report_day_sector");
+		console.log('END SCREEN 26 - Rerun Every 5.5 Minute');
+		setTimeout(refresh_screen_26,360000);
+}
+
+function refresh_screen_14(){
+
+		//combined all now//
+		update_scren_14('chart_f_g_topcharts');
+		//update_chart_f('update_graph_f');
+		//update_chart_g('update_graph_g');
+		//update_leaderboards('update_topcharts');
+
+		console.log('END SCREEN 14 - Rerun Every 15 Minute');
+		setTimeout(refresh_screen_14,900000);
+}
+
+
+
+function refresh_screen_15(){
+		C1Val = get_accounts('get_accounts');
+		console.log('END SCREEN 15 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_15,10000);
+
+}
+
+function refresh_screen_16(){
+		C2Val = get_cash('get_cash');
+		C3Val = get_cash_month('get_cash_month');
+		console.log('END SCREEN 16 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_16,5000);
+
+}
+
+function refresh_screen_17(){
+		group_json_both('update_sector_agent');
+		//group_json_a('update_sector');
+		//group_json_b('update_agent');
+		console.log('END SCREEN 17 - Rerun Every 15 Mins');
+		setTimeout(refresh_screen_17,900000);
+}
+
+function refresh_screen_18(){
+		update_TMtexts('text_magic_chats');
+		update_TMstats('text_magic_stats');
+		console.log('END SCREEN 18 - Rerun Every 1 Minute');
+		setTimeout(refresh_screen_18,60000);
+}
+
+function refresh_screen_22(){
+  group_update2('update_gdata');
+		update_rpc_board('screen_22_rpc');
+		console.log('END SCREEN 22 - Rerun Every 30 Minute');
+		setTimeout(refresh_screen_22,1800000);
+}
+function refresh_screen_32(){
+        updateTicker();
+        updateFeed();
+        updateMosts();
+		console.log('END SCREEN 22 - Rerun Every 5 Minute');
+		setTimeout(refresh_screen_32,120000);
+}
+
+
+$(document).ready(function() {
+
+  $("#owl-example").owlCarousel({
+		singleItem: true,
+		items:1,
+		loop:true,
+		margin:0,
+		autoplay:true,
+		nav:true,
+		//rewind : true,
+		autoplayTimeout:30000,
+	});
+
+});
+
+
+
+
+Chart.plugins.register({
+	afterDatasetsDraw: function(chart) {
+		if (chart.config.options.plugin_attribute == 1) {
+			var ctx = chart.ctx;
+
+			chart.data.datasets.forEach(function(dataset, i) {
+				var meta = chart.getDatasetMeta(i);
+				if (!meta.hidden) {
+					meta.data.forEach(function(element, index) {
+						// Draw the text in black, with the specified font
+						ctx.fillStyle = '<?php echo $color; ?>';
+
+						var fontSize = 25;
+						var fontStyle = 'bold';
+						var fontFamily = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+						ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+						// Just naively convert to string for now
+						var dataString = "£"+dataset.data[index].toString();
+
+						// Make sure alignment settings are correct
+						ctx.textAlign = 'center';
+						ctx.textBaseline = 'middle';
+
+						var padding = 2;
+						var position = element.tooltipPosition();
+						ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+					});
+				}
+			});
+		}
+		if (chart.config.options.plugin_attribute == 2) {
+			var ctx = chart.ctx;
+
+			chart.data.datasets.forEach(function(dataset, i) {
+				var meta = chart.getDatasetMeta(i);
+				if (!meta.hidden) {
+					meta.data.forEach(function(element, index) {
+						// Draw the text in black, with the specified font
+						ctx.fillStyle = '<?php echo $color;?>';
+
+						var fontSize = 20;
+						var fontStyle = 'bold';
+						var fontFamily = '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+						ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+						// Just naively convert to string for now
+						var dataString = dataset.data[index].toString();
+
+						// Make sure alignment settings are correct
+						ctx.textAlign = 'center';
+						ctx.textBaseline = 'middle';
+
+						var padding = 2;
+						var position = element.tooltipPosition();
+						ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+					});
+				}
+			});
+		}
+
+	}
+});
+
+
+
+</script>
+
+<?php if (isset($screens['screen_20'])==1 || isset($screens['screen_21'])==1 || isset($screens['screen_36'])==1) { ?>
+<link rel="stylesheet" href="/css/flipclock.css?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>">
+<script src="/js/flipclock.js?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>"></script>
+<?php } ?>
+<?php if (isset($screens['screen_21'])==1 || isset($screens['screen_36'])==1) { ?>
+<script type="text/javascript">
+
+	var api_data_path3 = 'get_accounts';
+	var start_counter3 = $.getValues("/admin/wallboard/apitest/"+api_data_path3);
+	var clock3 = new FlipClock($('.clock21'),start_counter3, {
+			clockFace: 'Counter'
+	});
+	function refresh_screen_21(){
+			var screen_id_status3 = 0;
+			update_clock2(api_data_path3,clock3,screen_id_status3);
+			console.log('END SCREEN 21 - Rerun Every 5 Seconds ('+screen_id_status3+')');
+			setTimeout(refresh_screen_21,10000);
+	}
+    function refresh_screen_36(){
+        var screen_id_status3 = 0;
+        update_clock2(api_data_path3,clock3,screen_id_status3);
+        console.log('END SCREEN 21 - Rerun Every 5 Seconds ('+screen_id_status3+')');
+        sort_cases("cases_report_day");
+        sort_cases_sector("cases_report_day_sector");
+        console.log('END SCREEN 26 - Rerun Every 5.5 Minute');
+        setTimeout(refresh_screen_36,360000);
+    }
+	var go=0;
+
+
+    if (!result_complete_update_clock2) {
+        var result_complete_update_clock2=0;
+    }
+	function update_clock2(screen_id,clock_data,screen_id_status){
+        if (result_complete_update_clock2==2 || result_complete_update_clock2==0) {
+            result_complete_update_clock2=1;
+    		$.ajax({
+    			url:"/admin/wallboard/apitest/"+screen_id,
+    			success:function(output) {
+    				var current_value = clock_data.getTime().time;
+    				var new_value = output;
+    				if(go==0) {
+    					var actual_counter = setInterval(function() {
+    						counting_method(screen_id,current_value,new_value,clock_data,actual_counter);
+    					}, 5);
+    				}
+                    result_complete_update_clock2=2;
+    			}
+    		});
+        }
+    }
+
+
+</script>
+<?php } ?>
+<?php if (isset($screens['screen_20'])==1) { ?>
+<script type="text/javascript">
+
+var api_data_path = 'get_cash';
+var start_counter = $.getValues("/admin/wallboard/apitest/"+api_data_path);
+var clock = new FlipClock($('.clock'),start_counter, {
+		clockFace: 'Counter'
+});
+var api_data_path2 = 'get_cash_month';
+var start_counter2 = $.getValues("/admin/wallboard/apitest/"+api_data_path2);
+var clock2 = new FlipClock($('.clock2'),start_counter2, {
+		clockFace: 'Counter'
+});
+var api_data_path3 = 'get_revenue';
+var start_counter3 = $.getValues("/admin/wallboard/apitest/"+api_data_path3);
+var clock3 = new FlipClock($('.clock3'),start_counter3, {
+		clockFace: 'Counter'
+});
+var api_data_path4 = 'get_revenue_month';
+var start_counter4 = $.getValues("/admin/wallboard/apitest/"+api_data_path4);
+var clock4 = new FlipClock($('.clock4'),start_counter4, {
+		clockFace: 'Counter'
+});
+
+var api_data_path5 = 'get_business_sector';
+var start_table4 = $.ajax({
+                            type: 'GET',
+                            url: "/admin/wallboard/apitest/"+api_data_path5,
+                            dataType: 'json',
+                            success: function (data) {
+                                $.each(data, function(key,value) {
+                                    $('#sectorbuisness').empty()
+                                    $('.sectorbuisness').append(
+                                        '<tr>'+
+                                        '<td>'+value.sector+'</td>'+
+                                        '<td>£'+value.counted+'</td>'+
+                                        '<td>£'+value.Revenue+'</td>'+
+                                        '</tr>'
+                                    )
+                                })
+
+                            }
+                        });
+
+
+
+function refresh_screen_20(){
+
+		var screen_id_status = 0;
+		var screen_id_status2 = 0;
+		var screen_id_status_data2 = 0;
+		var screen_id_status3 = 0;
+		var screen_id_status_data3 = 0;
+		var screen_id_status4 = 0;
+		var screen_id_status_data4 = 0;
+		update_clock(api_data_path,clock,screen_id_status);
+		update_clock(api_data_path2,clock2,screen_id_status2);
+		update_clock(api_data_path3,clock3,screen_id_status3);
+		update_clock(api_data_path4,clock4,screen_id_status4);
+        var api_data_path5 = 'get_business_sector';
+            var start_table4 = $.ajax({
+                                        type: 'GET',
+                                        url: "/admin/wallboard/apitest/"+api_data_path5,
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $.each(data, function(key,value) {
+                                                $('#sectorbuisness').empty()
+                                                $('#sectorbuisness').append(
+                                                    '<tr>'+
+                                                    '<td>'+value.sector+'</td>'+
+                                                    '<td>'+value.counted+'</td>'+
+                                                    '<td>'+value.Revenue+'</td>'+
+                                                    '</tr>'
+                                                )
+                                            })
+                                        }
+                                    });
+    		console.log('END SCREEN 20 - Rerun Every 5 Seconds ('+screen_id_status+')');
+    		setTimeout(refresh_screen_20,10000);
+
+}
+var go=0;
+function update_clock(screen_id,clock_data,screen_id_status){
+	$.ajax({
+		url:"/admin/wallboard/apitest/"+screen_id,
+		success:function(output) {
+
+
+      var current_value = clock_data.getTime().time;
+      var new_value = output;
+			if(go==0) {
+				var actual_counter = setInterval(function() {
+					counting_method(screen_id,current_value,new_value,clock_data,actual_counter);
+				}, 5);
+			}
+		}
+	});
+}
+
+
+
+</script>
+<?php } ?>
+<?php if (isset($screens['screen_15'])==1 || isset($screens['screen_16'])==1) { ?>
+<link rel="stylesheet" href="/css/flipclock.css?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>">
+<script src="/js/flipclock.js?rand=<?php echo rand(1,100).rand(1,100).rand(1,100); ?>"></script>
+
+<script type="text/javascript">
+
+<?php
+
+
+
+?>
+
+var padding = "0";
+
+C1Val=0;
+if (localStorage.getItem("C1Val")) { C1Val=localStorage.getItem("C1Val"); }
+C2Val=0;
+if (localStorage.getItem("C2Val")) { C2Val=localStorage.getItem("C2Val"); }
+C3Val=0;
+if (localStorage.getItem("C3Val")) { C3Val=localStorage.getItem("C3Val"); }
+
+/*
+var clock
+		clock = new FlipClock($('.clock'), C1Val, {
+					clockFace: 'Counter'
+				});
+var clock2
+		clock2 = new FlipClock($('.clock2'), C2Val, {
+					clockFace: 'Counter'
+				});
+var clock3
+		clock3 = new FlipClock($('.clock3'), C3Val, {
+					clockFace: 'Counter'
+				});
+*/
+
+
+function get_limit(the_id,clock, CVal){
+	var limit = the_id;
+
+	while (CVal<limit){
+		CVal++;
+		//console.log(CVal);
+		clock.increment();
+	};
+
+	return CVal;
+
+	}
+
+
+	var clock,countup,getvalue;
+	if (window.localStorage.getItem("clock")) {
+		getvalue=window.localStorage.getItem("clock");
+	} else {
+		getvalue=0;
+	}
+  clock = new FlipClock($('.clock'),getvalue, {
+      clockFace: 'Counter'
+  });
+
+var go_1 = 0;
+
+if (!result_complete_get_accounts) {
+	var result_complete_get_accounts=0;
+}
+
+function get_accounts(the_id){
+    if (result_complete_get_accounts==2 || result_complete_get_accounts==0) {
+        result_complete_get_accounts=1;
+	if (go_1 == 0) {
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+			async:true
+		}).done(function(res){
+
+			total_cases = res;
+
+			// sets the left padding depending on how many digits there are in the integer returned, amking sure the counter in centralized
+			if(total_cases < 100){
+				padding = "750px";
+			} else if(total_cases < 1000){
+				padding = "570px";
+			}else if(total_cases < 10000){
+				padding = "470px";
+			}else{
+				padding = "390px";
+			}
+
+			$(".clock").css("paddingLeft", padding);
+
+
+					window.localStorage.setItem("clock2", res);
+					console.log("old "+clock2.getTime().time+"| new "+res);
+							var clock1_inc = res;
+							countup1 = setInterval(function() {
+
+							var clock1_currentvalue = clock2.getTime().time;
+
+							if (clock1_currentvalue==clock1_inc) {
+								go_1 = 0;
+								clock2.stop();
+								clearInterval(countup1);
+							} else if (clock1_currentvalue<clock1_inc){
+								go_1 = clock1_currentvalue;
+								var dif_1 = parseInt(clock1_inc-clock1_currentvalue);
+								if (dif_1>=500) {
+									var step;
+									for (step = 0; step < 500; step++) {
+										clock2.increment();
+									}
+								} else if (dif_1>=500 && dif_1<=50) {
+									var step;
+									for (step = 0; step < 10; step++) {
+										clock2.increment();
+									}
+								} else {
+									clock2.increment();
+								}
+							} else if (clock1_currentvalue>clock1_inc) {
+								go_1 = clock1_currentvalue;
+								var dif_1 = parseInt(clock1_currentvalue-clock1_inc);
+								if (dif_1>=500) {
+									var step;
+									for (step = 0; step < 500; step++) {
+										clock2.decrement();
+									}
+								} else if (dif_1>=500 && dif_1<=50) {
+									var step;
+									for (step = 0; step < 10; step++) {
+										clock2.decrement();
+									}
+								} else {
+									clock2.decrement();
+								}
+							} else {
+								go_1 = 0;
+								clock2.stop();
+								clearInterval(countup1);
+							}
+
+
+			}, 1);
+
+			// Increment the counter to the value contained in total_cases
+			/*output = get_limit(total_cases,clock, C1ValG);
+			return output;*/
+            result_complete_get_accounts=2;
+		});
+
+	   }
+    }
+
+}
+</script>
+<script>
+
+
+var clock2,countup2,getvalue2;
+
+if (window.localStorage.getItem("clock2")) {
+	getvalue2=window.localStorage.getItem("clock2");
+} else {
+	getvalue2=0;
+}
+clock2 = new FlipClock($('.clock2'),getvalue2, {
+    clockFace: 'Counter'
+});
+var countup2;
+var go_2 = 0;
+
+
+
+
+if (!result_complete_get_cash) {
+	var result_complete_get_cash=0;
+}
+function get_cash(the_id){
+
+	console.log("go 2 value "+go_2)
+	if (go_2 == 0) {
+        // if (result_complete_get_cash==2 || result_complete_get_cash==0) {
+        //     result_complete_get_cash=1;
+		$.ajax({
+				url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+				cache: false,
+				processData: true,
+				async:true
+			}).done(function(res2){
+                    console.log(result_complete_get_cash)
+					window.localStorage.setItem("clock2", res2);
+					console.log("old "+clock2.getTime().time+"| new "+res2);
+							var clock2_inc = res2;
+							countup2 = setInterval(function() {
+
+							var clock2_currentvalue = clock2.getTime().time;
+
+							if (clock2_currentvalue==clock2_inc) {
+								go_2 = 0;
+								clock2.stop();
+								clearInterval(countup2);
+							} else if (clock2_currentvalue<clock2_inc){
+								go_2 = clock2_currentvalue;
+								var dif_2 = parseInt(clock2_inc-clock2_currentvalue);
+								if (dif_2>=500) {
+									var step;
+									for (step = 0; step < 500; step++) {
+										clock2.increment();
+									}
+								} else if (dif_2>=500 && dif_2<=50) {
+									var step;
+									for (step = 0; step < 10; step++) {
+										clock2.increment();
+									}
+								} else {
+									clock2.increment();
+								}
+							} else if (clock2_currentvalue>clock2_inc) {
+								go_2 = clock2_currentvalue;
+								var dif_2 = parseInt(clock2_currentvalue-clock2_inc);
+								if (dif_2>=500) {
+									var step;
+									for (step = 0; step < 500; step++) {
+										clock2.decrement();
+									}
+								} else if (dif_2>=500 && dif_2<=50) {
+									var step;
+									for (step = 0; step < 10; step++) {
+										clock2.decrement();
+									}
+								} else {
+									clock2.decrement();
+								}
+							} else {
+								go_2 = 0;
+								clock2.stop();
+								clearInterval(countup2);
+							}
+
+
+
+
+					}, 1);
+                    // result_complete_get_cash=2;
+			});
+
+        // }
+	}
+}
+
+console.log('testing');
+
+var clock3,countup3,getvalue3;
+				if (window.localStorage.getItem("clock3")) {
+					getvalue3=window.localStorage.getItem("clock3");
+				} else {
+					getvalue3=0;
+				}
+        clock3 = new FlipClock($('.clock3'),getvalue3, {
+            clockFace: 'Counter'
+        });
+
+
+var go_3 = 0;
+
+
+
+// if (!result_complete_get_cash_month) {
+// 	var result_complete_get_cash_month=0;
+// }
+
+function get_cash_month(the_id){
+
+    //
+    // if (result_complete_get_cash_month==2 || result_complete_get_cash_month==0) {
+    //     result_complete_get_cash_month=1;
+    //
+
+		console.log("go 3 value "+go_3)
+		if (go_3 == 0) {
+				$.ajax({
+						url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+						cache: false,
+						processData: true,
+						async:true
+					}).done(function(res3){
+
+						window.localStorage.setItem("clock3", res3);
+						var countup3;
+						countup3 = setInterval(function() {
+							var clock3_currentvalue = clock3.getTime().time;
+							var clock3_inc = res3;
+							if (clock3_currentvalue==clock3_inc) {
+								//console.log('STOP');
+								go_3 = 0;
+								clock3.stop();
+								clearInterval(countup3);
+							} else if (clock3_currentvalue<clock3_inc){
+								go_3 = clock3_currentvalue;
+									//console.log('GO UP');
+
+									var dif_3 = parseInt(clock3_inc-clock3_currentvalue);
+									if (dif_3>=500) {
+										var stepb;
+										for (stepb = 0; stepb < 500; stepb++) {
+											clock3.increment();
+										}
+									} else if (dif_3>=500 && dif_3<=50) {
+										var stepb;
+										for (stepb = 0; stepb < 10; stepb++) {
+											clock3.increment();
+										}
+									} else {
+										clock3.increment();
+									}
+
+
+
+
+
+
+							} else if (clock3_currentvalue>clock3_inc) {
+								go_3 = clock3_currentvalue;
+								//console.log('GO DOWN');
+
+									var dif_3 = parseInt(clock3_currentvalue-clock3_inc);
+									if (dif_3>=500) {
+										var stepb;
+										for (stepb = 0; stepb < 500; stepb++) {
+											clock3.decrement();
+										}
+									} else if (dif_3>=500 && dif_3<=50) {
+										var stepb;
+										for (stepb = 0; stepb < 10; stepb++) {
+											clock3.decrement();
+										}
+									} else {
+										clock3.decrement();
+									}
+
+							} else {
+								go_3 = 0;
+								clock3.stop();
+								clearInterval(countup3);
+							}
+
+						}, 0);
+
+            // result_complete_get_cash_month=2;
+					});
+		// }
+
+    }
+
+}
+
+</script>
+
+<?php } ?>
+<script>
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
+}
+
+</script>

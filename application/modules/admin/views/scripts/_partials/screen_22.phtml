@@ -1,0 +1,199 @@
+<style>
+.new_badge{
+    float: right;
+    top:10px;
+    right: 14px;
+    display: block;
+    position: absolute;
+    font-size: 1rem;
+    font-weight: 400;
+}
+.list-group li{
+  height:55px;
+  position: relative;
+}
+</style>
+<div class="container-fluid">
+  <div class="col-md-12 mt-3 title">
+    Daily Activity Board
+  </div>
+	<div class="row">
+
+		<div class="col-sm-8 col-md-6 mt-3">
+    <div class="card transparent text-white">
+      <h5 class="card-header borderbottom mt-0">Outbound</h5>
+      <ul class="list-group">
+
+           <li id="letters_sent" class="list-group-item">Number Of Letters Sent <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="sms_sent" class="list-group-item list-group-item-info">Number Of SMS Sent <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="ivr_sent" class="list-group-item">Number Of IVR Sent <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="process_emails" class="list-group-item list-group-item-info">Number Of Process Emails Sent <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="outbound_rpc" class="list-group-item ">Number Of Outbound RPC <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="collector_email" class="list-group-item ">Number Of Collector Emails <span class="badge badge-pill badge-danger new_badge">0</span></li>
+
+          </ul>
+
+        </div>
+		</div>
+
+    <div class="col-sm-8 col-md-6 mt-3">
+    <div class="card transparent text-white">
+      <h5 class="card-header borderbottom mt-0">Inbound</h5>
+
+          <ul class="list-group">
+
+            <li id="inbound_rpc" class="list-group-item">Number Of Inbound RPC <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="inbound_email" class="list-group-item list-group-item-info">Number Of Inbound Emails <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="web_chats" class="list-group-item">Number Of Web Chat <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="call_backs" class="list-group-item list-group-item-info">Call Back <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="website_visits" class="list-group-item">Website visitors <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="web_chats" class="list-group-item"></li>
+            <li id="call_backs" class="list-group-item list-group-item-info"></li>
+
+
+          </ul>
+
+        </div>
+		</div>
+
+
+    <div class="col-sm-8 col-md-6 mt-3">
+    <div class="card transparent text-white">
+      <h5 class="card-header borderbottom mt-0">Summary</h5>
+
+          <ul class="list-group">
+            <li id="new_accounts" class="list-group-item">New Accounts <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="value_accounts" class="list-group-item list-group-item-info">New Account Value <span class="badge badge-pill badge-danger new_badge">£0.00</span></li>
+            <li id="value_payments" class="list-group-item">Value Gross Payments <span class="badge badge-pill badge-danger new_badge">£0.00</span></li>
+            <li id="value_fees" class="list-group-item list-group-item-info">Fees & Costs Revenue <span class="badge badge-pill badge-danger new_badge">£0.00</span></li>
+            <li id="value_revenue" class="list-group-item ">Value Revenue <span class="badge badge-pill badge-danger new_badge">£0.00</span></li>
+
+          </ul>
+
+        </div>
+		</div>
+
+    <div class="col-sm-8 col-md-6 mt-3">
+    <div class="card transparent text-white">
+      <h5 class="card-header borderbottom mt-0">Plans</h5>
+
+          <ul class="list-group">
+            <li id="total_plans" class="list-group-item">Total Plans <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="collector_plans" class="list-group-item list-group-item-info">Collector Plans <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="eagle_plans" class="list-group-item">Eagle Plans <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="dma_plans" class="list-group-item list-group-item-info">DMA Plans <span class="badge badge-pill badge-danger new_badge">0</span></li>
+            <li id="web_plans" class="list-group-item ">Web Plans <span class="badge badge-pill badge-danger new_badge">0</span></li>
+
+          </ul>
+
+        </div>
+		</div>
+
+	</div>
+</div>
+
+
+<script>
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+
+function group_update2(the_id) {
+
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: true,
+			processData: true,
+		}).done(function(res){ //
+			//alert(1);
+			//var obj = JSON.parse(res);
+			// console.log(res.today);
+			// console.log(res.today.users);
+
+      $('#website_visits span').html(numberWithCommas(res.today.users));
+      //$('#website_visits span').html(numberWithCommas(res.today.users));
+
+			// $('.tt_arrangements').html(res.arrangement.today);
+			// $('.tw_arrangements').html(res.arrangement.week);
+			// $('.tm_arrangements').html(res.arrangement.month);
+      //
+			// $('.tt_cashcollected').html(res.cashcollected.today);
+			// $('.tw_cashcollected').html(res.cashcollected.week);
+			// $('.tm_cashcollected').html(res.cashcollected.month);
+      //
+			// $('.tt_payments').html('Successful: '+res.sagepay.today.SUCCESS);
+			// $('.tw_payments').html('Successful: '+res.sagepay.week.SUCCESS);
+			// $('.tm_payments').html('Successful: '+res.sagepay.month.SUCCESS);
+      //
+			// $('.tt_failure_payments').html('Failed: '+res.sagepay.today.FAILURE);
+			// $('.tw_failure_payments').html('Failed: '+res.sagepay.week.FAILURE);
+			// $('.tm_failure_payments').html('Failed: '+res.sagepay.month.FAILURE);
+      //
+			// $('.today_visits').html(res.today.users);
+			// //alert(res.today.users);
+			// today_donut.data.datasets[0].data = res.today_data;
+			// today_donut.options.scales.yAxes[0].ticks.max = parseInt(res.today_data[0])+parseInt(100);
+			// today_donut.update();
+      //
+			// week_donut.data.datasets[0].data = res.week_data;
+			// week_donut.options.scales.yAxes[0].ticks.max = parseInt(res.week_data[0])+parseInt(1000);
+			// week_donut.update();
+      //
+			// month_donut.data.datasets[0].data = res.month_data;
+			// month_donut.options.scales.yAxes[0].ticks.max = parseInt(res.month_data[0])+parseInt(4000);
+			// month_donut.update();
+      //
+			// //console.log(res.today_data);
+			// //console.log(res.week_data);
+			// //console.log(res.month_data);
+			// //console.log(res.arrangement);
+			// //console.log(res.cashcollected);
+			// //console.log(res.today);
+		});
+}
+
+function update_rpc_board(the_id) {
+
+
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'get',
+		}).done(function(res){
+
+        $('#new_accounts span').html(numberWithCommas(res.new_accounts));
+        $('#value_accounts span').html("£"+numberWithCommas(res.value_accounts));
+        $('#letters_sent span').html(numberWithCommas(res.letters_sent));
+        $('#sms_sent span').html(numberWithCommas(res.sms_sent));
+        $('#ivr_sent span').html(numberWithCommas(res.ivr_sent));
+        $('#process_emails span').html(numberWithCommas(res.process_emails));
+        $('#outbound_rpc span').html(numberWithCommas(res.outbound_rpc));
+        $('#collector_email span').html(numberWithCommas(res.collector_email));
+
+        $('#inbound_rpc span').html(numberWithCommas(res.inbound_rpc));
+        $('#inbound_email span').html(numberWithCommas(res.inbound_email));
+        $('#web_chats span').html(numberWithCommas(res.web_chats));
+        $('#call_backs span').html(numberWithCommas(res.call_backs));
+
+        $('#total_plans span').html(numberWithCommas(res.total_plans));
+        $('#eagle_plans span').html(numberWithCommas(res.eagle_plans));
+        $('#dma_plans span').html(numberWithCommas(res.dma_plans));
+        $('#web_plans span').html(numberWithCommas(res.web_plans));
+        $('#value_revenue span').html("£"+numberWithCommas(res.revenue));
+        $('#value_payments span').html("£"+numberWithCommas(res.payments));
+        $('#value_fees span').html("£"+numberWithCommas(res.fees_costs));
+        $('#collector_plans span').html(numberWithCommas(res.total_plans-res.web_plans-res.eagle_plans-res.dma_plans));
+
+
+		});
+
+}
+
+</script>

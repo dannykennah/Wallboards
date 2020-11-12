@@ -1,0 +1,26 @@
+<?php
+
+//print_r($this->screens);
+
+
+?>
+<table class="table table-striped mb-0">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col" width="20%">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($this->screens as $screen) { ?>
+	<tr>
+      <td scope="row"><?php echo $screen->id; ?></td>
+      <td><?php echo $screen->screen_name; ?></td>
+      <td><?php echo $screen->screen_desc; ?></td>
+      <td><?php echo $screen->screen_options; ?></td>
+    </tr>
+	<?php }	?>
+  </tbody>
+</table>

@@ -1,0 +1,43 @@
+<?php $this->pageTitle = 'Users'; ?>
+
+
+
+
+<section class="container text-white clear">
+    <div class="split-50 split-left">
+        <a href="<?php echo $this->url(array(), 'admin-user-add') ?>" class="split-left inner-m-right l-blue-ft"><button type="button" name="button" class="btn crs-button">Create Admin</button></a>
+
+    </div>
+        <table class="data-table crs-card table">
+            <thead>
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->users as $user): ?>
+                    <tr>
+                        <td scope="row"><?php echo $user->username ?></td>
+                        <td data-title="Created"><?php echo $this->dateFormat($user->created); ?></td>
+                        <td data-title="Company"><?php echo $user->company_name ?></td>
+                        <td data-title="User"><?php if($user->is_admin) : echo 'Admin'; else : echo 'Client '; endif; ?></td>
+                        <td data-title="Delete">
+                            <a href="<?php echo $this->url(array('admin_id' => $user->admin_user_id), 'admin-users-delete')?>" class="l-blue-ft">Delete <?php if($user->is_admin) : echo 'Admin'; else : echo 'Client '; endif; ?></a>
+                        </td>
+                        <td data-title="Edit">
+                            <?php if($user->is_admin) : ?>
+                            <a href="<?php echo $this->url(array('admin_id' => $user->admin_user_id), 'admin-user-editadmin')?>" class="l-blue-ft">Edit Admin</a>
+                            <?php else : ?>
+                            <a href="<?php //echo $this->url(array('admin_id' => $user->admin_user_id), 'admin-user-editclientuser')?>" class="l-blue-ft">Edit Client</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+  </section>

@@ -1,0 +1,65 @@
+<?php $this->pageTitle = 'Cash To Target'; ?>
+<?php
+function get_search($col){
+	return '<a href="?searchby='.$col.'&order=DESC"><i class="fas fa-caret-up"></i></a> <a href="?searchby='.$col.'&order=ASC"><i class="fas fa-caret-down"></i></a>';
+}
+?>
+<div class="container-fluid text-white">
+	<div class="container main_padding">
+		<div class="row">
+  		<div class="col-md-12">
+
+            <div class="card see-through">
+
+                <div class="card-header crs-card">
+                  <h5 class="mb-0 text-white">Cash - last Update (<?php echo date('H:i:s',strtotime($this->ctt[0]['last_updated']));  ?>)</h5>
+                </div>
+                <div class="out collapse show see-through">
+                  <div class="card-block p-0 crs-card">
+                      <table class="table table-striped mb-0">
+                        <thead>
+                          <tr>
+                            <th scope="col">Operator <?php echo get_search('op_code'); ?></th>
+                            <th scope="col">Fullname <?php echo get_search('fullname'); ?></th>
+                            <th scope="col">Cash Collected <?php echo get_search('cash'); ?></th>
+                            <th scope="col">+ / - amounts CC (NET)</th>
+                            <th scope="col">Revenue <?php echo get_search('revenue'); ?></th>
+                            <th scope="col">+ / - amounts REV (NET)</th>
+                            <th scope="col">Target Rev <?php echo get_search('target'); ?></th>
+                            <th scope="col">Payments <?php echo get_search('items'); ?></th>
+                            <th scope="col">% Target <?php echo get_search('perc_rev'); ?></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php foreach ($this->ctt as $op) { ?>
+                      	     <tr>
+                            <td><?php echo $op['op_code']; ?></td>
+                            <td><?php echo $op['fullname']; ?></td>
+                            <td>£<?php echo number_format($op['cash'],2);?></td>
+                            <td><?php echo $op['cash_ded']; ?> <?php if ($op['cash_ded']) { ?><?php } ?></td>
+                            <td>£<?php echo number_format($op['revenue'],2); ?></td>
+                            <td><?php echo $op['rev_ded']; ?> <?php if ($op['rev_ded']) { ?><?php } ?></td>
+                            <td>£<?php echo number_format($op['target'],2); ?></td>
+                            <td><?php echo $op['items'];?></td>
+                            <td><?php echo $op['perc_rev']; ?>%</td>
+                           </tr>
+                      	<?php }	?>
+                        </tbody>
+                      </table>
+
+
+                      <?php
+                        //echo '<pre>';
+                        //  print_r($this->ctt);
+                        //echo '</pre>';
+                      ?>
+
+                  </div>
+                </div>
+
+            </div>
+
+  		</div>
+    </div>
+  </div>
+</div>

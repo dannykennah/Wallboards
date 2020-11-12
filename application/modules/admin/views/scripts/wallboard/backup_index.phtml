@@ -1,0 +1,183 @@
+<?php $this->pageTitle = 'Wallboard'; ?>
+<style>
+body,
+html {
+	height: 100%;
+}
+.owl-stage-outer{ margin-top: 30px; } 
+
+
+</style>
+<div id="owl-example" class="owl-carousel">
+  <div class="owl-slide">
+		
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 mt-3">
+						<div class="card h-100">
+						  <h5 class="card-header">Website visits</h5>
+						  <div class="card-body p-3">							
+							
+							<div class="row update_fields update_gdata" id="update_gdata">
+								<div class="col-md-4">
+									<h3>Today </h3>
+									Users : <?php echo $this->gdatat[0]['users']; ?> <br>
+									New Users : <?php echo $this->gdatat[0]['newusers']; ?> <br>
+									Session : <?php echo $this->gdatat[0]['sessions']; ?> (<?php echo round($this->gdatat[0]['percentNewSessions'],2); ?>%) <br>
+									Organic Searches  : <?php echo $this->gdatat[0]['organicSearches']; ?> <br>
+								</div>
+								<div class="col-md-4">
+									<h3>This Week </h3>
+									Users : <?php echo $this->gdataw[0]['users']; ?> <br>
+									New Users : <?php echo $this->gdataw[0]['newusers']; ?> <br>
+									Session : <?php echo $this->gdataw[0]['sessions']; ?> (<?php echo round($this->gdataw[0]['percentNewSessions'],2); ?>%) <br>
+									Organic Searches  : <?php echo $this->gdataw[0]['organicSearches']; ?> <br>
+								</div>
+								<div class="col-md-4">
+									<h3>This Month </h3>
+									Users : <?php echo $this->gdatam[0]['users']; ?> <br>
+									New Users : <?php echo $this->gdatam[0]['newusers']; ?> <br>
+									Session : <?php echo $this->gdatam[0]['sessions']; ?> (<?php echo round($this->gdatam[0]['percentNewSessions'],2); ?>%) <br>
+									Organic Searches  : <?php echo $this->gdatam[0]['organicSearches']; ?> <br>
+								</div>
+						    </div>
+							
+							
+						  </div>
+						</div>
+				</div>
+				<div class="col-md-6 mt-3">
+					<h2 class="text-center">User's currently onsite</h2>	
+					<div class="online_users text-center update_fields update_glive" id="update_glive">
+						Google Data Loading
+					</div>
+							
+				</div>
+			</div>
+			
+			<div class="row bg-inverse mt-3 mb-3">
+				<div class="col-md-12">
+						<div class="p-3">
+						  <h3 class="text-white text-center">Cash Collected</h5>
+						  <div class="text-white text-center p-3">
+							
+								<div class="row">
+									
+									<div class="col-md-4">
+										<p>Today</p>
+										<h3><span>£</span><?php echo number_format($this->paydatat[0]['totalValue'],2); ?></h3><br> (<?php echo $this->paydatat[0]['totalTransactions']; ?> Transactions)
+									</div>
+									<div class="col-md-4">
+										<p>This Week</p>
+										<h3><span>£</span><?php echo number_format($this->paydataw[0]['totalValue'],2); ?></h3><br> (<?php echo $this->paydataw[0]['totalTransactions']; ?> Transactions)
+										
+									</div>
+									<div class="col-md-4">
+										<p>This Month</p>
+										<h3><span>£</span><?php echo number_format($this->paydatam[0]['totalValue'],2); ?></h3><br> (<?php echo $this->paydatam[0]['totalTransactions']; ?> Transactions)
+									
+									</div>
+									
+								</div>
+							
+							
+						  </div>
+						</div>
+				</div>
+			</div>
+			
+			<div class="row mt-3 mb-3">
+				<div class="col-md-12">
+						<div class="p-3">
+						  <h3 class="text-white text-center">Arrangements</h5>
+						  <div class="text-white text-center p-3">
+							
+								<div class="row update_fields update_adata" id="update_adata">
+									
+									<div class="col-md-4">
+										<p>Today</p>
+										<h3><?php echo $this->arrangedatat[0]['arrangementTotalCard']+$this->arrangedatat[0]['arrangementTotalDirectDebit'];?></h3>
+										<?php //print_r($this->paydatat);?>
+									</div>
+									<div class="col-md-4">
+										<p>This Week</p>
+										<h3><?php echo $this->arrangedataw[0]['arrangementTotalCard']+$this->arrangedataw[0]['arrangementTotalDirectDebit'];?></h3>
+									</div>
+									<div class="col-md-4">
+										<p>This Month</p>
+										<h3><?php echo $this->arrangedatam[0]['arrangementTotalCard']+$this->arrangedatam[0]['arrangementTotalDirectDebit'];?></h3>
+									</div>
+									
+								</div>
+							
+							
+						  </div>
+						</div>
+				</div>
+			</div>
+			
+		
+			
+		</div>
+
+	</div>
+
+  <div class="owl-slide">
+		<div class="owl--text">
+		<?php 
+		print_r($this->postdata);
+		echo $this->test;
+		?>
+		</div>
+	</div>
+</div>
+<script>
+
+
+
+$(document).ready(function() {
+
+function group_update(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script 
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,                      
+			type: 'post',
+		}).done(function(res){ //
+			//alert(the_id);
+				$("."+the_id).html(res);
+				//setTimeout(worker, 5000);
+		});
+}
+(function worker() {
+	
+	//$('.update_fields').each(function( index ) {
+	//	var the_id = this.id; 
+		group_update('update_gdata');			
+		group_update('update_adata');	
+		group_update('update_glive');
+	//	group_update('update_glive');		
+	//});	
+	
+	setTimeout(worker, 30000);
+
+})(); 
+
+ 
+
+	
+  $("#owl-example").owlCarousel({
+		singleItem: true,
+		items:1,
+		loop:true,
+		margin:10,
+		autoplay:false,
+		nav:true,
+		autoplayTimeout:120000,
+		autoplayHoverPause:false
+	});
+ 
+});
+</script>

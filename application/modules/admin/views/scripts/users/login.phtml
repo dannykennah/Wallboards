@@ -1,0 +1,57 @@
+<?php $this->pageTitle = 'Log in'; ?>
+
+<div class="container-fluid login_screen">
+	<div class="container login_box">
+		<div class="login_wrap">
+			<div class="row">
+
+				<div class="col-xs-6 col-md-6 login_intro">
+
+					<h1 class="dark-ft large">Welcome to the CRS wallboards dev</h1>
+
+				</div>
+				<div class="col-xs-6 col-md-6 login_panel">
+				<?php
+				//echo $this->form->renderForm(false);
+				echo $this->loginForm->renderForm(false);
+				?>
+					<h1 class="dark-ft">Let’s begin</h1>
+					<?php
+
+					foreach($this->loginForm->getElements() as $element){
+						$element->setAttrib('class', 'form-control');
+					}
+
+					?>
+					<div class="form-group row">
+						<div class="col-sm-12">
+							<?php
+							//echo $this->loginForm->email_address->;
+							echo $this->loginForm->email_address;
+							?>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-sm-12">
+							<?php echo $this->loginForm->new_password; ?>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-12">
+							<?php echo $this->loginForm->submit; ?>
+						</div>
+					</div>
+
+
+
+					<p>Please enter your login details to get started. </p>
+					<p>If you haven’t received / lost your login details <br>please call 01422 324 516.</p>
+					<a href="<?= $this->url(array(),'admin-forgot-password') ?>" class="dark-ft inner-1">
+						If you’ve forgotten your password click here</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

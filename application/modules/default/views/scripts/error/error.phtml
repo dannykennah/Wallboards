@@ -1,0 +1,19 @@
+<div class="block white">
+    <h1>An error occurred</h1>
+    <h2><?php echo $this->message ?></h2>
+    
+    <?php
+    if(isset($this->exception)) : ?>
+        <h1>Exception</h1>
+        <pre style="background:#ffc;padding:10px;"><?php echo $this->exception->getMessage() ?> </pre>
+        <h2>Trace</h2>
+        <pre style="background:#ffe;padding:10px;"><?php echo $this->exception->getTraceAsString() ?> </pre>
+    <?php endif ?>
+
+    <?php if(isset($this->errorLog)) : ?>
+        <p>
+            Error Number: 
+            <?php echo $this->errorLog; ?>
+        </p>
+    <?php endif ?>
+</div>

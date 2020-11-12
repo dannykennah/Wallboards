@@ -1,0 +1,76 @@
+<?php 
+$this->formlsc->setAction('/admin/legal');
+echo $this->formlsc->renderForm();
+echo $this->formlsc->renderForm(false);
+//echo $this->formlsc->renderForm(false); ?>
+
+
+<div id="field_include_lsc" class="form-group row"><div class="col-md-3">
+	<?php echo $this->formlsc->client_lsc->getLabel(); ?><br>
+	<a href="#" class="select_all" title="select all" data_ref="client_lsc">All</a> | <a href="#" title="select none" class="select_none" data_ref="client_lsc">None</a>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formlsc->getElement('client_lsc');?>
+</div></div>
+
+<div class="form-group row" id="loaded_data">
+	<div class="col-md-3">
+		<?php echo $this->formlsc->loaded_from->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formlsc->getElement('loaded_from'); ?>
+	</div>
+	<div class="col-md-1">
+		<?php echo $this->formlsc->loaded_to->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formlsc->getElement('loaded_to'); ?>
+	</div>
+</div>
+
+<div id="field_include_lsc" class="form-group row"><div class="col-md-3">
+	<?php echo $this->formlsc->amount->getLabel(); ?>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formlsc->getElement('amount');?>
+</div></div>
+
+<div id="field_include_lsc" class="form-group row"><div class="col-md-3">
+	<?php echo $this->formlsc->postcode->getLabel(); ?>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formlsc->getElement('postcode');?>
+</div></div>
+
+<div id="field_include_lsc" class="form-group row"><div class="col-md-3">
+	<?php echo $this->formlsc->nil_paid->getLabel(); ?>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formlsc->getElement('nil_paid');?>
+</div></div>
+
+<div id="field_include_lsc" class="form-group row"><div class="col-md-3">
+	<?php echo $this->formlsc->account_status->getLabel(); ?>
+</div><div class="col-md-9 hide_label">
+	<?php echo $this->formlsc->getElement('account_status');?>
+</div></div>
+
+<div class="form-group row" id="closed_data" style="display:none;">
+	<div class="col-md-3">
+		<?php echo $this->formlsc->closed_from->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formlsc->getElement('closed_from'); ?>
+	</div>
+	<div class="col-md-1">
+		<?php echo $this->formlsc->closed_to->getLabel(); ?>
+	</div>
+	<div class="col-md-4 hide_label">
+		<?php echo $this->formlsc->getElement('closed_to'); ?>
+	</div>
+</div>
+
+<div class="form-group row">
+	<div class="col-sm-12">
+		<?php echo $this->formlsc->submit_lsc; ?>
+	</div>
+</div>
+<?php 
+
+?>

@@ -1,0 +1,315 @@
+<?php
+
+if (date('Y-m-d')==date('Y-10-31')) { $color="#fff"; } else { $color="#FFF"; }
+
+$month_tcolor = "#ffe900";
+$percent_color = "#00b7c6";
+
+?>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+<script>
+
+// When you're arranging a dataset for a line + bar chart put the data set for the line first, otherwise the line will be drawn behind the bars
+var barChartData_f = {
+	labels: [],
+	datasets: [{
+		label: 'Monthly Target',
+		type:"line",
+		stack: "2",
+		borderWidth: 2,
+		backgroundColor: 'rgba(255, 218, 35, 0)', // set the background color to invisible on all lines
+		borderColor: '<?php echo $percent_color; ?>',
+		data:[]
+	},
+	{
+		label: 'Revenue Collected this Month',
+		stack: "1",
+		borderWidth: 1,
+		backgroundColor: '<?php echo $color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	},
+	{
+		label: 'Forecast Revenue this Month',
+		stack: "1",
+		borderWidth: 1,
+        backgroundColor: '#7a7a7a',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	}
+]
+
+};
+
+var barChartData_g = {
+	labels: [],
+	datasets: [{
+		label: 'Revenue Phasing %',
+		type: 'line',
+		stack: "0",
+		borderWidth: 2,
+		backgroundColor: 'rgba(255, 218, 35, 0)',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	},
+    {
+        label: 'Revenue + Forecasted Phasing %',
+        type: 'line',
+        stack: "0",
+        borderWidth: 2,
+        backgroundColor: 'rgba(255, 218, 35, 0)',
+        borderColor: '#303030',
+        data:[]
+    },
+    {
+		label: '% Collected of Monthly Target',
+		stack: "0",
+		borderWidth: 1,
+		backgroundColor: '<?php echo $percent_color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	},
+    {
+		label: '% Forecasted of Monthly Target',
+		stack: "0",
+		borderWidth: 1,
+		backgroundColor: '#7a7a7a',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	}
+
+]
+
+};
+
+var barChartData_fopt = {
+			type: 'bar',
+			data: barChartData_f,
+			options: {
+				plugin_attribute:0,
+				responsive: true,
+				legend: {
+					display: true
+				},
+				title: {
+					display: false
+				},
+				legend:{
+					labels:{
+						fontSize:16
+					}
+				},
+				scales: {
+				   xAxes: [{
+						ticks: {
+							fontSize: 12,
+							fontStyle:'bold',
+							fontColor:'#fff'
+						}
+				  }],
+				  yAxes: [{
+						display: true,
+						ticks: {
+							fontSize: 20,
+							fontStyle:'bold',
+							max: 25000,
+							fontColor:'#fff'
+						}
+				  }]
+				}
+			}
+};
+
+var barChartData_gopt = {
+			type: 'bar',
+			data: barChartData_g,
+			options: {
+				plugin_attribute:0,
+				responsive: true,
+				legend: {
+					display: true
+				},
+				title: {
+					display: false
+				},
+				legend:{
+					labels:{
+						fontSize:16
+					}
+				},
+				scales: {
+				   xAxes: [{
+						ticks: {
+							fontSize: 12,
+							fontStyle:'bold',
+							fontColor:'#fff'
+						}
+				  }],
+				  yAxes: [{
+						display: true,
+						ticks: {
+							type:"%",
+							fontSize: 20,
+							fontStyle:'bold',
+							max: 150,
+							stepValue: 10,
+							fontColor:'#fff'
+						}
+				  }]
+				}
+			}
+};
+
+
+function update_scren_14(the_id){
+	$.ajax({
+			url: '/admin/wallboard/apitest/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: 'json',
+			processData: true,
+		}).done(function(res){
+
+			console.log(myBar_f);
+
+			myBar_f.data.labels = res.chart_f.names;
+			myBar_f.data.datasets[0].data = res.chart_f.line;
+			console.log(res.chart_f.line);
+			myBar_f.data.datasets[1].data = res.chart_f.bar;
+            myBar_f.data.datasets[2].data = res.chart_f.forecast_cash_f;
+			// myBar_f.options.scales.yAxes[0].ticks.max = ((Math.max.apply(null, res.chart_f.line)) + (2000 - ((Math.max.apply(null, res.chart_f.line)) % 2000)));
+			// myBar_f.options.scales.yAxes[0].ticks.max = (Math.max.apply(null, res.chart_f.forecast_cash_f) + Math.max.apply(null, res.chart_f.forecast_cash_f)*0.1);
+
+			//console.log(res.chart_g.names);
+
+			//console.log(myBar_f.data.labels);
+
+			$(".percentage").html('');
+			$(".percentage").append("<li style = 'font-size:20px'>"+ res.chart_g.names[0] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:gold; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_g.names[1] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:silver; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_g.names[2] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:bronze; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_g.names[3] +"</li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_g.names[4] +"</li>");
+		  $(".cash").html('');
+			$(".cash").append("<li style = 'font-size:20px'>"+ res.chart_topcash.names[0] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:gold; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_topcash.names[1] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:silver; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_topcash.names[2] +"&nbsp;&nbsp;<i class=\"fas fa-trophy\" style=\"color:bronze; font-size:25px;\"></i></li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_topcash.names[3] +"</li>"+
+										 "<li style = 'font-size:20px'>"+ res.chart_topcash.names[4] +"</li>");
+
+			myBar_f.update();
+
+			//console.log(res.chart_g.forecast_phasing);
+			//console.log(res.chart_g.forecast);
+
+//res.chart_g.forecast_phasing.forEach(element => console.log(element));
+
+			// Update values in the top table
+			myBar_g.data.labels = res.chart_g.names;
+			if(res.chart_g.line[0] != "0.0"){
+				myBar_g.data.datasets[0].data = res.chart_g.line;
+			}
+			myBar_g.data.datasets[2].data = res.chart_g.bar;
+			myBar_g.data.datasets[3].data = res.chart_g.forecast;
+
+			//console.log(myBar_g.data.datasets[3].data);
+			console.log(myBar_g.data.datasets[0].data[0]);
+
+			$('.forecastrevenueblock').html(myBar_g.data.datasets[0].data[0]+'%');
+
+			myBar_g.data.datasets[1].data = res.chart_g.forecast_phasing;
+			//console.log(myBar_g.data.datasets[1].data[0]);
+
+			$('.forecastblock').html(myBar_g.data.datasets[1].data[0]+'%');
+
+			// if the maximum % to target is below 100% then set 100% as the Y-limit, otherwise set it to the next highest 10
+			// if(Math.max.apply(null, res.chart_g.bar) > 100){
+			// myBar_g.options.scales.yAxes[0].ticks.max = ((Math.max.apply(null, res.chart_g.bar)) + (50 - ((Math.max.apply(null, res.chart_g.bar)) % 10)));
+			// myBar_g.options.scales.yAxes[0].ticks.max = (Math.max.apply(null, res.chart_g.forecast) + Math.max.apply(null, res.chart_g.forecast)*0.1);
+			// }else{
+			// 	myBar_g.options.scales.yAxes[0].ticks.max = 100;
+			// }
+
+
+			myBar_g.update();
+
+
+		});
+}
+
+
+
+
+</script>
+
+
+<div class="container-fluid">
+	<h2 class=""><span>Collector Cash to Target Board <i class="fas fa-medal"></i></span></h2>
+	<div class="row">
+
+			<div class="col-md-9 mb-0">
+				<div class="col-md-12 title">
+				  <span class="screen14figure_test float-right" ></span>
+				</div>
+				<br>
+
+				<div class = "row" >
+				<canvas height="600" width="1800" id="canvas_g" style="padding-left:50px"></canvas>
+				</div>
+
+				<div class = "row">
+				<canvas height="600" width="1800" id="canvas_f" style="padding-left:50px"></canvas>
+				</div>
+			</div>
+
+			<div class="col-md-3 mt-3 mb-0" style="padding-top:75px;">
+
+				<div class="row row_data">
+						<div class="col-md-12">
+							<div class="card card-blue-white mt-0">
+
+
+								<div class="card-body p-0" style="border-radius:6px">
+									<h5 class="no-background ml-2" style="font-size:16px;">Top 5 % to target</h5>
+									<ol class="percentage" style="padding-top:10px; font-weight:bold;">
+									</ol>
+								</div>
+							</div>
+						</div>
+				</div>
+
+				<div class="row row_data">
+						<div class="col-md-12">
+							<div class="card card-blue-white mt-0">
+
+								<div class="card-body p-0" style="border-radius:6px">
+									<h5 class="no-background ml-2" style="font-size:16px;">Top 5 £ collected</h5>
+									<ol class="cash" style="padding-top:10px; font-weight:bold;">
+									</ol>
+								</div>
+							</div>
+						</div>
+				</div>
+
+				<div class="row row_data">
+						<div class="col-md-12">
+							<div class="card card-blue-white mt-0">
+
+								<div class="card-body p-0" style="border-radius:6px">
+									<h4 class="no-background ml-2" style="text-align:center;">Phasing position</h4>
+									<h5 class="no-background ml-2" style="font-size:16px;">Revenue and Forecasted phasing: <span class="forecastblock"></h5>
+									<h5 class="no-background ml-2" style="font-size:16px;">Revenue phasing: <span class="forecastrevenueblock"></h5>
+								</div>
+
+
+							</div>
+						</div>
+				</div>
+
+
+
+			</div>
+
+
+	</div>
+</div>

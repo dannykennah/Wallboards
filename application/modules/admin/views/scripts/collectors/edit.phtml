@@ -1,0 +1,73 @@
+<?php $this->pageTitle = 'Edit Collector'; ?>
+
+<div class="container-fluid text-white">
+	<div class="container main_padding">
+		<div class="row">
+  		<div class="col-md-4">
+
+            <div class="card see-through">
+
+                <div class="crs-card card-header">
+                  <h5 class="mb-0 text-white">Collector</h5>
+                </div>
+                <div class="out collapse show see-through">
+                  <div class="card-block p-2 crs-card">
+                    <?php echo $this->form; ?>
+                  </div>
+                </div>
+
+            </div>
+
+  		</div>
+      <div class="col-md-8">
+
+
+        <div class="card see-through">
+
+            <div class="crs-card card-header">
+              <h5 class="mb-0 text-white">Current Targets</h5>
+            </div>
+            <div class="out collapse show see-through">
+              <div class="card-block p-2 crs-card">
+                  <?php //echo $this->partial('_partials/targets.phtml',array('targets'=>$this->targets,'ex_button'=>true));?>
+																		<?php echo $this->targetform; ?>
+              </div>
+            </div>
+        </div>
+
+        <div class="card see-through mt-3">
+
+            <div class="crs-card card-header">
+              <h5 class="mb-0 text-white">Current Deductions</h5>
+            </div>
+            <div class="out collapse show see-through">
+              <div class="card-block p-0 crs-card">
+                  <?php echo $this->partial('_partials/t_deductions.phtml',array('deductions'=>$this->deductions,'ex_button'=>true));?>
+              </div>
+            </div>
+
+        </div>
+
+
+  		</div>
+
+      <div class="col-md-12">
+        <div class="card mt-3 see-through">
+
+            <div class="crs-card card-header">
+              <h5 class="mb-0 text-white">Previous Targets</h5>
+            </div>
+            <div class="out collapse show see-through">
+              <div class="card-block p-0 crs-card">
+                  <?php echo $this->partial('_partials/targets.phtml',array('targets'=>$this->prevtargets,'ex_button'=>true));?>
+              </div>
+            </div>
+
+        </div>
+      </div>
+
+
+
+		</div>
+	</div>
+</div>

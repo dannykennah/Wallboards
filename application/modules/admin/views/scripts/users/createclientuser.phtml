@@ -1,0 +1,73 @@
+<?php  $this->pageTitle = 'Client User'; ?>
+
+<?php 
+
+    echo $this->form;
+ 
+    if(isset($this->clients)) {
+            $client_code = '';
+            foreach($this->clients as $client){
+                $client_code  .=  $client['client_code'].',';
+
+            }
+            
+   }
+
+?>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script src="<?php echo $this->baseUrl('js/libs/autocomplete.js'); ?>"></script>
+    
+  <script>    
+                            
+                ;(function($){
+                
+                    $(document).ready(function(){
+                        
+                       $('#tags').completeText('<?php echo $client_code ; ?>');
+                       
+                       $('#field_client').css('display','none');
+                       
+                       $('#select_from_list').click(function() {
+                           if ($(this).is(':checked')) {
+                                 $('#field_client_textbox').css('display','none');
+                                 $('#field_client').css('display','block');
+                           }
+                           else {
+                               $('#field_client').css('display','none');
+                               $('#field_client_textbox').css('display','block');
+                           }
+                       });
+                       
+                       $('form').submit(function(){
+                         
+                           var clientCodes = $('#tags').val();
+                           var arrClient = clientCodes.split(',');
+                           var arrLength = arrClient.length;
+                           var labelText = '';
+                          
+                           var i ;
+                           if(!$("#select_from_list").is(':checked')) {
+                                    $('label > input').prop('checked', false);
+
+                                    for(i = 0 ; i< arrLength-1 ; i++) {
+
+                                         $('#field_client > label').each(function(index, item) {
+                                             labelText = $(this).text();
+                                             if(labelText == arrClient[i] ) {
+                                                 $(this).find('input').prop('checked', true);
+                                             }
+                                         });
+                                    }
+                       }
+                   
+                    });
+                });
+          
+                })(jQuery);
+                
+         </script>   
+
+
+

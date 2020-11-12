@@ -1,0 +1,276 @@
+<?php
+
+if (date('Y-m-d')==date('Y-10-31')) { $color="#000000"; } else { $color="#5cd3e6"; }
+
+?>
+
+<style>
+
+/* The styling here is to set the "Total Cash Collected by Agents" label to fit in with the rest of the wallboard*/
+
+.agent_cash .total_cash .symbol::before {
+	min-width:400px;
+	width:75%;
+}
+
+/* .agent_cash .total_cash .symbol::after {
+	content:"Total Cash Collected by Agents";
+	width:320px;
+	left:115px;
+} */
+
+.sector_cash .total_cash .symbol::before {
+	min-width:400px;
+	width:75%;
+}
+
+/* .sector_cash .total_cash .symbol::after {
+	content:"Total Cash Collected by Sectors";
+	width:320px;
+	left:180px;
+} */
+
+
+</style>
+
+
+<script>
+
+// This variable holds all of the data represented by the bars on the graph, as well as the labels.
+var barChartData_a = {
+	labels: [],
+	datasets: [{
+		label: 'Dataset 1',
+		borderWidth: 1,
+		backgroundColor: '<?php echo $color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	}]
+
+};
+
+// This variable holds all the data that controls aspects of the chart itself.
+var barChartData_aopt = {
+		// The data names are fairly self-explanatory
+		type: 'bar',
+		data: barChartData_a,
+		options: {
+			plugin_attribute:1,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 20,
+						fontStyle:'bold',
+						fontColor:'<?php echo $color; ?>'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						max: 75000,
+						fontSize: 20,
+						fontStyle:'bold',
+						fontColor:'<?php echo $color; ?>'
+					}
+			  }]
+			}
+		}
+	};
+
+var barChartData_b = {
+	labels: [],
+	datasets: [{
+		label: 'Dataset 1',
+		borderWidth: 1,
+		backgroundColor: '<?php echo $color; ?>',
+		borderColor: '<?php echo $color; ?>',
+		data:[]
+	}]
+
+};
+var barChartData_bopt = {
+			type: 'bar',
+			data: barChartData_b,
+			options: {
+				plugin_attribute:1,
+				responsive: true,
+				legend: {
+					display: false
+				},
+				title: {
+					display: false
+				},
+				scales: {
+				   xAxes: [{
+						ticks: {
+							fontSize: 16,
+							fontStyle:'bold',
+							fontColor:'<?php echo $color; ?>'
+						}
+				  }],
+				  yAxes: [{
+						display: false,
+						ticks: {
+							max: 75000,
+							fontSize: 20,
+							fontStyle:'bold',
+							fontColor:'<?php echo $color; ?>'
+						}
+				  }]
+				}
+			}
+		};
+
+
+
+if (!result_complete_group_json_both) {
+	var result_complete_group_json_both=0;
+}
+
+// NEW ALT FUNCTION GET DATA AT ONCE RATHER THAN TWO CALLS
+function group_json_both(the_id) {
+	if (result_complete_group_json_both==2 || result_complete_group_json_both==0) {
+		result_complete_group_json_both=1;
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: 'json',
+			processData: false,
+		}).done(function(res){
+			//console.log(res);
+			//alert(1);
+			var total = '0';
+			for (i in res.sector.data) {
+
+				// adds all of the money together for the "total cash" display
+				var total = parseInt(total) + parseInt(res.sector.data[i]);
+				$('.screen3figure').html(total.toLocaleString());
+				$('.screen3figure_test').html(res.sector.updated_time);
+
+			}
+			//console.log(res.sector.labels);
+
+			myBar_a.data.labels = res.sector.labels;
+			myBar_a.data.datasets[0].data = res.sector.data;
+			myBar_a.options.scales.yAxes[0].ticks.max = parseInt(res.sector.data[0])+parseInt(5000);
+			myBar_a.update();
+
+			var total = '0';
+
+			for (i in res.agent.data) {
+				var total = parseInt(total) + parseInt(res.agent.data[i]);
+			}
+
+			$('.screen5figure').html(total.toLocaleString());
+			$('.screen5figure_test').html(res.agent.updated_time);
+
+			//alert(total+parseInt(1000));
+
+			myBar_b.data.labels = res.agent.labels;
+			myBar_b.data.datasets[0].data = res.agent.data;
+			myBar_b.options.scales.yAxes[0].ticks.max = parseInt(res.agent.data[0])+parseInt(5000);
+			myBar_b.update();
+
+			//console.log('total sectors : '+total);
+			//console.log(res.data);.
+			result_complete_group_json_both=2;
+		});
+
+	}
+}
+
+/*
+
+// We are left with a function that runs an AJAX query and returns with updated data
+function group_json_a(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+			//alert(1);
+			var total = '0';
+			for (i in res.data) {
+
+				// adds all of the money together for the "total cash" display
+				var total = parseInt(total) + parseInt(res.data[i]);
+				$('.screen3figure').html(total.toLocaleString());
+				$('.screen3figure_test').html(res.updated_time);
+
+			}
+
+			myBar_a.data.labels = res.labels;
+			myBar_a.data.datasets[0].data = res.data;
+			myBar_a.options.scales.yAxes[0].ticks.max = parseInt(res.data[0])+parseInt(5000);
+			myBar_a.update();
+
+			//console.log('total sectors : '+total);
+			//console.log(res.data);
+		});
+}
+
+function group_json_b(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+			//alert(1);
+			var total = '0';
+			for (i in res.data) {
+				var total = parseInt(total) + parseInt(res.data[i]);
+
+			}
+
+			$('.screen5figure').html(total.toLocaleString());
+			$('.screen5figure_test').html(res.updated_time);
+
+			//alert(total+parseInt(1000));
+
+			myBar_b.data.labels = res.labels;
+			myBar_b.data.datasets[0].data = res.data;
+			myBar_b.options.scales.yAxes[0].ticks.max = parseInt(res.data[0])+parseInt(5000);
+			myBar_b.update();
+
+			//console.log('total agent : '+total);
+			//console.log(res);
+		});
+}
+*/
+
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+			<div class="col-md-12 mb-0">
+				<h2 class="text-white"><span>Total Cash Collected by Agents</span><span class="screen14figure_test float-right" ></span> </h2>
+				<br>
+
+
+				<div class = "row agent_cash">
+				<span class="total_cash"><span class="symbol">£</span><span class="screen5figure"></span></span>
+				<canvas height="380" width="1800" id="canvas_b" style="padding-left:50px"></canvas>
+				</div>
+				<h2 class="text-white"><span>Total Cash Collected by Sector</span><span class="screen14figure_test float-right" ></span> </h2>
+				<br>
+				<div class = "row sector_cash">
+				<span class="total_cash"><span class="symbol">£</span><span class="screen3figure"></span></span>
+				<canvas height="450" width="1800" id="canvas_a" style="padding-left:50px"></canvas>
+				</div>
+			</div>
+	</div>
+</div>

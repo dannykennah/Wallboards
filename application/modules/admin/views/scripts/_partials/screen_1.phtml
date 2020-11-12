@@ -1,0 +1,295 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 mt-3">
+			<div class="col-md-12">
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Active Users on myCRS</span></h2>
+				<div class="row_data">
+					<ul class="people_online">
+					<li><i class="fas fa-male"></i></li>
+					</ul>
+					<div class="online_usersa update_fields update_glive" id="update_glive">
+						Updating
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-12">
+
+
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Overview of Today</span></h2>
+
+				<div class="row_data">
+
+						<canvas height="580" width="880" id="canvas_c"></canvas>
+
+				</div>
+
+			</div>
+		</div>
+		<div class="col-md-6 mt-3">
+
+			<div class="col-md-12">
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Arrangements Online</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<h3>Today</h3>
+						<div class="circle_outline"><span class="tt_arrangements">0</span></div>
+					</div>
+					<div class="col-md-4">
+						<h3>This Week</h3>
+						<div class="circle_outline"><span class="tw_arrangements">0</span></div>
+					</div>
+					<div class="col-md-4">
+						<h3>This Month</h3>
+						<div class="circle_outline"><span class="tm_arrangements">0</span></div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12">
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Website Visits</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-6">
+						<h3>This Week</h3>
+						<canvas height="380" width="480" id="canvas_d"></canvas>
+					</div>
+					<div class="col-md-6">
+						<h3>This Month</h3>
+						<canvas height="380" width="480" id="canvas_e"></canvas>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-12">
+				<h2 class="header-bar-col-6"><span class="symbol"><i class="fas fa-mobile-alt"></i></span> <span class="title">Cash Collected on myCRS</span></h2>
+
+				<div class="row row_data cash_crs">
+
+					<div class="col-md-4">
+						<h3>Today</h3>
+						<div class="circle_outline money"><span class="tt_cashcollected">0</span></div>
+					</div>
+					<div class="col-md-4">
+						<h3>This Week</h3>
+						<div class="circle_outline money"><span class="tw_cashcollected">0</span></div>
+					</div>
+					<div class="col-md-4">
+						<h3>This Month</h3>
+						<div class="circle_outline money"><span class="tm_cashcollected">0</span></div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+		<script>
+function group_update_onsite(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'text',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+
+			if (res>25) {
+				$('.people_online').css("font-size", "50px");
+			} else {
+				$('.people_online').css("font-size", "75px");
+			}
+			var i;
+			$('.people_online').empty();
+			for (i = 0; i < res; i++) {
+				$('.people_online').append('<li><i class="fas fa-male"></i></li>');
+			}
+				$("."+the_id).html(res);
+
+				//setTimeout(worker, 5000);
+		});
+}
+
+function group_update(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: false,
+			contentType: true,
+			processData: false,
+			type: 'post',
+		}).done(function(res){ //
+			//alert(1);
+			//var obj = JSON.parse(res);
+
+
+			$('.tt_arrangements').html(res.arrangement.today);
+			$('.tw_arrangements').html(res.arrangement.week);
+			$('.tm_arrangements').html(res.arrangement.month);
+
+			$('.tt_cashcollected').html(res.cashcollected.today);
+			$('.tw_cashcollected').html(res.cashcollected.week);
+			$('.tm_cashcollected').html(res.cashcollected.month);
+
+			$('.today_visits').html(res.today.users);
+			//alert(res.today.users);
+			today_donut.data.datasets[0].data = res.today_data;
+			today_donut.options.scales.yAxes[0].ticks.max = parseInt(res.today_data[0])+parseInt(100);
+			today_donut.update();
+
+			week_donut.data.datasets[0].data = res.week_data;
+			week_donut.options.scales.yAxes[0].ticks.max = parseInt(res.week_data[0])+parseInt(1000);
+			week_donut.update();
+
+			month_donut.data.datasets[0].data = res.month_data;
+			month_donut.options.scales.yAxes[0].ticks.max = parseInt(res.month_data[0])+parseInt(4000);
+			month_donut.update();
+
+			//console.log(res.today_data);
+			//console.log(res.week_data);
+			//console.log(res.month_data);
+			//console.log(res.arrangement);
+			//console.log(res.cashcollected);
+			//console.log(res.today);
+		});
+}
+
+
+var today_donut_data = {
+		labels: ["Users","New Users","Organic Searches"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['#00b7c6','#002649','#dadf00'],
+			borderColor: ['#00b7c6','#002649','#dadf00'],
+			data:[100,80,20]
+		}]
+
+	};
+var today_donut_opt = {
+		type: 'bar',
+		data: today_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 14,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						max:2000,
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }]
+			}
+		}
+	};
+var week_donut_data = {
+		labels: ["Users","New Users","Organic Searches"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['#00b7c6','#002649','#dadf00'],
+			borderColor: ['#00b7c6','#002649','#dadf00'],
+			data:[100,80,20]
+		}]
+
+	};
+var week_donut_opt = {
+		type: 'bar',
+		data: week_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 11,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }]
+			}
+		}
+	};
+var month_donut_data = {
+		labels: ["Users","New Users","Organic Searches"],
+		datasets: [{
+			borderWidth: 1,
+			backgroundColor: ['#00b7c6','#002649','#dadf00'],
+			borderColor: ['#00b7c6','#002649','#dadf00'],
+			data:[1001,80,20]
+		}]
+
+	};
+var month_donut_opt = {
+		type: 'bar',
+		data: month_donut_data,
+		options: {
+			plugin_attribute:2,
+			responsive: true,
+			legend: {
+				display: false
+			},
+			title: {
+				display: false
+			},
+			scales: {
+			   xAxes: [{
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }],
+			  yAxes: [{
+					display: false,
+					ticks: {
+						fontSize: 10,
+						fontStyle:'bold',
+						fontColor:'#002649'
+					}
+			  }]
+			}
+		}
+	};
+</script>

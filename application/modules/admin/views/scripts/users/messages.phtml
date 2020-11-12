@@ -1,0 +1,73 @@
+<?php
+function nicetime($date)
+{
+    if(empty($date)) {
+        return "No date provided";
+    }
+
+    $periods         = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
+    $lengths         = array("60","60","24","7","4.35","12","10");
+
+    $now             = time();
+    $unix_date       = strtotime($date);
+
+       // check validity of date
+    if(empty($unix_date)) {
+        return "Bad date";
+    }
+
+    // is it future date or past date
+    if($now > $unix_date) {
+        $difference     = $now - $unix_date;
+        $tense         = "ago";
+
+    } else {
+        $difference     = $unix_date - $now;
+        $tense         = "from now";
+    }
+
+    for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+        $difference /= $lengths[$j];
+    }
+
+    $difference = round($difference);
+
+    if($difference != 1) {
+        $periods[$j].= "s";
+    }
+
+    return "$difference $periods[$j] {$tense}";
+}
+?>
+<?php $this->pageTitle = "Messages"; ?>
+<div class="container-fluid big_title_header first extra_padding_40 mt-3">
+	<div class="container">
+			<div class="row">
+					<div class="col-xs-12 col-md-12">
+      <ul class="list-group">
+         <?php foreach($this->notifications as $not) { ?>
+          <li class="list-group-item ">
+           <div class="row" style="width:100%">
+            <div class="col-md-3"><?php echo nicetime($not->created); ?></div>
+            <div class="col-md-9"><?php $string = $not->msg;  $out = str_replace('\r\n',' ',$string);  echo $out; ?>   <?php if ($not->read_receipt==0) { ?>
+               <span style="position: absolute; right: -55px; top: 3px;" class="badge badge-primary badge-pill">new</span>
+              <?php } ?> </div>
+           </div>
+          </li>
+         <?php } ?>
+      </ul>
+      <br>
+       <?php
+       //print_r($this->notifications);
+  					//echo '<p>'.$this->paginationControl($this->notifications, 'Sliding', 'pagination.phtml').'</p>';
+  					?>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>

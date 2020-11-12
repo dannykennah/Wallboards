@@ -1,0 +1,36 @@
+<table class="table table-striped mb-0">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Op Code</th>
+      <th scope="col">Active</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+
+
+      foreach ($this->operators as $op){
+        ?>
+        <tr>
+          <td scope="col"><?php echo $op->name; ?></td>
+          <td scope="col"><?php echo $op->op_code; ?></td>
+          <td scope="col"><?php echo $op->active; ?></td>
+          <td scope="col">
+            <a href="<?php echo $this->url(array('user'=>$op->user_id), 'admin-collectors-edit') ?>"><button type="button" class="btn btn-sm btn-secondary" title="Edit"><i class="fas fa-edit"></i></button></a>
+            <?php if ($op->active==0) {?>
+            <a href="<?php echo $this->url(array('user'=>$op->user_id,'status'=>1), 'admin-collectors-status') ?>"><button type="button" class="btn btn-sm btn-primary" title="Make Active"><i class="fas fa-plus"></i></button></a>
+            <?php } else { ?>
+            <a href="<?php echo $this->url(array('user'=>$op->user_id,'status'=>0), 'admin-collectors-status') ?>"><button type="button" class="btn btn-sm btn-secondary" title="Make Inactive"><i class="fas fa-minus"></i></button></a>
+            <?php } ?>
+          </td>
+        </tr>
+        <?php
+      }
+
+
+
+      ?>
+      <tbody>
+</table>

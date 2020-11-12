@@ -1,0 +1,408 @@
+<?php $this->pageTitle = 'Wallboard Dashboard'; ?>
+
+<div class="container-fluid text-white">
+	<div class="container main_padding">
+		<div class="row">
+		<div class="col-md-6">
+
+				<div class="card see-through">
+
+					<div class="crs-card card-header">
+						<h5 class="mb-0 text-white">Start Wallboard</h5>
+					</div>
+					<div class="out collapse show see-through">
+						<div class="card-block crs-card">
+
+							<?php echo $this->partial('_partials/start_wallboard.phtml', array('form' => $this->form));?>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="card mt-3 see-through">
+					<div class="crs-card card-header">
+						<h5 class="mb-0 text-white">Start Specific Wallboard</h5>
+					</div>
+					<div class="out collapse show see-through">
+						<div class="card-block crs-card">
+
+							<?php echo $this->sform;?>
+
+						</div>
+					</div>
+				</div>
+				<div class="card mt-3 see-through">
+					<div class="crs-card card-header">
+						<h5 class="mb-0 text-white">Custom Opening Time</h5>
+					</div>
+					<div class="out collapse show see-through">
+						<div class="card-block crs-card">
+							<p>This form sets a custom opening time which sets a boundary on the abandoned calls on the dialer wallboard and morning report.</p>
+							<p>If not set, the opening times will be 8am-7pm and Saturdays will default to 9:30am-12:30pm</p>
+
+							<?php echo $this->oform;?>
+
+						</div>
+					</div>
+				</div>
+
+		</div>
+		<div class="col-md-6">
+
+			<div class="card see-through">
+					<div class="crs-card card-header">
+						<h5 class="mb-0 text-white">Screen Groups Available</h5>
+					</div>
+					<div class="out collapse show see-through">
+						<div class="card-block p-0 crs-card">
+						<?php echo $this->partial('_partials/boards.phtml', array('boardgroups'=>$this->SGM));?>
+						</div>
+					</div>
+				</div>
+
+				 <div class="card see-through mt-3">
+					<div class="crs-card card-header">
+						<h5 class="mb-0 text-white">Screens Available</h5>
+					</div>
+					<div class="out collapse show see-through">
+						<div class="card-block p-0 crs-card">
+
+							<?php echo $this->partial('_partials/screens.phtml', array('screens'=>$this->screens));?>
+
+						</div>
+					</div>
+				</div>
+
+
+
+
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="container">
+		<div class="login_wrap">
+			<div class="row" style="display:none;">
+
+				<h1 class="dark-ft regular"><?php echo substr_count($this->report, PHP_EOL); ?> warnings from last import</h1>
+
+
+				<pre id="report-output"><?php echo $this->report; ?></pre><br>
+				<a href="#" id="report-output-view-all">View all</a>
+
+			</div>
+
+        <script>
+            $(document).ready(function () {
+
+
+
+				$('.select_all').click(function(){
+					var selectid = $(this).attr('data_ref');
+					$("#"+selectid+" option").each(function(){
+						$(this).prop('selected', true);
+					});
+
+				    $("#"+selectid).multiselect('rebuild');
+				  return false;
+				});
+				$('.select_none').click(function(){
+					var selectid = $(this).attr('data_ref');
+					$("#"+selectid+" option").each(function(){
+						$(this).prop('selected', false);
+					});
+
+				    $("#"+selectid).multiselect('rebuild');
+				  return false;
+				});
+
+
+				//$("select[multiple]").multiselect({
+                //    optGroupSelectable: true,
+                //    listHeight: 300
+                //}).multiselectfilter();
+
+				//<li class="multiselect-item filter">
+				//<div class="input-prepend input-append">
+				//<button class="btn" type="button"><i class="icon-search"></i></button>
+				//<input class="form-control multiselect-search" type="text">
+				//<button class="btn btn-default multiselect-clear-filter" type="button"><i class="icon-remove"></i></button>
+				//</div>
+				//</li>
+
+				$('select[multiple]').multiselect({
+					enableClickableOptGroups: true,
+					enableCollapsibleOptGroups: true,
+					collapseOptGroupsByDefault: true,
+					enableFullValueFiltering: true,
+					enableCaseInsensitiveFiltering: true,
+					enableFiltering: true,
+					includeSelectAllOption: false,
+					maxHeight: 300,
+					templates: {
+						li: '<li><a class="dropdown-item"><label class="m-0 pl-2 pr-0 select_this"></label></a></li>',
+						ul: ' <ul class="multiselect-container dropdown-menu p-1 m-0"></ul>',
+						button: '<button type="button" class="multiselect form-control dropdown-toggle" data-toggle="dropdown" data-flip="false"><span class="multiselect-selected-text"></span> <b class="caret"></b></button>',
+						filter: '<li class="multiselect-item filter"><div class="input-group m-0"><input class="form-control multiselect-search" type="text"></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-secondary multiselect-clear-filter" type="button"><i class="fas fa-minus-circle"></i></button></span>'
+					},
+					buttonContainer: '<div class="dropdown" />',
+					buttonClass: 'btn btn-secondary'
+				});
+
+                $('#report-output-view-all').click(function () {
+                    var pre = $('#report-output');
+                    if (pre.hasClass('view-all')) {
+                        pre.removeClass('view-all');
+                        $(this).text('View all');
+                    } else {
+                        pre.addClass('view-all');
+                        $(this).text('View less');
+                    }
+                });
+                hideShowOutBound("#outbound");
+                $("#outbound").change(function () {
+                    hideShowOutBound(this);
+                });
+
+                hideShowInbound("#inbound");
+                $("#inbound").change(function () {
+                    hideShowInbound(this);
+                });
+
+                hideShowExportTypes("#export_format");
+                $("#export_format").change(function () {
+                    hideShowExportTypes(this);
+                });
+
+                $("#sector").change(function () {
+                   // alert(1);
+					loadClientListBySector(this);
+					//alert(2);
+                });
+
+				HideLoadedAndClosed("#account_status");
+				$("#account_status").change(function () {
+                   // alert(1);
+					HideLoadedAndClosed(this);
+					//alert(2);
+                });
+            });
+
+            function loadClientListBySector(sector)
+            {
+                var el = $("#client");
+                $.ajax({
+                    type: "GET",
+                    url: "<?php echo $this->url(array(), 'admin-clients') ?>",
+                    data: "sector=" + $(sector).val(),
+                    success: function (result) {
+						console.log(result);
+						$('#client').html(result);
+
+
+						$('#client').multiselect('rebuild');
+
+                    }
+                });
+            }
+
+					//$('#client').multiselect('rebuild');
+						/////console.log(result);
+                        /////$('#client').multiselect('select', result);
+
+					//	$('#client').find('option').remove().end();
+					//	$('#client').find('optgroup').remove().end();
+
+					//	$.each(result, function(val,key){
+					//		console.log(val+key)
+							/////$('option[value="'+key+'"]', $('#client')).remove();
+					//		$('#client').append('<option value="'+key+'">'+key+'</option>');
+					//	});
+					//	$('#client').multiselect('select', result);
+						/////$('option[value="add1"]', $('#client')).remove();
+
+					//	$('#client').multiselect('rebuild');
+
+			function HideLoadedAndClosed(outbound)
+            {
+                var type = $('#loaded_data');
+                var type_1 = $('#loaded_from');
+                var type_2 = $('#loaded_to');
+                var typeb = $('#closed_data');
+                var typeb_1 = $('#closed_from');
+                var typeb_2 = $('#closed_to');
+
+				type_1.prop('disabled', false);
+				type_2.prop('disabled', false);
+				typeb.hide();
+			    typeb_1.prop('disabled', true);
+				typeb_2.prop('disabled', true);
+
+                if ($(outbound).val() == 'closed') {
+					 type_1.prop('disabled', true);
+					 type_2.prop('disabled', true);
+					 typeb.show();
+					 typeb_1.prop('disabled', false);
+					 typeb_2.prop('disabled', false);
+                }
+            }
+
+            function hideShowOutBound(outbound)
+            {
+                var type = $('#outbound_type');
+                var typec = $('.outbound_type');
+                var within_from = $('#outbound_within_from');
+                var within_to = $('#outbound_within_to');
+
+				typec.show();
+                type.prop('disabled', false);
+                within_from.prop('disabled', false);
+                within_to.prop('disabled', false);
+                type.removeClass('is-disabled');
+                within_from.removeClass('is-disabled');
+                within_to.removeClass('is-disabled');
+				$(type).multiselect('enable');
+
+                if ($(outbound).val() == 'no') {
+					typec.hide();
+                    type.addClass('is-disabled');
+                    within_from.addClass('is-disabled');
+                    type.prop('disabled', true);
+                    within_from.prop('disabled', true);
+                    within_to.prop('disabled', true);
+                    within_to.addClass('is-disabled');
+					$(type).multiselect('disable');
+                }
+            }
+
+            function hideShowInbound(inbound)
+            {
+                var type = $('#inbound_type');
+                var typec = $('.inbound_type');
+                var withinTo = $('#inbound_within_to');
+                var withinFrom = $('#inbound_within_from');
+				typec.show();
+                type.prop('disabled', false);
+                withinTo.prop('disabled', false);
+                withinFrom.prop('disabled', false);
+                type.removeClass('is-disabled');
+                withinTo.removeClass('is-disabled');
+                withinFrom.removeClass('is-disabled');
+					$(type).multiselect('enable');
+
+                if ($(inbound).val() == 'no') {
+					typec.hide();
+                    type.prop('disabled', true);
+                    withinTo.prop('disabled', true);
+                    withinFrom.prop('disabled', true);
+                    type.addClass('is-disabled');
+                    withinTo.addClass('is-disabled');
+                    withinFrom.addClass('is-disabled');
+					$(type).multiselect('disable');
+                }
+            }
+
+            function hideShowExportTypes(type)
+            {
+                var sms = $('#field_sms_type');
+                var ivrType = $('#field_ivr_type');
+                var emailType = $('#field_email_type');
+                var callbackType = $("#field_callback_type");
+                var mobileOnly = $("#field_phone_type");
+                var discountOffer = $("#field_discount_offer");
+                var letterTemplate = $("#field_letter_template");
+
+                sms.hide();
+                callbackType.hide();
+                ivrType.hide();
+                mobileOnly.hide();
+                emailType.hide();
+                discountOffer.hide();
+                letterTemplate.hide();
+
+                if ($(type).val() == 'sms') {
+                    sms.show();
+                }
+                if ($(type).val() == 'ivr') {
+                    callbackType.show();
+                    ivrType.show();
+                    mobileOnly.show();
+                }
+                if ($(type).val() == 'email') {
+                    emailType.show();
+                    discountOffer.show();
+                }
+                if ($(type).val() == 'post') {
+                    letterTemplate.show();
+                }
+            }
+        </script>
+
+        <script>
+            $(function() {
+              $(".from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $(".to").datepicker( "option", "minDate", selectedDate );
+                }
+              });
+              $( ".to" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $(".from").datepicker( "option", "maxDate", selectedDate );
+                }
+              });
+			  $(".closefrom").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $(".closeto").datepicker( "option", "minDate", selectedDate );
+                }
+              });
+              $( ".closeto" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                changeYear: true,
+                dateFormat: 'dd-mm-yy',
+                beforeShow: function (input, inst) {
+                    inst.dpDiv.removeClass('hide-year');
+                },
+                onClose: function( selectedDate ) {
+                  $(".closefrom").datepicker( "option", "maxDate", selectedDate );
+                }
+              });
+            });
+
+
+      </script>
+
+
+
+
+		</div>
+	</div>
+</div>

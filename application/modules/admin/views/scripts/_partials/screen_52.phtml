@@ -1,0 +1,525 @@
+<?php
+//require_once '../library/Dialer/Dialer.php';
+//echo __DIR__;
+//require_once '/public_html/dialer/dialer.php';
+//$incoming = api_ajax("incoming");
+//$outgoing = api_ajax("outgoing");
+//$agents = api_ajax("agents");
+//$inbound_activity = api_ajax("inbound_activity");
+
+?>
+
+<div class="container-fluid" style="height:auto;">
+
+  <div class="row">
+
+    <div class="col-xs-12 col-md-12 text-center">
+      <h1 style="color:white;">Inbound call stats</h1>
+
+    </div>
+
+    <div class="col-xs-12 col-md-6" style="margin-top:20px;">
+      <div class="row">
+
+        <div class="col-xs-12 col-md-11 no-overlap box transparent boxpositionclear box height">
+
+          <div class="row">
+            <div class="col-xs-12 col-md-12 text-center">
+              <h1>Inbound calls</h1>
+            </div>
+            <div class="col-xs-12 col-md-12" style="color:black;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="text-left">Queue</th>
+                    <th class="text-left">Caller ID</th>
+                    <th class="text-left">Agent</th>
+                    <th class="text-left">Duration</th>
+                  </tr>
+                </thead>
+                <tbody class="update_incalldata">
+                  <tr class="alert-danger">
+                    <?php $incoming=array(); $outgoing=array(); $agents=array(); if (isset($incoming['list'])) { foreach ($incoming['list'] as $incoming) {
+                    $duration=gmdate("H:i:s", $incoming['srvtime']-$incoming['answered']);
+                    ?>
+                  <tr class="custom ">
+                    <td><?php echo $incoming['queue']?></td>
+                    <td><?php echo $incoming['callerid']?></td>
+                    <td><?php echo $incoming['agent']?></td>
+                    <td class="<?php if ($incoming['answered']>0) { echo "alert-success"; } ?>">
+                      <?php if ($incoming['answered']) { echo $duration; } else { echo "Queueing"; } ?></td>
+                  </tr>
+                  <?php } }	?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="row">
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-4 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_queueing"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-8">
+              <h1 class="boxcardnumbertext" style="margin-top:70px;">Calls Queueing</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-4 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_live"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-8">
+              <h1 class="boxcardnumbertext" style="margin-top:70px;">Agents available</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-5 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_lh"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-7">
+              <h1 class="boxcardnumbertext" style="margin-top:70px;">Calls LH</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-4 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_aban_lh"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-8">
+              <h1 class="boxcardnumbertext" style="margin-top:70px;">Abandoned LH</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-5 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_today"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-7">
+              <h1 class="boxcardnumbertext" style="margin-top:70px;">Calls today</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-5 box transparent boxlgmargin" style="border:1px solid white;">
+
+          <div class="row">
+
+            <div class="col-xs-12 col-md-4 boxcardnumberlg">
+              <p class="boxcardnumberlg update_calls_aban_today"></p>
+            </div>
+
+            <div class="col-xs-12 col-md-7">
+              <h1 class="boxcardnumbertext" style="margin-top:50px;">Abandoned today</h1>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-xs-12 col-md-12">
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+
+            <div class="col-xs-12 col-md-11 no-overlap box transparent box cover  bheight" style="margin:20px;">
+
+              <div class="row">
+                <div class="col-xs-12 col-md-12 text-center">
+                  <h1>Agent Status (IDLE/HOLD)</h1>
+                </div>
+                <div class="col-xs-12 col-md-12 text-center">
+                  <table class="table">
+                    <thead>
+                      <tr style="color:black;">
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Duration</th>
+                      </tr>
+                    </thead>
+                    <tbody class="update_agentdata_a">
+                      <tr class="alert-danger">
+                      <tr class="text-left agentwrap" style="text-align:center;">
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row">
+
+            <div class="col-xs-12 col-md-11 no-overlap box transparent box cover bheight" style="margin:20px;">
+
+              <div class="row">
+                <div class="col-xs-12 col-md-12 text-center">
+                  <h1>Agent Status (Available)</h1>
+                </div>
+                <div class="col-xs-12 col-md-12 text-center">
+                  <table class="table">
+                    <thead>
+                      <tr style="color:black;">
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center"></th>
+                      </tr>
+                    </thead>
+                    <tbody class="update_agentdata_b">
+                      <tr class="alert-danger">
+                      <tr class="text-left agentwrap" style="text-align:center;">
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+  <!-- <div class="col-md-4">
+    <div class="row">
+
+      <div class="col-xs-12 col-md-11 no-overlap box transparent box cover  bheight" style="margin:20px;">
+
+        <div class="row">
+        <div class="col-xs-12 col-md-12 text-center">
+          <h1>Agent Status (Call)</h1>
+        </div>
+        <div class="col-xs-12 col-md-12 text-center">
+          <table class="table">
+                <thead>
+                  <tr style="color:black;">
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Duration</th>
+                    </tr>
+                </thead>
+                <tbody class="update_agentdata_c"><tr class="alert-danger">
+                  <tr class="text-left agentwrap" style="text-align:center;">
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+      </div>
+
+    </div>
+
+
+    </div>
+  </div> -->
+</div>
+
+  </div>
+
+
+  </div>
+</div>
+
+<script>
+if (!result_complete) {
+	var result_complete=0;
+}
+
+function group_screen_eight_all(the_id,the_o_id) {
+
+	if (result_complete==2 || result_complete==0) {
+		result_complete=1;
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			async: true,
+			contentType: false,
+			processData: true,
+		}).done(function(obj){
+      //console.log(obj.agent_list);
+
+//       var agents = obj.agent_list;
+//
+//       var wrap = [];
+//
+//       var wait = [];
+//
+//       var call = [];
+//
+// for (i = 0; i < obj.agent_list.length; i++) {
+//
+//   //console.log(obj.agent_list[i].status);
+//
+//   if(obj.agent_list[i].status === 'wrap'){
+//     //console.log('Found wrap');
+//     wrap.push(obj.agent_list[i]);
+//   }
+//   if(obj.agent_list[i].status === 'wait'){
+//     wait.push(obj.agent_list[i]);
+//   }
+//   if(obj.agent_list[i].status === 'call'){
+//     call.push(obj.agent_list[i]);
+//   }
+// }
+//
+// for (i = 0; i < wrap.length; i++) {
+//
+//   $('.wrap').append('test');
+//
+//   console.log(wrap[i]);
+//
+//   $('.agentwrap').html('<tr style="color:black;"><td>'+wrap[i].name+'</td><td>'+wrap[i].name+'</td><td>'+wrap[i].answered+'</td></tr>');
+//
+// }
+
+// console.log(wrap);
+// console.log(wait);
+// console.log(call);
+//console.log(obj.queueingcall);
+
+			var trHTML = '';
+			var trOutHTML = '';
+			$('.'+the_id).empty();
+			$('.update_outcalldata').empty();
+				$.each(obj.list, function (i, item) {
+          //console.log(item.class);
+          //console.log(item.class);
+          if(item.class === 'alert-success'){
+            item.class = 'alert-success2';
+          }
+          if(item.class === 'alert-warning'){
+            item.class = 'alert-warning2';
+          }
+          if(item.class === 'alert-danger'){
+            item.class = 'alert-danger2';
+          }
+					trHTML += '<tr class="'+ item.class +'"><td>' + item.queue + '</td><td>' + item.callerid + '</td><td>' + item.agent + '</td><td>' + item.answered + '</td></tr>';
+				});
+				$.each(obj.outgoing_list, function (i, item) {
+					trOutHTML += '<tr class="'+ item.class +'"><td>' + item.queue + '</td><td>' + item.callerid + '</td><td>' + item.agent + '</td><td>' + item.answered + '</td></tr>';
+				});
+			$('.'+the_id).append(trHTML);
+			$('.update_outcalldata').append(trOutHTML);
+
+			$('.card-que').removeClass('que_green2 que_red que_amber').addClass(obj.queueing_class);
+			$('.update_calls_queueing').html(obj.queueingcall);
+			if (obj.queueingcall>=5) {
+				$('.call-queing').removeClass('shockwave1 shockwave2');
+				$('.call-queing').addClass('shockwave3')
+			} else if (obj.queueingcall==4) {
+			 	$('.call-queing').removeClass('shockwave1 shockwave3');
+				$('.call-queing').addClass('shockwave2')
+			} else if (obj.queueingcall==1 || obj.queueingcall==2 || obj.queueingcall==3) {
+				$('.call-queing').removeClass('shockwave2 shockwave3');
+				$('.call-queing').addClass('shockwave1')
+			} else {
+				$('.call-queing').removeClass('shockwave1 shockwave2 shockwave3');
+			}
+
+			$('.update_calls_today').html(obj.calls_today);
+			$('.update_calls_aban_today').html(obj.calls_aban_today);
+			$('.update_calls_lh').html(obj.calls_lh);
+			$('.update_calls_aban_lh').html(obj.calls_aban_lh);
+
+			var traHTML = '';
+			var trbHTML = '';
+			var trcHTML = '';
+			$('.'+the_o_id+'_a').empty();
+			$('.'+the_o_id+'_b').empty();
+			$('.'+the_o_id+'_c').empty();
+				$('.update_calls_live').html(obj.agents_waiting);
+				$.each(obj.agent_list, function (i, item) {
+					if (item.status=="hold" || item.status=="call") {
+            //console.log(item.class);
+            if(item.class === 'alert-success'){
+              item.class = 'alert-success2';
+            }
+            if(item.class === 'alert-warning'){
+              item.class = 'alert-warning2';
+            }
+            if(item.class === 'alert-danger'){
+              item.class = 'alert-danger2';
+            }
+						trcHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>' + item.status + '</td><td>' + item.answered + '</td></tr>';
+					} else if (item.status=="wait") {
+            if(item.class === 'alert-success'){
+              item.class = 'alert-success2';
+            }
+            if(item.class === 'alert-warning'){
+              item.class = 'alert-warning2';
+            }
+            if(item.class === 'alert-danger'){
+              item.class = 'alert-danger2';
+            }
+						trbHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>Waiting</td><td">' + item.answered + '</td></tr>';
+					} else {
+            if(item.class === 'alert-success'){
+              item.class = 'alert-success2';
+            }
+            if(item.class === 'alert-warning'){
+              item.class = 'alert-warning2';
+            }
+            if(item.class === 'alert-danger'){
+              item.class = 'alert-danger2';
+            }
+            // if(item.class === 'alert-success'){
+            //   item.class = 'alert-success2';
+            // }
+						traHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>'+item.statuscode+'</td><td>' + item.answered + '</td></tr>';
+					}
+				});
+			$('.'+the_o_id+'_a').append(traHTML);
+			$('.'+the_o_id+'_b').append(trbHTML);
+			$('.'+the_o_id+'_c').append(trcHTML);
+
+			//$('.update_calls_queueing').html(obj.queueingcall);
+
+
+
+
+				//setTimeout(worker, 5000);
+				result_complete=2;
+		});
+	 }
+
+
+}
+
+/*
+function group_screen(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: false,
+			processData: true,
+		}).done(function(obj){ //
+			//var obj = jQuery.parseJSON(res);
+			//alert(the_id);
+			//$("."+the_id).html(res);
+			//console.log(obj.success);
+			//console.log(obj);
+			var trHTML = '';
+			$('.'+the_id).empty();
+				$.each(obj.list, function (i, item) {
+					trHTML += '<tr class="'+ item.class +'"><td>' + item.queue + '</td><td>' + item.callerid + '</td><td>' + item.agent + '</td><td>' + item.answered + '</td></tr>';
+				});
+			$('.'+the_id).append(trHTML);
+
+			$('.card-que').removeClass('que_green que_red que_amber').addClass(obj.queueing_class);
+			$('.update_calls_queueing').html(obj.queueingcall);
+
+			$('.update_calls_today').html(obj.calls_today);
+			$('.update_calls_aban_today').html(obj.calls_aban_today);
+			$('.update_calls_lh').html(obj.calls_lh);
+			$('.update_calls_aban_lh').html(obj.calls_aban_lh);
+
+
+				//setTimeout(worker, 5000);
+		});
+}
+
+function group_multiscreen(the_id) {
+	$.ajax({
+			url: '/admin/wallboard/api/'+the_id, // point to server-side PHP script
+			dataType: 'json',  // what to expect back from the PHP script, if anything
+			cache: true,
+			contentType: false,
+			processData: true
+		}).done(function(obj){ //
+			//var obj = jQuery.parseJSON(res);
+			//alert(the_id);
+			//$("."+the_id).html(res);
+			//console.log(obj.success);
+			//console.log(obj);
+
+			var traHTML = '';
+			var trbHTML = '';
+			var trcHTML = '';
+			$('.'+the_id+'_a').empty();
+			$('.'+the_id+'_b').empty();
+			$('.'+the_id+'_c').empty();
+				$('.update_calls_live').html(obj.agents_waiting);
+				$.each(obj.list, function (i, item) {
+					if (item.status=="hold" || item.status=="call") {
+						trcHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>' + item.status + '</td><td>' + item.answered + '</td></tr>';
+					} else if (item.status=="wait") {
+						trbHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>Waiting</td><td">' + item.answered + '</td></tr>';
+					} else {
+						traHTML += '<tr class="'+ item.class +'"><td>' + item.name + '</td><td>'+item.statuscode+'</td><td>' + item.answered + '</td></tr>';
+					}
+				});
+			$('.'+the_id+'_a').append(traHTML);
+			$('.'+the_id+'_b').append(trbHTML);
+			$('.'+the_id+'_c').append(trcHTML);
+
+			//$('.update_calls_queueing').html(obj.queueingcall);
+				//setTimeout(worker, 5000);
+		});
+}
+*/
+
+</script>

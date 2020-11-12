@@ -1,0 +1,22 @@
+<?php
+
+
+?>
+<table class="table table-striped mb-0">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Contains</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($this->boardgroups as $boardgroup) { ?>
+	<tr>
+      <td><?php echo $boardgroup->id; ?></td>
+      <td><?php echo $boardgroup->group_name; ?></td>
+      <td><?php echo str_replace(",",", ",$boardgroup->info); ?></td>
+    </tr>
+	<?php }	?>
+  </tbody>
+</table>
